@@ -9,23 +9,33 @@ import { Product } from "@/types/product";
 export default function SupplierProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const loadProducts = async () => {
+    const loadCatalogData = async () => {
       try {
-        const data = await api.getProducts();
-        if (data) {
-          setProducts(data);
+        const [productsData, bookingsRes] = await Promise.all([
+          api.getProducts(),
+          fetch('/api/bookings')
+        ]);
+
+        if (productsData) {
+          setProducts(productsData);
+        }
+
+        if (bookingsRes.ok) {
+          const bookingsData = await bookingsRes.json();
+          setBookings(bookingsData);
         }
       } catch (error) {
-        console.error("Failed to load live products from DB:", error);
+        console.error("Failed to load live catalog from DB:", error);
       } finally {
         setLoading(false);
       }
     };
-    loadProducts();
+    loadCatalogData();
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -58,6 +68,7 @@ export default function SupplierProductsPage() {
     <div className="w-full animate-in fade-in duration-500">
       <ProductsTab 
         products={products as any[]}
+        bookings={bookings}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
         onOpenModal={() => router.push("/products/create")}

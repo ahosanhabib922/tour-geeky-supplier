@@ -7,6 +7,7 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from ".
 
 interface ProductsTabProps {
   products: any[];
+  bookings?: any[];
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
   onOpenModal: () => void;
@@ -15,12 +16,17 @@ interface ProductsTabProps {
 
 export function ProductsTab({
   products,
+  bookings = [],
   searchQuery,
   onSearchQueryChange,
   onOpenModal,
   onDeleteProduct,
 }: ProductsTabProps) {
   const [filterStatus, setFilterStatus] = useState("all");
+
+  const getProductBookingsCount = (productId: string) => {
+    return bookings.filter((b: any) => b.product_id === productId).length;
+  };
 
   const filteredProducts = products.filter(p => {
     if (p.status === "archived") return false;
@@ -114,22 +120,20 @@ export function ProductsTab({
                   <h4 className="font-bold text-sm text-brand-black leading-tight line-clamp-1">{product.title}</h4>
                   <span className="text-[11px] text-muted-foreground capitalize font-semibold">{product.category?.replace("-", " ")}</span>
                   <div className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} className="h-3 w-3 text-amber-500 fill-amber-500" />
-                    ))}
+                    <span className="text-[11px] text-muted-foreground">★ New (No reviews)</span>
                   </div>
                 </div>
               </div>
 
               {/* Sells & Reviews Mobile Row */}
-              <div className="grid grid-cols-2 gap-4 py-2.5 px-3.5 bg-brand-light/30 rounded-xl text-xs">
+              <div className="grid grid-cols-2 gap-4 py-2.5 px-3.5 bg-brand-light/30 rounded-xl text-center text-xs">
                 <div>
-                  <span className="text-muted-foreground block text-[9px] uppercase font-bold tracking-wider">Sells</span>
-                  <span className="font-bold text-brand-black">{product.bookings !== undefined ? product.bookings : Math.floor(Math.random() * 20) + 5} sold</span>
+                  <span className="text-muted-foreground block text-[9px] uppercase font-bold tracking-wider mb-0.5">Sells</span>
+                  <span className="font-bold text-brand-black">{getProductBookingsCount(product.id)} sold</span>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[9px] uppercase font-bold tracking-wider">Reviews</span>
-                  <span className="font-bold text-brand-black">{product.reviewsCount !== undefined ? product.reviewsCount : Math.floor((product.bookings || 10) * 0.8) + 2} reviews</span>
+                  <span className="text-muted-foreground block text-[9px] uppercase font-bold tracking-wider mb-0.5">Reviews</span>
+                  <span className="font-bold text-brand-black">0 reviews</span>
                 </div>
               </div>
 
@@ -199,9 +203,7 @@ export function ProductsTab({
                       <div className="flex flex-col">
                         <span className="font-medium">{product.title}</span>
                         <div className="flex items-center gap-1 mt-0.5">
-                          {[1, 2, 3, 4, 5].map((s) => (
-                            <Star key={s} className="h-3 w-3 text-amber-500 fill-amber-500" />
-                          ))}
+                          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">New</span>
                         </div>
                       </div>
                     </div>
@@ -219,12 +221,12 @@ export function ProductsTab({
 
                   {/* Sells */}
                   <TableCell className="font-semibold text-brand-black">
-                    {product.bookings !== undefined ? product.bookings : Math.floor(Math.random() * 20) + 5} sold
+                    {getProductBookingsCount(product.id)} sold
                   </TableCell>
 
                   {/* Reviews */}
                   <TableCell className="text-muted-foreground font-medium">
-                    {product.reviewsCount !== undefined ? product.reviewsCount : Math.floor((product.bookings || 10) * 0.8) + 2} reviews
+                    0 reviews
                   </TableCell>
 
                   {/* Status Badge */}
