@@ -81,8 +81,72 @@ export function ProductsTab({
         </div>
       </div>
 
-      {/* Admin-Style Products Table */}
-      <div className="w-full overflow-auto">
+      {/* Mobile Card List (Visible only on mobile/tablet) */}
+      <div className="block lg:hidden space-y-4">
+        {filteredProducts.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-2xl border border-brand-border/40">
+            <PackageOpen className="h-8 w-8 opacity-20 mx-auto mb-2 text-brand-gray" />
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">No products found</p>
+          </div>
+        ) : (
+          filteredProducts.map((product) => (
+            <div key={product.id} className="bg-white rounded-2xl border border-brand-border/40 p-5 space-y-4 hover:shadow-md transition-shadow">
+              {/* Product Header: ID & Status Badge */}
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] text-muted-foreground">{product.id}</span>
+                <Badge variant={product.status === "published" ? "default" : "secondary"}>
+                  {getStatusLabel(product.status)}
+                </Badge>
+              </div>
+
+              {/* Cover Image & Info */}
+              <div className="flex gap-4">
+                <div className="h-14 w-16 rounded-lg bg-muted overflow-hidden shrink-0">
+                  <img 
+                    src={product.coverImage || `https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=200&h=150&auto=format&fit=crop`} 
+                    alt={product.title} 
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="flex flex-col justify-center space-y-1">
+                  <h4 className="font-bold text-sm text-brand-black leading-tight line-clamp-1">{product.title}</h4>
+                  <span className="text-[11px] text-muted-foreground capitalize font-semibold">{product.category?.replace("-", " ")}</span>
+                  <div className="flex items-center gap-0.5">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <Star key={s} className="h-3 w-3 text-amber-500 fill-amber-500" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-between pt-3 border-t border-brand-border/30">
+                <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Actions</span>
+                <div className="flex items-center gap-2">
+                  {onDeleteProduct && (
+                    <button 
+                      onClick={() => onDeleteProduct(product.id)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 rounded-full text-xs font-bold transition-all active:scale-95"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      Delete
+                    </button>
+                  )}
+                  <button 
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-light text-brand-black rounded-full text-xs font-bold transition-all active:scale-95"
+                  >
+                    <Globe className="h-3.5 w-3.5" />
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Desktop Clean Table (Visible only on desktop) */}
+      <div className="hidden lg:block w-full overflow-auto">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
