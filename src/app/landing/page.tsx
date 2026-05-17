@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plane, Star, Shield, TrendingUp, DollarSign, Users, Award, HelpCircle, Check, ArrowRight, X, Phone, Building, FileText, Smartphone, User, Mail, Globe, MapPin, Anchor, ArrowUpRight, Compass, ShieldCheck } from "lucide-react";
+import { Plane, Star, Shield, TrendingUp, DollarSign, Users, Award, HelpCircle, Check, ArrowRight, X, Phone, Building, FileText, Smartphone, User, Mail, Globe, MapPin, Anchor, ArrowUpRight, Compass, ShieldCheck, Heart, ShoppingBag, Menu, Camera, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export default function SupplierLandingPage() {
@@ -128,38 +128,55 @@ export default function SupplierLandingPage() {
   return (
     <div className="min-h-screen bg-white text-brand-black font-sans selection:bg-brand-black selection:text-white">
       
-      {/* Top Navbar */}
-      <nav className="h-20 border-b border-brand-border px-6 sm:px-12 flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur-md z-30">
-        <div className="flex items-center gap-3">
-          <div className="w-8.5 h-8.5 bg-brand-black rounded-xl flex items-center justify-center">
-            <Plane className="w-4.5 h-4.5 text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-base tracking-tight text-brand-black leading-none">Tour Geeky</span>
-            <span className="text-[9px] text-brand-gray uppercase font-bold tracking-wider mt-1.5 leading-none">Partner Network</span>
-          </div>
-        </div>
-
-        {/* Center menu links */}
-        <div className="hidden md:flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider text-brand-gray">
-          <a href="#benefits" className="px-4 py-2 hover:bg-brand-light hover:text-brand-black rounded-full transition-all">Benefits</a>
-          <a href="#stats" className="px-4 py-2 hover:bg-brand-light hover:text-brand-black rounded-full transition-all">Impact</a>
-          <a href="#workflow" className="px-4 py-2 hover:bg-brand-light hover:text-brand-black rounded-full transition-all">Workflow</a>
-          <a href="#stories" className="px-4 py-2 hover:bg-brand-light hover:text-brand-black rounded-full transition-all">Success Stories</a>
-          <a href="#faqs" className="px-4 py-2 hover:bg-brand-light hover:text-brand-black rounded-full transition-all">FAQs</a>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <a href="/" className="text-xs font-bold text-brand-gray hover:text-brand-black transition-colors uppercase tracking-wider hidden lg:block">
-            Demo Portal
+      {/* Top Navbar - 100% Client Logo & Styling */}
+      <nav className="w-full h-[80px] flex items-center sticky top-0 bg-white/80 backdrop-blur-md z-[60] border-b border-brand-border/50 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
+          {/* Client Logo */}
+          <a href="/" className="flex items-center">
+            <img 
+              src="/assets/logo.png" 
+              alt="Tour Geeky Logo" 
+              className="h-8 md:h-9 w-auto object-contain" 
+            />
           </a>
-          <Button 
-            onClick={() => setIsModalOpen(true)}
-            size="sm" 
-            className="rounded-full px-6 h-11 text-xs font-bold bg-brand-black text-white hover:bg-brand-black/90 transition-all shadow-sm"
-          >
-            Apply as Partner
-          </Button>
+
+          {/* Desktop Links - Match Client Navbar Pills */}
+          <div className="hidden lg:flex items-center gap-1 text-[14px] font-medium text-brand-black">
+            <a href="#benefits" className="px-4 py-2 rounded-full hover:bg-brand-light transition-colors">
+              Benefits
+            </a>
+            <a href="#stats" className="px-4 py-2 rounded-full hover:bg-brand-light transition-colors">
+              Impact
+            </a>
+            <a href="#workflow" className="px-4 py-2 rounded-full hover:bg-brand-light transition-colors">
+              Workflow
+            </a>
+            <a href="#stories" className="px-4 py-2 rounded-full hover:bg-brand-light transition-colors">
+              Success Stories
+            </a>
+            <a href="#faqs" className="px-4 py-2 rounded-full hover:bg-brand-light transition-colors">
+              FAQs
+            </a>
+          </div>
+
+          {/* Actions - Match Client Actions */}
+          <div className="hidden md:flex items-center gap-6">
+            <button className="flex items-center gap-2 text-[14px] font-medium hover:text-brand-gray transition-colors">
+              <Globe className="w-4 h-4" />
+              English
+            </button>
+
+            <div className="flex items-center gap-3">
+              <Button 
+                onClick={() => setIsModalOpen(true)}
+                variant="primary" 
+                size="sm" 
+                className="rounded-full px-8 h-11 font-bold text-[14px]"
+              >
+                Apply as Partner
+              </Button>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -223,7 +240,7 @@ export default function SupplierLandingPage() {
       </header>
 
       {/* Benefits Section */}
-      <section id="benefits" className="py-24 bg-brand-light/20 border-y border-brand-border px-6 sm:px-12ScrollAnchor">
+      <section id="benefits" className="py-24 bg-brand-light/20 border-y border-brand-border px-6 sm:px-12">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-3">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black uppercase">Why Partner with Us?</h2>
@@ -368,74 +385,86 @@ export default function SupplierLandingPage() {
         </div>
       </section>
 
-      {/* Massive Detailed Structural Footer */}
-      <footer className="bg-brand-black text-white pt-20 pb-10 px-6 sm:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-10 pb-16 border-b border-white/10">
-            {/* Logo area */}
-            <div className="col-span-2 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-8.5 h-8.5 bg-white rounded-xl flex items-center justify-center">
-                  <Plane className="w-4.5 h-4.5 text-brand-black" />
-                </div>
-                <span className="font-bold text-lg tracking-tight">Tour Geeky</span>
-              </div>
-              <p className="text-xs text-brand-gray font-medium leading-relaxed max-w-sm">
-                Greece's leading activity selling channel. Empowering yachtsmen, tour operators, and certified guides to list sunset cruises, wine tastings, and hiking experiences globally.
+      {/* Footer - 100% Match Client Footer */}
+      <footer className="w-full pt-16 pb-8 px-4 sm:px-6 lg:px-8 bg-brand-light mt-12 border-t border-brand-border/50">
+        <div className="w-full max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+            {/* Brand Col */}
+            <div className="lg:col-span-2">
+              <a href="/" className="mb-4 block">
+                <img 
+                  src="/assets/logo.png" 
+                  alt="Tour Geeky Logo" 
+                  className="h-7 md:h-8 w-auto object-contain" 
+                />
+              </a>
+              <p className="text-[14px] text-brand-gray leading-[1.6] max-w-[300px] mb-8">
+                Radiant revelries and sparkling summer parties made easy. Your ultimate celebration and tour partner.
               </p>
-              <div className="pt-2">
-                <Button 
-                  onClick={() => setIsModalOpen(true)}
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full px-6 h-10 border-white/15 text-white hover:bg-white/10 font-bold text-xs"
-                >
-                  Register Partner Account
-                </Button>
+              <div className="flex items-center gap-3">
+                <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-brand-black hover:bg-brand-border transition-colors border border-brand-border">
+                  <Camera className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-brand-black hover:bg-brand-border transition-colors border border-brand-border">
+                  <Send className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-brand-black hover:bg-brand-border transition-colors border border-brand-border">
+                  <MessageCircle className="w-4 h-4" />
+                </a>
               </div>
             </div>
 
-            {/* Destinations */}
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-gray">Explore Excursions</h4>
-              <ul className="space-y-2 text-xs font-semibold text-brand-gray/80">
-                <li><a href="#" className="hover:text-white transition-colors">Santorini Yachting</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Athens Walking Tours</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Mykonos Sunset Cruises</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Crete Historical Tours</a></li>
+            {/* Links Col 1 */}
+            <div>
+              <h4 className="font-medium text-[15px] text-brand-black mb-5">Company</h4>
+              <ul className="space-y-3.5 text-[14px] text-brand-gray">
+                <li><a href="/about" className="hover:text-brand-black transition-colors">About Us</a></li>
+                <li><a href="/blog" className="hover:text-brand-black transition-colors">Blog</a></li>
+                <li><a href="/contact" className="hover:text-brand-black transition-colors">Contact Us</a></li>
               </ul>
             </div>
 
-            {/* Features */}
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-gray">Operator Tools</h4>
-              <ul className="space-y-2 text-xs font-semibold text-brand-gray/80">
-                <li><a href="/" className="hover:text-white transition-colors">Supplier Dashboard</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Calendar Management</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Direct Payout Analytics</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">SEPA Stripe Linkage</a></li>
+            {/* Links Col 2 */}
+            <div>
+              <h4 className="font-medium text-[15px] text-brand-black mb-5">Legal</h4>
+              <ul className="space-y-3.5 text-[14px] text-brand-gray">
+                <li><a href="/terms" className="hover:text-brand-black transition-colors">Terms of Service</a></li>
+                <li><a href="/privacy" className="hover:text-brand-black transition-colors">Privacy Policy</a></li>
+                <li><a href="/refund" className="hover:text-brand-black transition-colors">Refund Policy</a></li>
               </ul>
             </div>
 
-            {/* Support / Contact */}
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-brand-gray">Athens Headquarters</h4>
-              <ul className="space-y-2 text-xs font-semibold text-brand-gray/80">
-                <li className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-brand-gray/60" /> Athens, Greece</li>
-                <li className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-brand-gray/60" /> +30 210 123456</li>
-                <li className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-brand-gray/60" /> partners@tourgeeky.com</li>
+            {/* Contact Col */}
+            <div>
+              <h4 className="font-medium text-[15px] text-brand-black mb-5">Contact</h4>
+              <ul className="space-y-3.5 text-[14px] text-brand-gray">
+                <li><a href="mailto:info@gerromantours.com" className="hover:text-brand-black transition-colors">info@gerromantours.com</a></li>
+                <li className="pt-2">
+                  <span className="block font-bold text-brand-dark mb-1">English Support</span>
+                  <a href="tel:+393420342257" className="hover:text-brand-black transition-colors">+39 342 034 2257</a>
+                </li>
+                <li className="pt-2">
+                  <span className="block font-bold text-brand-dark mb-1">Italian Support</span>
+                  <a href="tel:+393248042892" className="hover:text-brand-black transition-colors">+39 324 804 2892</a>
+                </li>
               </ul>
             </div>
           </div>
 
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-brand-gray/60 font-bold uppercase tracking-widest">
-            <p>© {new Date().getFullYear()} Tour Geeky Partner Network. Aegean Maritime Logistics.</p>
-            <div className="flex gap-4">
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <span>•</span>
-              <a href="#" className="hover:text-white transition-colors">Operator guidelines</a>
-              <span>•</span>
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-brand-border flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] text-brand-gray">
+            <div className="space-y-2 text-center md:text-left">
+              <p>© {new Date().getFullYear()} Get Your Roman Tours S.R.L.S. All rights reserved.</p>
+              <p className="opacity-60">Address: via Tre Novembre 40, Mentana, Roma 00013</p>
+              <p className="font-bold text-brand-dark">P.IVA: IT18457421008</p>
+            </div>
+            <div className="flex items-center gap-6">
+              <button className="flex items-center gap-1.5 hover:text-brand-black transition-colors">
+                <Globe className="w-4 h-4" /> English (US)
+              </button>
+              <button className="flex items-center gap-1.5 hover:text-brand-black transition-colors">
+                <span className="font-medium text-brand-black">USD</span> ($)
+              </button>
             </div>
           </div>
         </div>
