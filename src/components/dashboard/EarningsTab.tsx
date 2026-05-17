@@ -16,14 +16,6 @@ export function EarningsTab({
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
-      {/* Title Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Finance Overview</h1>
-          <p className="text-zinc-500 text-sm">Monitor payouts, platform commissions, and direct bank transfers.</p>
-        </div>
-      </div>
-
       {/* Commission Breakdown */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="p-6 rounded-xl bg-white border border-zinc-200/80 shadow-sm">

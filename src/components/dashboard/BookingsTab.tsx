@@ -9,14 +9,6 @@ export function BookingsTab({ bookings }: BookingsTabProps) {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
-      {/* Title Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Activity Bookings</h1>
-          <p className="text-zinc-500 text-sm">Review real-time incoming traveler requests and check-in dates.</p>
-        </div>
-      </div>
-
       {/* Bookings Table */}
       <div className="rounded-xl border border-zinc-200/80 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">

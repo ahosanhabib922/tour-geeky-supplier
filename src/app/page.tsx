@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { LayoutDashboard, Box, ClipboardList, Wallet, Plane, Moon, X, Menu } from "lucide-react";
+import { LayoutDashboard, Box, ClipboardList, Wallet, Plane, Moon, X, Menu, Bell, Search } from "lucide-react";
 
 // Components
 import { OverviewTab } from "@/components/dashboard/OverviewTab";
@@ -9,6 +9,7 @@ import { ProductsTab } from "@/components/dashboard/ProductsTab";
 import { BookingsTab } from "@/components/dashboard/BookingsTab";
 import { EarningsTab } from "@/components/dashboard/EarningsTab";
 import { RequestListingModal } from "@/components/modals/RequestListingModal";
+import { Input } from "@/components/ui/Input";
 
 // Mock Initial Data
 const INITIAL_PRODUCTS = [
@@ -53,8 +54,24 @@ export default function SupplierDashboard() {
   const commissionPaid = grossSales * 0.10;
   const netEarnings = grossSales - commissionPaid;
 
+  const getHeaderInfo = () => {
+    switch (activeTab) {
+      case "products":
+        return { title: "Products List", desc: "Manage your activity catalog", breadcrumb: "Activities" };
+      case "bookings":
+        return { title: "Orders", desc: "View and manage traveler bookings", breadcrumb: "Bookings" };
+      case "earnings":
+        return { title: "Finance", desc: "Revenue and payouts", breadcrumb: "Finances" };
+      case "dashboard":
+      default:
+        return { title: "Dashboard", desc: "Operator Overview", breadcrumb: "Dashboard" };
+    }
+  };
+
+  const headerInfo = getHeaderInfo();
+
   return (
-    <div className="flex h-screen bg-zinc-50/50 text-zinc-950 font-sans overflow-hidden">
+    <div className="flex h-screen bg-white text-zinc-950 font-sans overflow-hidden">
       
       {/* Mobile Top Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-zinc-200 z-30 flex items-center justify-between px-6">
@@ -144,46 +161,81 @@ export default function SupplierDashboard() {
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto z-20 p-6 sm:p-10 lg:p-14 mt-16 lg:mt-0 relative">
-        {activeTab === "dashboard" && (
-          <OverviewTab 
-            activeTours={activeTours}
-            pendingTours={pendingTours}
-            totalBookings={totalBookings}
-            grossSales={grossSales}
-            netEarnings={netEarnings}
-            bookings={bookings}
-            onOpenModal={() => setIsModalOpen(true)}
-            onViewAllBookings={() => setActiveTab("bookings")}
-          />
-        )}
+      {/* Main Content Area (Right Side Layout) */}
+      <main className="flex-1 flex flex-col min-w-0 bg-white h-screen overflow-hidden mt-16 lg:mt-0">
+        
+        {/* Sticky Top Header */}
+        <header className="h-[72px] shrink-0 border-b border-zinc-200/80 flex items-center justify-between px-6 lg:px-10 bg-white/80 backdrop-blur-md z-10 sticky top-0">
+          <div className="flex items-center gap-6">
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-zinc-400 font-semibold tracking-wide">
+              <span>Supplier Hub</span>
+              <span>/</span>
+              <span className="text-zinc-600">{headerInfo.breadcrumb}</span>
+            </div>
+            
+            <div className="flex flex-col border-l border-zinc-200 pl-6 animate-in fade-in slide-in-from-left-2 duration-300">
+              <h1 className="text-[15px] font-bold text-zinc-900 leading-tight">{headerInfo.title}</h1>
+              <p className="text-[10px] text-zinc-400 font-semibold mt-0.5">{headerInfo.desc}</p>
+            </div>
+          </div>
 
-        {activeTab === "products" && (
-          <ProductsTab 
-            products={products}
-            searchQuery={searchQuery}
-            onSearchQueryChange={setSearchQuery}
-            onOpenModal={() => setIsModalOpen(true)}
-            onDeleteProduct={(id) => {
-              if (window.confirm("Delete this product?")) {
-                setProducts(prev => prev.filter(p => p.id !== id));
-              }
-            }}
-          />
-        )}
+          <div className="flex items-center gap-4">
+            <div className="relative hidden md:flex w-[200px]">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-400" />
+              <Input 
+                placeholder="Search" 
+                className="pl-8 h-8 text-xs rounded-lg"
+              />
+            </div>
+            
+            <button className="relative p-2 text-zinc-500 hover:text-zinc-800 rounded-full hover:bg-zinc-50 transition-colors">
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 border border-white rounded-full"></span>
+            </button>
+          </div>
+        </header>
 
-        {activeTab === "bookings" && (
-          <BookingsTab bookings={bookings} />
-        )}
+        {/* Tab Page Contents */}
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10 lg:p-14 bg-zinc-50/20">
+          {activeTab === "dashboard" && (
+            <OverviewTab 
+              activeTours={activeTours}
+              pendingTours={pendingTours}
+              totalBookings={totalBookings}
+              grossSales={grossSales}
+              netEarnings={netEarnings}
+              bookings={bookings}
+              onOpenModal={() => setIsModalOpen(true)}
+              onViewAllBookings={() => setActiveTab("bookings")}
+            />
+          )}
 
-        {activeTab === "earnings" && (
-          <EarningsTab 
-            grossSales={grossSales}
-            commissionPaid={commissionPaid}
-            netEarnings={netEarnings}
-          />
-        )}
+          {activeTab === "products" && (
+            <ProductsTab 
+              products={products}
+              searchQuery={searchQuery}
+              onSearchQueryChange={setSearchQuery}
+              onOpenModal={() => setIsModalOpen(true)}
+              onDeleteProduct={(id) => {
+                if (window.confirm("Delete this product?")) {
+                  setProducts(prev => prev.filter(p => p.id !== id));
+                }
+              }}
+            />
+          )}
+
+          {activeTab === "bookings" && (
+            <BookingsTab bookings={bookings} />
+          )}
+
+          {activeTab === "earnings" && (
+            <EarningsTab 
+              grossSales={grossSales}
+              commissionPaid={commissionPaid}
+              netEarnings={netEarnings}
+            />
+          )}
+        </div>
       </main>
 
       {/* Mobile Sidebar Overlay */}

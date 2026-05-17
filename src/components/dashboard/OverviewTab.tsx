@@ -1,6 +1,5 @@
 import React from "react";
 import { CheckCircle2, Calendar, DollarSign, Wallet, TrendingUp, ArrowUpRight } from "lucide-react";
-import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 
 interface OverviewTabProps {
@@ -21,23 +20,11 @@ export function OverviewTab({
   grossSales,
   netEarnings,
   bookings,
-  onOpenModal,
   onViewAllBookings,
 }: OverviewTabProps) {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
-      {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Ahlan, Aegean Sails!</h1>
-          <p className="text-zinc-500 text-sm">Here is your operator overview for Santorini sailing tours and premium excursions.</p>
-        </div>
-        <Button onClick={onOpenModal} className="h-10 px-5 text-xs">
-          Request Listing
-        </Button>
-      </div>
-
       {/* Quick Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[

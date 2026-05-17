@@ -44,14 +44,6 @@ export function ProductsTab({
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
-      {/* Title Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">My Activity Listings</h1>
-          <p className="text-zinc-500 text-sm">Add and review your catalog. All new listings require platform verification before going public.</p>
-        </div>
-      </div>
-
       {/* Filter Tabs & Search Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Status Filters */}
