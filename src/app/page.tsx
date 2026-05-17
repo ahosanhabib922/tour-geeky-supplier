@@ -28,10 +28,9 @@ const INITIAL_BOOKINGS = [
 ];
 
 export default function SupplierDashboard() {
-  const [activeTab, setActiveTab] = useState<"dashboard" | "products" | "bookings" | "earnings">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "products" | "bookings" | "earnings" | "create-product">("dashboard");
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
   const [bookings, setBookings] = useState(INITIAL_BOOKINGS);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -51,6 +50,8 @@ export default function SupplierDashboard() {
         return { title: "Orders", desc: "View and manage traveler bookings", breadcrumb: "Bookings" };
       case "earnings":
         return { title: "Finance", desc: "Revenue and payouts", breadcrumb: "Finances" };
+      case "create-product":
+        return { title: "Create Product", desc: "Wizard Mode", breadcrumb: "Create Experience" };
       case "dashboard":
       default:
         return { title: "Dashboard", desc: "Operator Overview", breadcrumb: "Dashboard" };
@@ -75,7 +76,7 @@ export default function SupplierDashboard() {
         </button>
       </div>
 
-      {/* Sidebar Layout */}
+      {/* Sidebar Layout (Always Visible on Large Screens) */}
       <aside className={`w-[280px] border-r border-zinc-200/80 bg-white flex flex-col justify-between h-full fixed lg:relative z-40 transform transition-all duration-300 ease-in-out shrink-0 ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       }`}>
@@ -105,7 +106,7 @@ export default function SupplierDashboard() {
                 { id: "earnings", label: "Finances & Payouts", icon: Wallet },
               ].map(item => {
                 const Icon = item.icon;
-                const isActive = activeTab === item.id;
+                const isActive = activeTab === item.id || (item.id === "products" && activeTab === "create-product");
                 return (
                   <button
                     key={item.id}
@@ -150,7 +151,7 @@ export default function SupplierDashboard() {
         </div>
       </aside>
 
-      {/* Main Content Area (Right Side Layout) */}
+      {/* Main Content Area (Right Side Layout - Persistent on Large Screens) */}
       <main className="flex-1 flex flex-col min-w-0 bg-white h-screen overflow-hidden mt-16 lg:mt-0">
         
         {/* Sticky Top Header */}
@@ -185,7 +186,7 @@ export default function SupplierDashboard() {
         </header>
 
         {/* Tab Page Contents */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-10 lg:p-14 bg-zinc-50/20">
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10 lg:p-14 bg-zinc-50/20 relative">
           {activeTab === "dashboard" && (
             <OverviewTab 
               activeTours={activeTours}
@@ -194,7 +195,7 @@ export default function SupplierDashboard() {
               grossSales={grossSales}
               netEarnings={netEarnings}
               bookings={bookings}
-              onOpenModal={() => setIsModalOpen(true)}
+              onOpenModal={() => setActiveTab("create-product")}
               onViewAllBookings={() => setActiveTab("bookings")}
             />
           )}
@@ -204,7 +205,7 @@ export default function SupplierDashboard() {
               products={products}
               searchQuery={searchQuery}
               onSearchQueryChange={setSearchQuery}
-              onOpenModal={() => setIsModalOpen(true)}
+              onOpenModal={() => setActiveTab("create-product")}
               onDeleteProduct={(id) => {
                 if (window.confirm("Delete this product?")) {
                   setProducts(prev => prev.filter(p => p.id !== id));
@@ -224,6 +225,17 @@ export default function SupplierDashboard() {
               netEarnings={netEarnings}
             />
           )}
+
+          {activeTab === "create-product" && (
+            <div className="max-w-6xl mx-auto pb-12">
+              <ProductFormProvider>
+                <ProductWizard onSuccess={() => {
+                  alert("Product successfully created and submitted for verification!");
+                  setActiveTab("products");
+                }} />
+              </ProductFormProvider>
+            </div>
+          )}
         </div>
       </main>
 
@@ -233,46 +245,6 @@ export default function SupplierDashboard() {
           className="fixed inset-0 bg-black/10 z-30 lg:hidden backdrop-blur-sm transition-all duration-300" 
           onClick={() => setIsSidebarOpen(false)} 
         />
-      )}
-
-      {/* Fullscreen Product Wizard Overlay */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-white flex flex-col animate-in fade-in duration-300">
-          {/* Header Banner */}
-          <header className="h-[72px] shrink-0 border-b border-zinc-200/80 flex items-center justify-between px-6 lg:px-10 bg-white/80 backdrop-blur-md z-10 sticky top-0">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-semibold tracking-wide">
-                <span>Supplier Hub</span>
-                <span>/</span>
-                <span className="text-zinc-600">Create Experience</span>
-              </div>
-              
-              <div className="flex flex-col border-l border-zinc-200 pl-6">
-                <h1 className="text-[15px] font-bold text-zinc-900 leading-tight">New Activity Wizard</h1>
-                <p className="text-[10px] text-zinc-400 font-semibold mt-0.5">Wizard Mode • Create product listing</p>
-              </div>
-            </div>
-
-            <button 
-              onClick={() => setIsModalOpen(false)}
-              className="p-2 text-zinc-400 hover:text-zinc-800 rounded-lg hover:bg-zinc-50 transition-all"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </header>
-
-          {/* Form Content */}
-          <div className="flex-1 overflow-y-auto p-6 sm:p-10 lg:p-14 bg-zinc-50/10">
-            <div className="max-w-6xl mx-auto">
-              <ProductFormProvider>
-                <ProductWizard onSuccess={() => {
-                  alert("Product successfully created and submitted for verification!");
-                  setIsModalOpen(false);
-                }} />
-              </ProductFormProvider>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
