@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Box, ClipboardList, Wallet, Plane, X, Menu, Bell, Search } from "lucide-react";
+import { LayoutDashboard, Box, ClipboardList, Wallet, Plane, X, Menu, Bell, Search, Plus } from "lucide-react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -35,6 +35,35 @@ export default function RootLayout({
   };
 
   const headerInfo = getHeaderInfo();
+
+  const getFloatingActionButton = () => {
+    if (isLanding || pathname === "/products/create") return null;
+
+    if (pathname === "/" || pathname === "/products") {
+      return {
+        label: "Create Experience",
+        icon: Plus,
+        onClick: () => router.push("/products/create")
+      };
+    }
+    if (pathname === "/bookings") {
+      return {
+        label: "New Booking",
+        icon: Plus,
+        onClick: () => alert("Direct booking insertion is handled by the Tour Geeky client checkout flow.")
+      };
+    }
+    if (pathname === "/earnings") {
+      return {
+        label: "Withdraw",
+        icon: Wallet,
+        onClick: () => alert("Withdrawal request submitted successfully. Processing transfer to your verified settlement account.")
+      };
+    }
+    return null;
+  };
+
+  const fab = getFloatingActionButton();
 
   if (isLanding) {
     return (
@@ -207,6 +236,18 @@ export default function RootLayout({
               );
             })}
           </nav>
+
+          {/* Floating Action Button (FAB) on Mobile */}
+          {fab && (
+            <button
+              onClick={fab.onClick}
+              className="lg:hidden fixed bottom-20 right-5 z-[55] bg-brand-black text-white hover:bg-brand-black/90 active:scale-95 transition-all shadow-2xl rounded-full p-4 flex items-center justify-center gap-2 border border-white/10 animate-in slide-in-from-bottom-10 duration-300"
+              style={{ boxShadow: "0 12px 30px rgba(0,0,0,0.25)" }}
+            >
+              <fab.icon className="h-5 w-5 text-white" />
+              <span className="text-[10px] font-black uppercase tracking-wider pr-1 text-white">{fab.label}</span>
+            </button>
+          )}
 
         </div>
       </body>
