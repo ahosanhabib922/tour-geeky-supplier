@@ -128,4 +128,8 @@ export type Product = {
   cancellationPolicy: 'standard' | 'strict' | 'non-refundable';
   slug?: string;
   supplier_id?: string;
+  // View-layer fields (populated from DB aggregations or defaults)
+  price?: number;
+  bookings?: number;
+  reviewsCount?: number;
 };

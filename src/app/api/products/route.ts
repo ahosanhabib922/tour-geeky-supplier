@@ -1,10 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { queryD1 } from "@/lib/db";
 import { mapProductFromDB, productSchema } from "@shared/index";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const results = await queryD1("SELECT * FROM products ORDER BY created_at DESC");
+    const supplierId = request.nextUrl.searchParams.get("supplier_id");
+    let results;
+    if (supplierId) {
+      results = await queryD1("SELECT * FROM products WHERE supplier_id = ? ORDER BY created_at DESC", [supplierId]);
+    } else {
+      results = await queryD1("SELECT * FROM products ORDER BY created_at DESC");
+    }
     const products = results.map(mapProductFromDB);
     return NextResponse.json(products);
   } catch (error) {
@@ -125,7 +131,7 @@ export async function POST(request: Request) {
     await queryD1(sql, params);
 
     // Trigger revalidation on the client side
-    const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || "http://localhost:3001";
+    const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || "http://localhost:3000";
     try {
       fetch(`${clientUrl}/api/revalidate?tag=products&secret=tour-geeky-secret`).catch(() => {});
     } catch (e) {}
