@@ -136,6 +136,11 @@ export default function SupplierDashboard() {
             searchQuery={searchQuery}
             onSearchQueryChange={setSearchQuery}
             onOpenModal={() => setIsModalOpen(true)}
+            onDeleteProduct={(id) => {
+              if (window.confirm("Delete this product?")) {
+                setProducts(prev => prev.filter(p => p.id !== id));
+              }
+            }}
           />
         )}
 
