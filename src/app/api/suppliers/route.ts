@@ -25,27 +25,64 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email, supplier_name, company_name, commission_rate } = body;
+    const { id: firebaseUid, name, email, supplier_name, company_name, phone, commission_rate } = body;
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const id = "sup_" + Math.random().toString(36).substring(2, 11);
-    const sql = `
-      INSERT INTO users (id, name, email, role, supplier_name, company_name, supplier_status, commission_rate)
-      VALUES (?, ?, ?, 'supplier', ?, ?, 'pending', ?)
-    `;
-    await queryD1(sql, [
-      id,
-      name || supplier_name || "New Supplier",
-      email,
-      supplier_name || name || "New Supplier",
-      company_name || null,
-      commission_rate !== undefined ? Number(commission_rate) : 10.0
-    ]);
+    // 1. Check if user already exists in D1 database by email or firebaseUid
+    const checkSql = "SELECT id, role, supplier_status FROM users WHERE email = ? OR id = ?";
+    const existing = await queryD1(checkSql, [email, firebaseUid || ""]);
 
-    return NextResponse.json({ success: true, id });
+    if (existing && existing.length > 0) {
+      const existingUser = existing[0];
+      const userId = existingUser.id;
+      
+      // Update existing user profile to apply as supplier
+      const updateSql = `
+        UPDATE users 
+        SET 
+          role = 'supplier',
+          name = COALESCE(?, name),
+          phone = COALESCE(?, phone),
+          supplier_name = ?,
+          company_name = ?,
+          supplier_status = 'pending',
+          commission_rate = COALESCE(?, commission_rate),
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `;
+      
+      await queryD1(updateSql, [
+        name || null,
+        phone || null,
+        supplier_name || name || "New Supplier",
+        company_name || null,
+        commission_rate !== undefined ? Number(commission_rate) : 10.0,
+        userId
+      ]);
+
+      return NextResponse.json({ success: true, id: userId, updated: true });
+    } else {
+      // 2. User doesn't exist, do an insert
+      const userId = firebaseUid || "sup_" + Math.random().toString(36).substring(2, 11);
+      const insertSql = `
+        INSERT INTO users (id, name, email, phone, role, supplier_name, company_name, supplier_status, commission_rate)
+        VALUES (?, ?, ?, ?, 'supplier', ?, ?, 'pending', ?)
+      `;
+      await queryD1(insertSql, [
+        userId,
+        name || supplier_name || "New Supplier",
+        email,
+        phone || null,
+        supplier_name || name || "New Supplier",
+        company_name || null,
+        commission_rate !== undefined ? Number(commission_rate) : 10.0
+      ]);
+
+      return NextResponse.json({ success: true, id: userId, inserted: true });
+    }
   } catch (error) {
     console.error("Admin Suppliers POST Error:", error);
     return NextResponse.json({ error: "Failed to create supplier" }, { status: 500 });

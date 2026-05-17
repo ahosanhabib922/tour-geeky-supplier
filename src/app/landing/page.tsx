@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { Plane, Star, Shield, TrendingUp, DollarSign, Users, Award, HelpCircle, Check, ArrowRight, X, Phone, Building, FileText, Smartphone, User, Mail, Globe, MapPin, Anchor, ArrowUpRight, Compass, ShieldCheck, Heart, ShoppingBag, Menu, Camera, Send, MessageCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Plane, Star, Shield, TrendingUp, DollarSign, Users, Award, HelpCircle, Check, ArrowRight, X, Phone, Building, FileText, Smartphone, User, Mail, Globe, MapPin, Anchor, ArrowUpRight, Compass, ShieldCheck, Heart, ShoppingBag, Menu, Camera, Send, MessageCircle, Lock, AlertCircle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 
 export default function SupplierLandingPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,6 +18,74 @@ export default function SupplierLandingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
+  // Firebase Auth states
+  const [user, setUser] = useState<any>(null);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+
+  // Monitor Auth state change
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setFormData(prev => ({
+          ...prev,
+          name: prev.name || currentUser.displayName || "",
+          email: prev.email || currentUser.email || ""
+        }));
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleGoogleLogin = async () => {
+    setAuthLoading(true);
+    setAuthError("");
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err: any) {
+      console.error("Google Signin Error:", err);
+      setAuthError(err.message || "Failed to sign in with Google.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthLoading(true);
+    setAuthError("");
+    try {
+      if (authMode === 'register') {
+        await createUserWithEmailAndPassword(auth, authEmail, authPassword);
+      } else {
+        await signInWithEmailAndPassword(auth, authEmail, authPassword);
+      }
+    } catch (err: any) {
+      console.error("Email Auth Error:", err);
+      setAuthError(err.message || "Authentication failed. Check your credentials.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setAuthEmail("");
+      setAuthPassword("");
+      setAuthError("");
+    } catch (err) {
+      console.error("Logout Error:", err);
+    }
+  };
+
   const handleApply = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.supplier_name || !formData.phone || !formData.email || !formData.name) {
@@ -28,7 +98,10 @@ export default function SupplierLandingPage() {
       const res = await fetch('/api/suppliers', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          id: user?.uid // Pass the firebase uid to pair with D1 database
+        })
       });
 
       if (res.ok) {
@@ -481,11 +554,6 @@ export default function SupplierLandingPage() {
               <X className="w-5 h-5" />
             </button>
 
-            <h2 className="text-xl font-bold tracking-tight text-brand-black mb-2">Apply as Operator</h2>
-            <p className="text-xs text-brand-gray mb-6 leading-relaxed font-semibold">
-              Fill in your operator profile details. Our partner onboarding specialists will verify your catalog credentials within 24 hours.
-            </p>
-
             {successMsg ? (
               <div className="py-12 flex flex-col items-center justify-center gap-3 text-emerald-600 animate-in fade-in duration-300">
                 <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-100">
@@ -493,88 +561,194 @@ export default function SupplierLandingPage() {
                 </div>
                 <p className="font-bold text-sm text-center max-w-xs">{successMsg}</p>
               </div>
-            ) : (
-              <form onSubmit={handleApply} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
-                    <User className="w-4 h-4 text-brand-gray" /> Full Name
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. John Doe" 
-                    required
-                    className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
-                    value={formData.name}
-                    onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  />
+            ) : !user ? (
+              /* --- Phase 1: Authentication --- */
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <h2 className="text-xl font-bold tracking-tight text-brand-black">Partner Sign In</h2>
+                  <p className="text-xs text-brand-gray leading-relaxed font-semibold">
+                    Sign in or register your partner account first using Google or your email.
+                  </p>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
-                    <Mail className="w-4 h-4 text-brand-gray" /> Email Address
-                  </label>
-                  <input 
-                    type="email" 
-                    placeholder="e.g. partner@example.com" 
-                    required
-                    className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
-                    value={formData.email}
-                    onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  />
+                {authError && (
+                  <div className="p-3 bg-rose-50 border border-rose-100 rounded-xl flex items-center gap-2.5 text-rose-600 text-xs font-semibold animate-in shake duration-500">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span className="truncate">{authError}</span>
+                  </div>
+                )}
+
+                <Button 
+                  onClick={handleGoogleLogin}
+                  variant="secondary" 
+                  className="w-full h-12 rounded-xl border-brand-border/40 text-xs font-bold flex items-center justify-center gap-2 hover:bg-brand-light transition-all cursor-pointer"
+                  disabled={authLoading}
+                >
+                  <Globe className="w-4 h-4 text-brand-black" />
+                  Continue with Google
+                </Button>
+
+                <div className="relative py-2">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-brand-border/40"></div>
+                  </div>
+                  <div className="relative flex justify-center text-[10px] uppercase font-extrabold text-brand-gray/50">
+                    <span className="bg-white px-3 tracking-widest">or email & pass</span>
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
-                    <FileText className="w-4 h-4 text-brand-gray" /> Brand / Operator Name
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Aegean Cruising Group" 
-                    required
-                    className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
-                    value={formData.supplier_name}
-                    onChange={e => setFormData(prev => ({ ...prev, supplier_name: e.target.value }))}
-                  />
-                </div>
+                <form onSubmit={handleEmailAuth} className="space-y-3.5">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-brand-black uppercase tracking-wider ml-1">Email Address</label>
+                    <div className="relative group">
+                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-gray/40 group-focus-within:text-brand-black transition-colors" />
+                      <input 
+                        type="email" 
+                        required
+                        value={authEmail}
+                        onChange={(e) => setAuthEmail(e.target.value)}
+                        placeholder="partner@example.com"
+                        className="w-full h-11 bg-brand-light/20 border border-brand-border rounded-xl pl-10 pr-4 text-xs font-semibold focus:bg-white focus:border-brand-black outline-none transition-all"
+                      />
+                    </div>
+                  </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
-                    <Building className="w-4 h-4 text-brand-gray" /> Company Registered Name (Optional)
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Aegean Sails Maritime LLC" 
-                    className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
-                    value={formData.company_name}
-                    onChange={e => setFormData(prev => ({ ...prev, company_name: e.target.value }))}
-                  />
-                </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-brand-black uppercase tracking-wider ml-1">Password</label>
+                    <div className="relative group">
+                      <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-gray/40 group-focus-within:text-brand-black transition-colors" />
+                      <input 
+                        type="password" 
+                        required
+                        value={authPassword}
+                        onChange={(e) => setAuthPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full h-11 bg-brand-light/20 border border-brand-border rounded-xl pl-10 pr-4 text-xs font-semibold focus:bg-white focus:border-brand-black outline-none transition-all"
+                      />
+                    </div>
+                  </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
-                    <Smartphone className="w-4 h-4 text-brand-gray" /> Operator Phone Number
-                  </label>
-                  <input 
-                    type="tel" 
-                    placeholder="e.g. +30 691234567" 
-                    required
-                    className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
-                    value={formData.phone}
-                    onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  />
-                </div>
-
-                <div className="pt-4">
                   <Button 
-                    type="submit"
-                    variant="primary"
-                    className="w-full rounded-xl h-11 font-bold text-xs bg-brand-black text-white hover:bg-brand-black/90 active:scale-95"
-                    disabled={submitting}
+                    type="submit" 
+                    variant="primary" 
+                    className="w-full h-12 rounded-xl text-xs font-bold gap-2 mt-2 bg-brand-black text-white hover:bg-brand-black/90 cursor-pointer"
+                    disabled={authLoading}
                   >
-                    {submitting ? "Submitting Application..." : "Submit Application"}
+                    {authLoading ? "Authenticating..." : authMode === 'register' ? "Sign Up as Partner" : "Sign In & Continue"}
                   </Button>
+                </form>
+
+                <div className="text-center pt-2">
+                  <button 
+                    onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
+                    className="text-xs text-brand-gray font-bold hover:text-brand-black transition-colors cursor-pointer"
+                  >
+                    {authMode === 'login' ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                  </button>
                 </div>
-              </form>
+              </div>
+            ) : (
+              /* --- Phase 2: Application Form --- */
+              <div className="space-y-5">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <h2 className="text-xl font-bold tracking-tight text-brand-black">Apply as Operator</h2>
+                    <p className="text-xs text-brand-gray font-semibold leading-none">Step 2: Partner Profile Details</p>
+                  </div>
+                  <button 
+                    onClick={handleLogout}
+                    className="text-[10px] font-bold text-rose-500 hover:text-rose-700 transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5" /> Sign out
+                  </button>
+                </div>
+
+                <div className="p-3 bg-brand-light/40 border border-brand-border/40 rounded-xl text-[11px] text-brand-gray font-semibold flex items-center justify-between">
+                  <span>Signed in as: <strong className="text-brand-black">{user.email}</strong></span>
+                </div>
+
+                <form onSubmit={handleApply} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
+                      <User className="w-4 h-4 text-brand-gray" /> Full Name
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="e.g. John Doe" 
+                      required
+                      className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-brand-light/20 text-brand-black transition-all"
+                      value={formData.name}
+                      onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
+                      <Mail className="w-4 h-4 text-brand-gray" /> Email Address
+                    </label>
+                    <input 
+                      type="email" 
+                      placeholder="e.g. partner@example.com" 
+                      required
+                      disabled
+                      className="w-full h-11 px-4 rounded-xl border border-brand-border bg-brand-light/40 text-brand-gray/80 text-xs font-semibold cursor-not-allowed"
+                      value={formData.email}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-brand-gray" /> Brand / Operator Name
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="e.g. Aegean Cruising Group" 
+                      required
+                      className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
+                      value={formData.supplier_name}
+                      onChange={e => setFormData(prev => ({ ...prev, supplier_name: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
+                      <Building className="w-4 h-4 text-brand-gray" /> Company Registered Name (Optional)
+                    </label>
+                    <input 
+                      type="text" 
+                      placeholder="e.g. Aegean Sails Maritime LLC" 
+                      className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
+                      value={formData.company_name}
+                      onChange={e => setFormData(prev => ({ ...prev, company_name: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold text-brand-black uppercase tracking-wider flex items-center gap-1.5">
+                      <Smartphone className="w-4 h-4 text-brand-gray" /> Operator Phone Number
+                    </label>
+                    <input 
+                      type="tel" 
+                      placeholder="e.g. +30 691234567" 
+                      required
+                      className="w-full h-11 px-4 rounded-xl border border-brand-border focus:outline-none focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black text-xs font-semibold bg-white text-brand-black transition-all"
+                      value={formData.phone}
+                      onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="pt-4">
+                    <Button 
+                      type="submit"
+                      variant="primary"
+                      className="w-full rounded-xl h-11 font-bold text-xs bg-brand-black text-white hover:bg-brand-black/90 active:scale-95 cursor-pointer"
+                      disabled={submitting}
+                    >
+                      {submitting ? "Submitting Application..." : "Submit Application"}
+                    </Button>
+                  </div>
+                </form>
+              </div>
             )}
           </div>
         </div>
