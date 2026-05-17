@@ -1,20 +1,43 @@
-import * as React from "react"
-import { Input as InputPrimitive } from "@base-ui/react/input"
+import React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
-
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
-  return (
-    <InputPrimitive
-      type={type}
-      data-slot="input"
-      className={cn(
-        "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-        className
-      )}
-      {...props}
-    />
-  )
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+  helperText?: string;
+  rightElement?: React.ReactNode;
 }
 
-export { Input }
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ label, error, helperText, rightElement, className, type = "text", ...props }, ref) => {
+    return (
+      <div className={cn("space-y-2", !className?.includes("w-") && "w-full")}>
+        {label && (
+          <div className="flex items-center justify-between">
+            <label className="text-[13px] font-bold text-brand-black">{label}</label>
+            {rightElement}
+          </div>
+        )}
+        <input
+          ref={ref}
+          type={type}
+          className={cn(
+            "w-full px-4 rounded-xl border border-brand-border bg-white outline-none transition-all text-brand-black font-medium text-[13px]",
+            "focus:ring-2 focus:ring-brand-black/5 focus:border-brand-black",
+            "h-11", // Standard premium height
+            error && "border-red-500 focus:ring-red-500/10 focus:border-red-500",
+            className
+          )}
+          {...props}
+        />
+        {error ? (
+          <p className="text-[11px] text-red-500 font-medium">{error}</p>
+        ) : helperText ? (
+          <p className="text-[11px] text-brand-gray font-medium">{helperText}</p>
+        ) : null}
+      </div>
+    );
+  }
+);
+
+Input.displayName = "Input";

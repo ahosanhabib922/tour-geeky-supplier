@@ -27,7 +27,7 @@ export function Badge({ className, variant = "default", status, ...props }: Badg
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-lg border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-colors",
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-colors",
         status 
           ? statusClasses 
           : "bg-zinc-900 text-white border-transparent",

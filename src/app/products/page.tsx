@@ -54,7 +54,7 @@ export default function SupplierProductsPage() {
   if (loading) {
     return (
       <div className="w-full flex items-center justify-center py-20">
-        <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-brand-black border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }

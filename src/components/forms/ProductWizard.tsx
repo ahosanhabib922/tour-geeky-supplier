@@ -99,22 +99,22 @@ export function ProductWizard({ isEdit = false, onSuccess }: { isEdit?: boolean;
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push("/products/list");
+        router.push("/products");
       }
     }
   };
 
   return (
-    <div className="w-full animate-in fade-in duration-500 pb-32">
-      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12 items-start">
-        {/* Minimal Sidebar Navigation */}
-        <aside className="lg:sticky lg:top-8 space-y-8">
+    <div className="w-full animate-in fade-in duration-500 pb-36">
+      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-12 items-start">
+        {/* Progress Sidebar */}
+        <aside className="lg:sticky lg:top-8 space-y-6">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 px-2">
-              <LayoutGrid className="w-3 h-3" /> Progress
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-gray/60 px-4">
+              <LayoutGrid className="w-3.5 h-3.5" /> Progress Tracker
             </div>
             
-            <div className="flex flex-col gap-0.5">
+            <div className="flex flex-col gap-1.5">
               {STEPS.map((step, idx) => {
                 const isCompleted = idx < currentStepIndex;
                 const isActive = idx === currentStepIndex;
@@ -125,32 +125,31 @@ export function ProductWizard({ isEdit = false, onSuccess }: { isEdit?: boolean;
                     onClick={() => idx < currentStepIndex && setCurrentStepIndex(idx)}
                     disabled={!isCompleted && !isActive}
                     className={cn(
-                      "group w-full flex items-center gap-3.5 p-2.5 rounded-xl transition-all text-left relative",
+                      "group w-full flex items-center gap-4 px-4 py-2.5 rounded-full transition-all text-left relative active:scale-95",
                       isActive 
-                        ? "text-primary" 
+                        ? "bg-brand-light text-brand-black shadow-sm" 
                         : isCompleted 
-                          ? "text-foreground/80 hover:bg-muted/50" 
-                          : "text-muted-foreground/70",
-                      "ml-px"
+                          ? "text-brand-black hover:bg-brand-light/40" 
+                          : "text-brand-gray/60",
                     )}
                   >
                     <div className={cn(
-                      "w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold shrink-0 transition-all duration-300",
-                      isCompleted ? "bg-emerald-500/10 text-emerald-600" : 
-                      isActive ? "bg-primary text-white shadow-md shadow-primary/10" : "bg-muted/40 text-muted-foreground/70"
+                      "w-6.5 h-6.5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all duration-300 border border-brand-border",
+                      isCompleted ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600" : 
+                      isActive ? "bg-brand-black text-white border-transparent" : "bg-transparent text-brand-gray/50"
                     )}>
                       {isCompleted ? <Check className="w-3 h-3" /> : idx + 1}
                     </div>
-                    <div className="space-y-0 overflow-hidden">
+                    <div className="space-y-0.5 overflow-hidden">
                       <p className={cn(
-                        "text-[13px] font-semibold tracking-tight truncate transition-colors",
-                        isActive ? "text-primary" : "text-foreground/80 group-disabled:text-muted-foreground/60"
+                        "text-[12px] font-bold tracking-tight truncate transition-colors leading-none",
+                        isActive ? "text-brand-black" : "text-brand-black/80 group-disabled:text-brand-gray/40"
                       )}>
                         {step.title}
                       </p>
                       <p className={cn(
-                        "text-[9px] font-medium uppercase tracking-wider truncate",
-                        isActive ? "text-primary/70" : "text-muted-foreground/70"
+                        "text-[8.5px] font-bold uppercase tracking-widest truncate leading-none mt-0.5",
+                        isActive ? "text-brand-gray" : "text-brand-gray/60 group-disabled:text-brand-gray/30"
                       )}>{step.desc}</p>
                     </div>
                   </button>
@@ -161,49 +160,53 @@ export function ProductWizard({ isEdit = false, onSuccess }: { isEdit?: boolean;
         </aside>
 
         {/* Minimal Content Area */}
-        <main className="animate-in slide-in-from-right-2 duration-500">
+        <main className="animate-in slide-in-from-right-2 duration-500 bg-white">
            {renderStep()}
         </main>
       </div>
 
       {/* Floating Minimal Footer */}
-      <footer className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-4xl z-[100]">
-        <div className="bg-background/60 backdrop-blur-xl border border-border/40 rounded-3xl p-3 flex items-center justify-between shadow-xl shadow-black/5">
+      <footer className="fixed bottom-6 left-1/2 lg:left-[calc(50%+140px)] -translate-x-1/2 w-[calc(100%-3rem)] max-w-4xl z-[100]">
+        <div className="bg-white/85 backdrop-blur-md border border-brand-border rounded-full p-3.5 flex items-center justify-between shadow-2xl shadow-brand-black/5">
           <Button 
             variant="ghost" 
+            size="sm"
             onClick={handleBack} 
             disabled={currentStepIndex === 0}
-            className="rounded-2xl px-6 h-10 gap-2 font-semibold text-xs uppercase tracking-wider disabled:opacity-20"
+            className="rounded-full px-6 h-11 gap-2 font-bold text-[11px] uppercase tracking-wider disabled:opacity-20"
           >
-            <ChevronLeft className="w-4 h-4" /> Back
+            <ChevronLeft className="w-4 w-4" /> Back
           </Button>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button 
               variant="outline" 
-              className="rounded-2xl px-5 h-10 font-bold text-[10px] uppercase tracking-wider border-border/50 text-muted-foreground hover:bg-muted/50"
+              size="sm"
+              className="rounded-full px-6 h-11 font-bold text-[11px] uppercase tracking-wider border-brand-border text-brand-black hover:bg-brand-light"
             >
-              Draft
+              Save Draft
             </Button>
             
             {currentStepIndex === totalSteps - 1 ? (
               <Button 
                 onClick={handleSubmit} 
                 disabled={isSubmitting}
-                className="rounded-2xl px-10 h-10 bg-primary text-white shadow-lg shadow-primary/10 font-bold text-[10px] uppercase tracking-wider hover:scale-[1.01] transition-transform"
+                size="sm"
+                className="rounded-full px-8 h-11 bg-brand-black text-white hover:bg-brand-black/90 font-bold text-[11px] uppercase tracking-wider active:scale-95 transition-all shadow-sm"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <>{product.status === "published" ? "Update" : "Launch"}</>
+                  <>{product.status === "published" ? "Update Experience" : "Launch Experience"}</>
                 )}
               </Button>
             ) : (
               <Button 
                 onClick={handleNext} 
-                className="rounded-2xl px-10 h-10 bg-foreground text-background font-bold text-[10px] uppercase tracking-wider gap-2 hover:scale-[1.01] transition-transform"
+                size="sm"
+                className="rounded-full px-8 h-11 bg-brand-black text-white hover:bg-brand-black/90 font-bold text-[11px] uppercase tracking-wider gap-2 active:scale-95 transition-all shadow-sm"
               >
-                Next <ChevronRight className="w-4 h-4" />
+                Next Step <ChevronRight className="w-4 h-4" />
               </Button>
             )}
           </div>
