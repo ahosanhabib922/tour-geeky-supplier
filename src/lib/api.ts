@@ -11,6 +11,12 @@ export const api = {
     return res.json();
   },
 
+  getBookings: async (): Promise<any[]> => {
+    const res = await fetch(`/api/bookings?t=${Date.now()}`);
+    if (!res.ok) throw new Error("Failed to fetch bookings");
+    return res.json();
+  },
+
   getProductById: async (id: string): Promise<Product | null> => {
     const res = await fetch(`/api/products/${id}`);
     if (res.status === 404) return null;
