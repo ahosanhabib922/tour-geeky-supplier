@@ -41,7 +41,7 @@ export default function RootLayout({
 
     if (pathname === "/" || pathname === "/products") {
       return {
-        label: "Create Experience",
+        label: "Create Product",
         icon: Plus,
         onClick: () => router.push("/products/create")
       };
