@@ -148,6 +148,25 @@ export async function initDatabase() {
       )
     `);
 
+    // 7.5 Suppliers Table (Separated from users table)
+    console.log("Creating suppliers table...");
+    await queryD1(`
+      CREATE TABLE IF NOT EXISTS suppliers (
+        id TEXT PRIMARY KEY,
+        user_id TEXT UNIQUE,
+        name TEXT,
+        email TEXT UNIQUE,
+        phone TEXT,
+        supplier_name TEXT NOT NULL,
+        company_name TEXT,
+        supplier_status TEXT DEFAULT 'pending',
+        commission_rate REAL DEFAULT 10.0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+      )
+    `);
+
     // 8. Verification Codes Table (OTP)
     console.log("Creating verification_codes table...");
     await queryD1(`

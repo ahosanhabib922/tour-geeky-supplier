@@ -5,14 +5,14 @@ export async function GET() {
   try {
     const sql = `
       SELECT 
-        u.id, u.name, u.email, u.phone, u.image, u.role, u.created_at,
-        u.supplier_name, u.company_name, u.supplier_status, u.commission_rate,
-        (SELECT COUNT(*) FROM products p WHERE p.supplier_id = u.id) as products_count,
-        (SELECT COUNT(*) FROM bookings b WHERE b.supplier_id = u.id) as bookings_count,
-        (SELECT COALESCE(SUM(b.total_price), 0) FROM bookings b WHERE b.supplier_id = u.id AND b.payment_status = 'paid') as total_revenue
-      FROM users u
-      WHERE u.role = 'supplier' OR u.supplier_name IS NOT NULL OR u.company_name IS NOT NULL
-      ORDER BY u.created_at DESC
+        s.id, s.name, s.email, s.phone, s.supplier_name, s.company_name, s.supplier_status, s.commission_rate, s.created_at,
+        u.image, u.role,
+        (SELECT COUNT(*) FROM products p WHERE p.supplier_id = s.id) as products_count,
+        (SELECT COUNT(*) FROM bookings b WHERE b.supplier_id = s.id) as bookings_count,
+        (SELECT COALESCE(SUM(b.total_price), 0) FROM bookings b WHERE b.supplier_id = s.id AND b.payment_status = 'paid') as total_revenue
+      FROM suppliers s
+      LEFT JOIN users u ON s.id = u.id
+      ORDER BY s.created_at DESC
     `;
     const suppliers = await queryD1(sql);
     return NextResponse.json(suppliers || []);
@@ -32,18 +32,48 @@ export async function POST(request: Request) {
     }
 
     // 1. Check if user already exists in D1 database by email or firebaseUid
-    const checkSql = "SELECT id, role, supplier_status FROM users WHERE email = ? OR id = ?";
-    const existing = await queryD1(checkSql, [email, firebaseUid || ""]);
+    const checkUserSql = "SELECT id, role FROM users WHERE email = ? OR id = ?";
+    const existingUsers = await queryD1(checkUserSql, [email, firebaseUid || ""]);
 
-    if (existing && existing.length > 0) {
-      const existingUser = existing[0];
-      const userId = existingUser.id;
+    let userId: string;
+
+    if (existingUsers && existingUsers.length > 0) {
+      userId = existingUsers[0].id;
       
-      // Update existing user profile to apply as supplier
-      const updateSql = `
+      // Update existing user profile role to 'supplier'
+      const updateUserSql = `
         UPDATE users 
         SET 
           role = 'supplier',
+          name = COALESCE(?, name),
+          phone = COALESCE(?, phone),
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `;
+      await queryD1(updateUserSql, [name || null, phone || null, userId]);
+    } else {
+      // 2. User doesn't exist, create user record first
+      userId = firebaseUid || "sup_" + Math.random().toString(36).substring(2, 11);
+      const insertUserSql = `
+        INSERT INTO users (id, name, email, phone, role)
+        VALUES (?, ?, ?, ?, 'supplier')
+      `;
+      await queryD1(insertUserSql, [
+        userId,
+        name || "New Supplier User",
+        email,
+        phone || null
+      ]);
+    }
+
+    // 3. Create or update the business profile in the suppliers table
+    const checkSupplierSql = "SELECT id FROM suppliers WHERE id = ? OR email = ?";
+    const existingSuppliers = await queryD1(checkSupplierSql, [userId, email]);
+
+    if (existingSuppliers && existingSuppliers.length > 0) {
+      const updateSupplierSql = `
+        UPDATE suppliers
+        SET
           name = COALESCE(?, name),
           phone = COALESCE(?, phone),
           supplier_name = ?,
@@ -53,36 +83,32 @@ export async function POST(request: Request) {
           updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
       `;
-      
-      await queryD1(updateSql, [
+      await queryD1(updateSupplierSql, [
         name || null,
         phone || null,
-        supplier_name || name || "New Supplier",
+        supplier_name || "New Supplier Brand",
         company_name || null,
         commission_rate !== undefined ? Number(commission_rate) : 10.0,
         userId
       ]);
-
-      return NextResponse.json({ success: true, id: userId, updated: true });
     } else {
-      // 2. User doesn't exist, do an insert
-      const userId = firebaseUid || "sup_" + Math.random().toString(36).substring(2, 11);
-      const insertSql = `
-        INSERT INTO users (id, name, email, phone, role, supplier_name, company_name, supplier_status, commission_rate)
-        VALUES (?, ?, ?, ?, 'supplier', ?, ?, 'pending', ?)
+      const insertSupplierSql = `
+        INSERT INTO suppliers (id, user_id, name, email, phone, supplier_name, company_name, supplier_status, commission_rate)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)
       `;
-      await queryD1(insertSql, [
+      await queryD1(insertSupplierSql, [
         userId,
-        name || supplier_name || "New Supplier",
+        userId,
+        name || "New Supplier",
         email,
         phone || null,
-        supplier_name || name || "New Supplier",
+        supplier_name || "New Supplier Brand",
         company_name || null,
         commission_rate !== undefined ? Number(commission_rate) : 10.0
       ]);
-
-      return NextResponse.json({ success: true, id: userId, inserted: true });
     }
+
+    return NextResponse.json({ success: true, id: userId });
   } catch (error) {
     console.error("Admin Suppliers POST Error:", error);
     return NextResponse.json({ error: "Failed to create supplier" }, { status: 500 });
@@ -124,7 +150,7 @@ export async function PUT(request: Request) {
 
     values.push(id);
     const sql = `
-      UPDATE users 
+      UPDATE suppliers 
       SET ${updates.join(", ")}, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `;
