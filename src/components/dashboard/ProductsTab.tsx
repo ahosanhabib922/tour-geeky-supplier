@@ -74,7 +74,7 @@ export function ProductsTab({
               className="w-full pl-9 pr-4 h-11 text-xs rounded-full border border-brand-border bg-brand-light/20 outline-none transition-all focus:border-brand-black text-brand-black font-semibold placeholder:text-brand-gray/40"
             />
           </div>
-          <Button onClick={onOpenModal} className="h-11 px-5 shrink-0 flex items-center gap-2 font-bold text-[13px]">
+          <Button onClick={onOpenModal} className="hidden lg:inline-flex h-11 px-5 shrink-0 flex items-center gap-2 font-bold text-[13px]">
             <Plus className="h-4.5 w-4.5" /> Create Product
           </Button>
         </div>
