@@ -241,6 +241,32 @@ export async function initDatabase() {
       }
     }
 
+    // --- Data Migration: Move existing suppliers from users to suppliers table ---
+    console.log("Migrating existing suppliers from users to suppliers table...");
+    try {
+      await queryD1(`
+        INSERT INTO suppliers (id, user_id, name, email, phone, supplier_name, company_name, supplier_status, commission_rate, created_at, updated_at)
+        SELECT 
+          u.id, 
+          u.id, 
+          COALESCE(u.name, 'Supplier'), 
+          u.email, 
+          u.phone, 
+          COALESCE(u.supplier_name, u.name, 'Supplier'), 
+          u.company_name, 
+          COALESCE(u.supplier_status, 'pending'), 
+          COALESCE(u.commission_rate, 10.0), 
+          u.created_at, 
+          u.updated_at
+        FROM users u
+        WHERE (u.role = 'supplier' OR u.supplier_name IS NOT NULL OR u.company_name IS NOT NULL)
+          AND u.id NOT IN (SELECT id FROM suppliers)
+      `);
+      console.log("✅ Supplier data migration completed successfully.");
+    } catch (e) {
+      console.error("Warning: Supplier data migration error:", e);
+    }
+
     console.log("✅ Database initialization complete.");
 
   } catch (err) {
