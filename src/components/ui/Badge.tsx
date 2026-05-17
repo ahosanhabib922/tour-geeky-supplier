@@ -1,7 +1,7 @@
 import React from "react";
 
 interface BadgeProps extends React.ComponentPropsWithoutRef<"span"> {
-  status?: "published" | "pending" | "confirmed";
+  status?: "published" | "pending" | "confirmed" | "draft";
 }
 
 export function Badge({ 
@@ -11,15 +11,21 @@ export function Badge({
   ...props 
 }: BadgeProps) {
   const getStyles = () => {
-    if (status === "published" || status === "confirmed") {
-      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+    switch (status) {
+      case "published":
+      case "confirmed":
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      case "pending":
+        return "bg-amber-50 text-amber-700 border-amber-200";
+      case "draft":
+      default:
+        return "bg-zinc-50 text-zinc-600 border-zinc-200";
     }
-    return "bg-amber-500/10 text-amber-400 border-amber-500/20";
   };
 
   return (
     <span 
-      className={`rounded-lg text-[8px] uppercase font-black px-2 py-0.5 border ${getStyles()} ${className}`} 
+      className={`inline-flex items-center justify-center rounded-full text-[10px] font-semibold px-2.5 py-0.5 border ${getStyles()} ${className}`} 
       {...props}
     >
       {children}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Plus, Star, Globe, PackageOpen, MoreHorizontal, Trash2 } from "lucide-react";
+import { Search, Plus, Star, Globe, PackageOpen, Trash2 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { Input } from "../ui/Input";
@@ -20,12 +20,10 @@ export function ProductsTab({
   onDeleteProduct,
 }: ProductsTabProps) {
   const [filterStatus, setFilterStatus] = useState("all");
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const filteredProducts = products.filter(p => {
     if (p.status === "archived") return false;
     
-    // Map 'pending' mock status to matches for 'draft' filtering or separate check
     const matchesStatus = 
       filterStatus === "all" || 
       p.status === filterStatus ||
@@ -46,26 +44,26 @@ export function ProductsTab({
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       
-      {/* Title & Request Action */}
-      <div className="flex justify-between items-end">
+      {/* Title Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-6">
         <div className="space-y-1">
-          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent">My Activity Listings</h1>
-          <p className="text-zinc-400 text-sm">Add and review your catalog. All new listings require platform verification before going public.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">My Activity Listings</h1>
+          <p className="text-zinc-500 text-sm">Add and review your catalog. All new listings require platform verification before going public.</p>
         </div>
       </div>
 
       {/* Filter Tabs & Search Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Status Filters */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {["all", "published", "draft"].map((status) => (
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize tracking-wide transition-all duration-200 ${
                 filterStatus === status 
-                  ? "bg-violet-600/20 text-violet-400 border border-violet-500/30"
-                  : "text-zinc-500 hover:text-zinc-300 border border-transparent"
+                  ? "bg-zinc-100 text-zinc-900 border border-zinc-200"
+                  : "text-zinc-500 hover:text-zinc-950 border border-transparent"
               }`}
             >
               {status === "draft" ? "Draft / Pending" : status}
@@ -74,52 +72,52 @@ export function ProductsTab({
         </div>
 
         {/* Search & Action Buttons */}
-        <div className="flex items-center gap-4 w-full md:w-auto">
+        <div className="flex items-center gap-3 w-full md:w-auto">
           <div className="relative w-full md:w-72">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
             <Input 
               placeholder="Search catalog..." 
               value={searchQuery}
               onChange={(e) => onSearchQueryChange(e.target.value)}
-              className="pl-11"
+              className="pl-9"
             />
           </div>
-          <Button onClick={onOpenModal} className="h-11 px-6 shrink-0 flex items-center gap-2">
+          <Button onClick={onOpenModal} className="h-10 px-5 shrink-0 flex items-center gap-2">
             <Plus className="h-4 w-4" /> Create Product
           </Button>
         </div>
       </div>
 
       {/* Admin-Style Products Table */}
-      <div className="rounded-3xl border border-zinc-800/50 bg-zinc-900/20 backdrop-blur-md overflow-hidden">
+      <div className="rounded-xl border border-zinc-200/80 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b border-zinc-800/60 bg-zinc-900/10 text-left">
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500 w-[450px]">Product</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Reference</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Category</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Status</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500 text-right">Actions</th>
+              <tr className="border-b border-zinc-200/80 bg-zinc-50/50 text-left">
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400 w-[450px]">Product</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Reference</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Category</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Status</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredProducts.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-12 text-center">
-                    <div className="flex flex-col items-center gap-3 text-zinc-600">
-                      <PackageOpen className="h-9 w-9 opacity-30" />
+                    <div className="flex flex-col items-center gap-3 text-zinc-400">
+                      <PackageOpen className="h-9 w-9 opacity-40" />
                       <p className="text-xs font-bold uppercase tracking-wider">No products found</p>
                     </div>
                   </td>
                 </tr>
               ) : (
                 filteredProducts.map((product) => (
-                  <tr key={product.id} className="border-b border-zinc-800/30 hover:bg-zinc-900/20 transition-all last:border-0">
+                  <tr key={product.id} className="border-b border-zinc-100 hover:bg-zinc-50/50 transition-all last:border-0">
                     {/* Cover image & Title */}
-                    <td className="py-4 px-6">
+                    <td className="py-3 px-6">
                       <div className="flex items-center gap-4">
-                        <div className="h-10 w-12 rounded-xl bg-zinc-800 overflow-hidden shrink-0 border border-zinc-800/60">
+                        <div className="h-10 w-12 rounded-lg bg-zinc-100 overflow-hidden shrink-0 border border-zinc-200">
                           <img 
                             src={`https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=200&h=150&auto=format&fit=crop`} 
                             alt={product.title} 
@@ -127,7 +125,7 @@ export function ProductsTab({
                           />
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-bold text-xs text-zinc-100 hover:text-white transition-colors">{product.title}</span>
+                          <span className="font-bold text-xs text-zinc-900 hover:text-zinc-950 transition-colors">{product.title}</span>
                           <div className="flex items-center gap-0.5 mt-1">
                             {[1, 2, 3, 4, 5].map((s) => (
                               <Star key={s} className="h-3 w-3 text-amber-500 fill-amber-500" />
@@ -138,36 +136,36 @@ export function ProductsTab({
                     </td>
 
                     {/* Reference ID */}
-                    <td className="py-4 px-6 font-mono text-[10px] text-zinc-500">
+                    <td className="py-3 px-6 font-mono text-[10px] text-zinc-400">
                       {product.id}
                     </td>
 
                     {/* Category Label */}
-                    <td className="py-4 px-6 text-xs text-zinc-400 capitalize font-semibold">
+                    <td className="py-3 px-6 text-xs text-zinc-600 capitalize font-semibold">
                       {product.category.replace("-", " ")}
                     </td>
 
                     {/* Status Badge */}
-                    <td className="py-4 px-6">
+                    <td className="py-3 px-6">
                       <Badge status={product.status}>
                         {getStatusLabel(product.status)}
                       </Badge>
                     </td>
 
                     {/* Dropdown Options */}
-                    <td className="py-4 px-6 text-right relative">
-                      <div className="flex items-center justify-end gap-2">
+                    <td className="py-3 px-6 text-right relative">
+                      <div className="flex items-center justify-end gap-1.5">
                         {onDeleteProduct && (
                           <button 
                             onClick={() => onDeleteProduct(product.id)}
-                            className="p-2 hover:bg-rose-500/10 rounded-xl text-zinc-500 hover:text-rose-400 transition-colors"
+                            className="p-2 hover:bg-rose-50 rounded-lg text-zinc-400 hover:text-rose-600 transition-colors"
                             title="Delete"
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
                         )}
                         <button 
-                          className="p-2 hover:bg-zinc-800 rounded-xl text-zinc-400 hover:text-white transition-colors"
+                          className="p-2 hover:bg-zinc-100 rounded-lg text-zinc-400 hover:text-zinc-800 transition-colors"
                           title="View Details"
                         >
                           <Globe className="h-4 w-4" />

@@ -8,34 +8,38 @@ interface BookingsTabProps {
 export function BookingsTab({ bookings }: BookingsTabProps) {
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent">Activity Bookings</h1>
-        <p className="text-zinc-400 text-sm">Review real-time incoming traveler requests and check-in dates.</p>
+      
+      {/* Title Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-100 pb-6">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Activity Bookings</h1>
+          <p className="text-zinc-500 text-sm">Review real-time incoming traveler requests and check-in dates.</p>
+        </div>
       </div>
 
       {/* Bookings Table */}
-      <div className="rounded-3xl border border-zinc-800/50 bg-zinc-900/20 backdrop-blur-md overflow-hidden">
+      <div className="rounded-xl border border-zinc-200/80 bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="border-b border-zinc-800/60 bg-zinc-900/10 text-left">
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Booking ID</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Traveler</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Experience / Tour</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Travel Date</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Net Payout</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">Status</th>
+              <tr className="border-b border-zinc-200/80 bg-zinc-50/50 text-left">
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Booking ID</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Traveler</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Experience / Tour</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Travel Date</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Net Payout</th>
+                <th className="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-zinc-400">Status</th>
               </tr>
             </thead>
             <tbody>
               {bookings.map((bk, i) => (
-                <tr key={i} className="border-b border-zinc-800/30 hover:bg-zinc-900/20 transition-all last:border-0">
-                  <td className="py-4 px-6 text-xs font-bold text-violet-400">{bk.id}</td>
-                  <td className="py-4 px-6 font-bold text-xs">{bk.traveler}</td>
-                  <td className="py-4 px-6 font-semibold text-xs text-zinc-400 max-w-[200px] truncate">{bk.tour}</td>
-                  <td className="py-4 px-6 text-[11px] text-zinc-500 font-medium">{bk.date}</td>
-                  <td className="py-4 px-6 font-bold text-xs text-white">${bk.payout.toFixed(2)}</td>
-                  <td className="py-4 px-6">
+                <tr key={i} className="border-b border-zinc-100 hover:bg-zinc-50/50 transition-all last:border-0">
+                  <td className="py-3 px-6 text-xs font-bold text-blue-600">{bk.id}</td>
+                  <td className="py-3 px-6 font-bold text-xs text-zinc-900">{bk.traveler}</td>
+                  <td className="py-3 px-6 font-semibold text-xs text-zinc-500 max-w-[220px] truncate">{bk.tour}</td>
+                  <td className="py-3 px-6 text-[11px] text-zinc-500 font-medium">{bk.date}</td>
+                  <td className="py-3 px-6 font-bold text-xs text-zinc-900">${bk.payout.toFixed(2)}</td>
+                  <td className="py-3 px-6">
                     <Badge status={bk.status}>
                       {bk.status}
                     </Badge>

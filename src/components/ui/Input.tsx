@@ -10,7 +10,7 @@ export function Input({
 }: InputProps) {
   return (
     <input 
-      className={`w-full px-4 h-11 border border-zinc-800/80 rounded-xl bg-zinc-950 text-zinc-100 placeholder-zinc-700 outline-none focus:border-violet-500/50 transition-all text-sm font-semibold ${className}`} 
+      className={`w-full px-3 h-10 border border-zinc-200 rounded-xl bg-white text-zinc-900 placeholder-zinc-400 outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400/20 transition-all text-sm font-medium ${className}`} 
       {...props} 
     />
   );
