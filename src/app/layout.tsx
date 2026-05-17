@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Box, ClipboardList, Wallet, Plane, X, Menu, Bell, Search, Plus } from "lucide-react";
+import { LayoutDashboard, Box, ClipboardList, Wallet, Plane, X, Menu, Bell, Search, Plus, CalendarDays } from "lucide-react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -30,6 +30,9 @@ export default function RootLayout({
     }
     if (pathname === "/earnings") {
       return { title: "Finance", desc: "Revenue and payouts", breadcrumb: "Finances", active: "earnings" };
+    }
+    if (pathname === "/calendar") {
+      return { title: "Availability", desc: "Manage time slots and capacity", breadcrumb: "Calendar", active: "calendar" };
     }
     return { title: "Dashboard", desc: "Operator Overview", breadcrumb: "Dashboard", active: "dashboard" };
   };
@@ -80,6 +83,7 @@ export default function RootLayout({
     { id: "products", label: "Activities", icon: Box, href: "/products" },
     { id: "bookings", label: "Bookings", icon: ClipboardList, href: "/bookings" },
     { id: "earnings", label: "Finances", icon: Wallet, href: "/earnings" },
+    { id: "calendar", label: "Calendar", icon: CalendarDays, href: "/calendar" },
   ];
 
   return (
