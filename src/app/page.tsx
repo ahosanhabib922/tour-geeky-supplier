@@ -8,8 +8,11 @@ import { OverviewTab } from "@/components/dashboard/OverviewTab";
 import { ProductsTab } from "@/components/dashboard/ProductsTab";
 import { BookingsTab } from "@/components/dashboard/BookingsTab";
 import { EarningsTab } from "@/components/dashboard/EarningsTab";
-import { RequestListingModal } from "@/components/modals/RequestListingModal";
 import { Input } from "@/components/ui/Input";
+
+// Admin Product Creation Wizard Imports
+import { ProductFormProvider } from "@/hooks/useProductForm";
+import { ProductWizard } from "@/components/forms/ProductWizard";
 
 // Mock Initial Data
 const INITIAL_PRODUCTS = [
@@ -31,20 +34,6 @@ export default function SupplierDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const handleCreateProduct = (formData: any) => {
-    const newProd = {
-      id: "prod_" + Math.random().toString(36).substring(2, 9),
-      title: formData.title,
-      category: formData.category,
-      price: parseFloat(formData.price),
-      bookings: 0,
-      revenue: 0,
-      status: "pending"
-    };
-    setProducts([newProd, ...products]);
-    setIsModalOpen(false);
-  };
 
   // Calculations
   const activeTours = products.filter(p => p.status === 'published').length;
@@ -246,12 +235,45 @@ export default function SupplierDashboard() {
         />
       )}
 
-      {/* Product Request Modal */}
-      <RequestListingModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleCreateProduct}
-      />
+      {/* Fullscreen Product Wizard Overlay */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 bg-white flex flex-col animate-in fade-in duration-300">
+          {/* Header Banner */}
+          <header className="h-[72px] shrink-0 border-b border-zinc-200/80 flex items-center justify-between px-6 lg:px-10 bg-white/80 backdrop-blur-md z-10 sticky top-0">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-1.5 text-xs text-zinc-400 font-semibold tracking-wide">
+                <span>Supplier Hub</span>
+                <span>/</span>
+                <span className="text-zinc-600">Create Experience</span>
+              </div>
+              
+              <div className="flex flex-col border-l border-zinc-200 pl-6">
+                <h1 className="text-[15px] font-bold text-zinc-900 leading-tight">New Activity Wizard</h1>
+                <p className="text-[10px] text-zinc-400 font-semibold mt-0.5">Wizard Mode • Create product listing</p>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="p-2 text-zinc-400 hover:text-zinc-800 rounded-lg hover:bg-zinc-50 transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </header>
+
+          {/* Form Content */}
+          <div className="flex-1 overflow-y-auto p-6 sm:p-10 lg:p-14 bg-zinc-50/10">
+            <div className="max-w-6xl mx-auto">
+              <ProductFormProvider>
+                <ProductWizard onSuccess={() => {
+                  alert("Product successfully created and submitted for verification!");
+                  setIsModalOpen(false);
+                }} />
+              </ProductFormProvider>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
