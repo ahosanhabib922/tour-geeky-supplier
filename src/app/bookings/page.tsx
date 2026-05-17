@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { BookingsTab } from "@/components/dashboard/BookingsTab";
 import { api } from "@/lib/api";
-import { INITIAL_BOOKINGS } from "@/constants/mockData";
 
 export default function SupplierBookingsPage() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -13,14 +12,11 @@ export default function SupplierBookingsPage() {
     const loadBookings = async () => {
       try {
         const data = await api.getBookings();
-        if (data && data.length > 0) {
+        if (data) {
           setBookings(data);
-        } else {
-          setBookings(INITIAL_BOOKINGS);
         }
       } catch (error) {
-        console.error("Failed to load live bookings from DB, falling back to mock:", error);
-        setBookings(INITIAL_BOOKINGS);
+        console.error("Failed to load live bookings from DB:", error);
       } finally {
         setLoading(false);
       }

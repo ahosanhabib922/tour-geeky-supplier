@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { OverviewTab } from "@/components/dashboard/OverviewTab";
 import { api } from "@/lib/api";
-import { INITIAL_PRODUCTS, INITIAL_BOOKINGS } from "@/constants/mockData";
 
 export default function SupplierDashboard() {
   const router = useRouter();
@@ -20,21 +19,14 @@ export default function SupplierDashboard() {
           api.getBookings(),
         ]);
 
-        if (liveProducts && liveProducts.length > 0) {
+        if (liveProducts) {
           setProducts(liveProducts);
-        } else {
-          setProducts(INITIAL_PRODUCTS);
         }
-
-        if (liveBookings && liveBookings.length > 0) {
+        if (liveBookings) {
           setBookings(liveBookings);
-        } else {
-          setBookings(INITIAL_BOOKINGS);
         }
       } catch (error) {
-        console.error("Failed to load live dashboard data, falling back to mock:", error);
-        setProducts(INITIAL_PRODUCTS);
-        setBookings(INITIAL_BOOKINGS);
+        console.error("Failed to load live dashboard data:", error);
       } finally {
         setLoading(false);
       }

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { ProductsTab } from "@/components/dashboard/ProductsTab";
 import { api } from "@/lib/api";
 import { Product } from "@/types/product";
-import { INITIAL_PRODUCTS } from "@/constants/mockData";
 
 export default function SupplierProductsPage() {
   const router = useRouter();
@@ -17,15 +16,11 @@ export default function SupplierProductsPage() {
     const loadProducts = async () => {
       try {
         const data = await api.getProducts();
-        if (data && data.length > 0) {
+        if (data) {
           setProducts(data);
-        } else {
-          // Fallback to mock data if DB is empty
-          setProducts(INITIAL_PRODUCTS as any[]);
         }
       } catch (error) {
-        console.error("Failed to load live products from DB, falling back to mock:", error);
-        setProducts(INITIAL_PRODUCTS as any[]);
+        console.error("Failed to load live products from DB:", error);
       } finally {
         setLoading(false);
       }
