@@ -96,22 +96,27 @@ export function OverviewTab({
             </div>
             
             <div className="space-y-3.5">
-              {bookings.slice(0, 3).map((bk, i) => (
+              {bookings.slice(0, 3).map((bk, i) => {
+                const name = bk.customer_name || bk.traveler || "Unknown";
+                const tour = bk.product_title || bk.tour || "Activity";
+                const initials = name.substring(0, 2).toUpperCase();
+                return (
                 <div key={i} className="flex justify-between items-center p-3.5 rounded-[20px] bg-brand-light/30 border border-brand-border hover:bg-brand-light/60 transition-all">
                   <div className="flex items-center gap-3">
                     <div className="h-8.5 w-8.5 rounded-full bg-brand-light border border-brand-border flex items-center justify-center text-[10px] font-bold text-brand-black uppercase">
-                      {bk.traveler.substring(0, 2).toUpperCase()}
+                      {initials}
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-brand-black leading-none">{bk.traveler}</p>
-                      <p className="text-[9px] text-brand-gray font-bold uppercase tracking-wider mt-1 truncate max-w-[130px]">{bk.tour}</p>
+                      <p className="text-xs font-bold text-brand-black leading-none">{name}</p>
+                      <p className="text-[9px] text-brand-gray font-bold uppercase tracking-wider mt-1 truncate max-w-[130px]">{tour}</p>
                     </div>
                   </div>
-                  <Badge status={bk.status}>
-                    {bk.status}
+                  <Badge status={bk.status || "pending"}>
+                    {bk.status || "pending"}
                   </Badge>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
           

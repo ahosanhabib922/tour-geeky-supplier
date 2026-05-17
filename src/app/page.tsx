@@ -46,7 +46,7 @@ export default function SupplierDashboard() {
   const activeTours = products.filter(p => p.status === 'published').length;
   const pendingTours = products.filter(p => p.status === 'pending').length;
   const totalBookings = bookings.length;
-  const grossSales = products.reduce((sum, p) => sum + (p.revenue || 0), 0);
+  const grossSales = bookings.reduce((sum, b) => sum + (b.total_price || b.price || 0), 0);
   const netEarnings = grossSales * 0.90; // 10% commission
 
   if (loading) {

@@ -58,12 +58,16 @@ export async function initDatabase() {
       CREATE TABLE IF NOT EXISTS bookings (
         id TEXT PRIMARY KEY,
         product_id TEXT,
+        option_id TEXT, -- Which product option was booked
+        option_name TEXT, -- Option reference name for display
         user_id TEXT, -- Link to users table
         customer_name TEXT,
         customer_email TEXT,
         customer_phone TEXT,
         booking_date TEXT,
         travel_date TEXT,
+        time_slot TEXT, -- The specific time slot booked
+        participants TEXT, -- JSON: {"adults": 2, "children": 1}
         total_price REAL,
         currency TEXT,
         status TEXT DEFAULT 'pending',
