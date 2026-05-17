@@ -82,34 +82,34 @@ export function ProductsTab({
       </div>
 
       {/* Admin-Style Products Table */}
-      <div className="rounded-[24px] border border-brand-border/40 bg-white hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300 overflow-hidden">
+      <div className="w-full overflow-auto">
         <Table>
-          <TableHeader className="bg-brand-light/50 border-b border-brand-border">
+          <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray w-[450px]">Product</TableHead>
-              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Reference</TableHead>
-              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Category</TableHead>
-              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Status</TableHead>
-              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray text-right">Actions</TableHead>
+              <TableHead className="w-[400px]">Product</TableHead>
+              <TableHead>Reference</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="py-12 text-center">
-                  <div className="flex flex-col items-center gap-3 text-brand-gray/60">
-                    <PackageOpen className="h-9 w-9 opacity-40 text-brand-gray" />
-                    <p className="text-[10px] font-bold uppercase tracking-wider">No products found</p>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                    <PackageOpen className="h-8 w-8 opacity-20" />
+                    <p>No products found</p>
                   </div>
                 </TableCell>
               </TableRow>
             ) : (
               filteredProducts.map((product) => (
-                <TableRow key={product.id} className="border-b border-brand-border hover:bg-brand-light/20 transition-all last:border-0">
+                <TableRow key={product.id}>
                   {/* Cover image & Title */}
-                  <TableCell className="py-4 px-6">
+                  <TableCell>
                     <div className="flex items-center gap-4">
-                      <div className="h-10 w-12 rounded-xl bg-brand-light overflow-hidden shrink-0 border border-brand-border">
+                      <div className="h-10 w-12 rounded-md bg-muted overflow-hidden shrink-0">
                         <img 
                           src={product.coverImage || `https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=200&h=150&auto=format&fit=crop`} 
                           alt={product.title} 
@@ -117,10 +117,10 @@ export function ProductsTab({
                         />
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-bold text-xs text-brand-black hover:text-brand-black/80 transition-colors">{product.title}</span>
-                        <div className="flex items-center gap-0.5 mt-1">
+                        <span className="font-medium">{product.title}</span>
+                        <div className="flex items-center gap-1 mt-0.5">
                           {[1, 2, 3, 4, 5].map((s) => (
-                            <Star key={s} className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
+                            <Star key={s} className="h-3 w-3 text-amber-500 fill-amber-500" />
                           ))}
                         </div>
                       </div>
@@ -128,24 +128,24 @@ export function ProductsTab({
                   </TableCell>
 
                   {/* Reference ID */}
-                  <TableCell className="py-4 px-6 font-mono text-[10px] text-brand-gray/60 font-semibold">
+                  <TableCell className="font-mono text-xs text-muted-foreground">
                     {product.id}
                   </TableCell>
 
                   {/* Category Label */}
-                  <TableCell className="py-4 px-6 text-xs text-brand-gray capitalize font-bold">
+                  <TableCell className="text-muted-foreground capitalize">
                     {product.category?.replace("-", " ")}
                   </TableCell>
 
                   {/* Status Badge */}
-                  <TableCell className="py-4 px-6">
-                    <Badge status={product.status}>
+                  <TableCell>
+                    <Badge variant={product.status === "published" ? "default" : "secondary"}>
                       {getStatusLabel(product.status)}
                     </Badge>
                   </TableCell>
 
                   {/* Dropdown Options */}
-                  <TableCell className="py-4 px-6 text-right relative">
+                  <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                       {onDeleteProduct && (
                         <button 
@@ -153,14 +153,14 @@ export function ProductsTab({
                           className="p-2 hover:bg-red-50 rounded-full text-brand-gray/60 hover:text-red-600 transition-colors active:scale-95"
                           title="Delete"
                         >
-                          <Trash2 className="h-4.5 w-4.5" />
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       )}
                       <button 
                         className="p-2 hover:bg-brand-light rounded-full text-brand-gray/60 hover:text-brand-black transition-colors active:scale-95"
                         title="View Details"
                       >
-                        <Globe className="h-4.5 w-4.5" />
+                        <Globe className="h-4 w-4" />
                       </button>
                     </div>
                   </TableCell>
