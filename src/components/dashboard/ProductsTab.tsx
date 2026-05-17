@@ -3,6 +3,7 @@ import { Search, Plus, Star, Globe, PackageOpen, Trash2 } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { Input } from "../ui/Input";
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "../ui/Table";
 
 interface ProductsTabProps {
   products: any[];
@@ -82,94 +83,92 @@ export function ProductsTab({
 
       {/* Admin-Style Products Table */}
       <div className="rounded-[24px] border border-brand-border/40 bg-white hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="border-b border-brand-border bg-brand-light/50 text-left">
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray w-[450px]">Product</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Reference</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Category</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Status</th>
-                <th className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredProducts.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="py-12 text-center">
-                    <div className="flex flex-col items-center gap-3 text-brand-gray/60">
-                      <PackageOpen className="h-9 w-9 opacity-40 text-brand-gray" />
-                      <p className="text-[10px] font-bold uppercase tracking-wider">No products found</p>
+        <Table>
+          <TableHeader className="bg-brand-light/50 border-b border-brand-border">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray w-[450px]">Product</TableHead>
+              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Reference</TableHead>
+              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Category</TableHead>
+              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray">Status</TableHead>
+              <TableHead className="py-4 px-6 text-[10px] font-bold uppercase tracking-wider text-brand-gray text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredProducts.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="py-12 text-center">
+                  <div className="flex flex-col items-center gap-3 text-brand-gray/60">
+                    <PackageOpen className="h-9 w-9 opacity-40 text-brand-gray" />
+                    <p className="text-[10px] font-bold uppercase tracking-wider">No products found</p>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : (
+              filteredProducts.map((product) => (
+                <TableRow key={product.id} className="border-b border-brand-border hover:bg-brand-light/20 transition-all last:border-0">
+                  {/* Cover image & Title */}
+                  <TableCell className="py-4 px-6">
+                    <div className="flex items-center gap-4">
+                      <div className="h-10 w-12 rounded-xl bg-brand-light overflow-hidden shrink-0 border border-brand-border">
+                        <img 
+                          src={product.coverImage || `https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=200&h=150&auto=format&fit=crop`} 
+                          alt={product.title} 
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-xs text-brand-black hover:text-brand-black/80 transition-colors">{product.title}</span>
+                        <div className="flex items-center gap-0.5 mt-1">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <Star key={s} className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </td>
-                </tr>
-              ) : (
-                filteredProducts.map((product) => (
-                  <tr key={product.id} className="border-b border-brand-border hover:bg-brand-light/20 transition-all last:border-0">
-                    {/* Cover image & Title */}
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-4">
-                        <div className="h-10 w-12 rounded-xl bg-brand-light overflow-hidden shrink-0 border border-brand-border">
-                          <img 
-                            src={product.coverImage || `https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=200&h=150&auto=format&fit=crop`} 
-                            alt={product.title} 
-                            className="h-full w-full object-cover"
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="font-bold text-xs text-brand-black hover:text-brand-black/80 transition-colors">{product.title}</span>
-                          <div className="flex items-center gap-0.5 mt-1">
-                            {[1, 2, 3, 4, 5].map((s) => (
-                              <Star key={s} className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
+                  </TableCell>
 
-                    {/* Reference ID */}
-                    <td className="py-4 px-6 font-mono text-[10px] text-brand-gray/60 font-semibold">
-                      {product.id}
-                    </td>
+                  {/* Reference ID */}
+                  <TableCell className="py-4 px-6 font-mono text-[10px] text-brand-gray/60 font-semibold">
+                    {product.id}
+                  </TableCell>
 
-                    {/* Category Label */}
-                    <td className="py-4 px-6 text-xs text-brand-gray capitalize font-bold">
-                      {product.category?.replace("-", " ")}
-                    </td>
+                  {/* Category Label */}
+                  <TableCell className="py-4 px-6 text-xs text-brand-gray capitalize font-bold">
+                    {product.category?.replace("-", " ")}
+                  </TableCell>
 
-                    {/* Status Badge */}
-                    <td className="py-4 px-6">
-                      <Badge status={product.status}>
-                        {getStatusLabel(product.status)}
-                      </Badge>
-                    </td>
+                  {/* Status Badge */}
+                  <TableCell className="py-4 px-6">
+                    <Badge status={product.status}>
+                      {getStatusLabel(product.status)}
+                    </Badge>
+                  </TableCell>
 
-                    {/* Dropdown Options */}
-                    <td className="py-4 px-6 text-right relative">
-                      <div className="flex items-center justify-end gap-2">
-                        {onDeleteProduct && (
-                          <button 
-                            onClick={() => onDeleteProduct(product.id)}
-                            className="p-2 hover:bg-red-50 rounded-full text-brand-gray/60 hover:text-red-600 transition-colors active:scale-95"
-                            title="Delete"
-                          >
-                            <Trash2 className="h-4.5 w-4.5" />
-                          </button>
-                        )}
+                  {/* Dropdown Options */}
+                  <TableCell className="py-4 px-6 text-right relative">
+                    <div className="flex items-center justify-end gap-2">
+                      {onDeleteProduct && (
                         <button 
-                          className="p-2 hover:bg-brand-light rounded-full text-brand-gray/60 hover:text-brand-black transition-colors active:scale-95"
-                          title="View Details"
+                          onClick={() => onDeleteProduct(product.id)}
+                          className="p-2 hover:bg-red-50 rounded-full text-brand-gray/60 hover:text-red-600 transition-colors active:scale-95"
+                          title="Delete"
                         >
-                          <Globe className="h-4.5 w-4.5" />
+                          <Trash2 className="h-4.5 w-4.5" />
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                      )}
+                      <button 
+                        className="p-2 hover:bg-brand-light rounded-full text-brand-gray/60 hover:text-brand-black transition-colors active:scale-95"
+                        title="View Details"
+                      >
+                        <Globe className="h-4.5 w-4.5" />
+                      </button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
