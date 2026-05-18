@@ -194,17 +194,8 @@ export default function RootLayout({
             <main className="flex-1 w-full flex items-center justify-center p-4 sm:p-6 lg:p-8">
               <div className="bg-white border border-brand-border/40 rounded-[32px] max-w-xl w-full p-8 sm:p-10 space-y-8 animate-in zoom-in-95 duration-500">
               
-              {/* Pulsing Status Icon */}
-              <div className="mx-auto w-16 h-16 rounded-[24px] bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 relative">
-                <div className="absolute inset-0 rounded-[24px] bg-amber-400/10 animate-ping opacity-75" />
-                <Clock className="w-8 h-8 relative z-10 animate-pulse" />
-              </div>
-
               {/* Title & Brand Badge */}
               <div className="text-center space-y-3">
-                <div className="px-3.5 py-1 bg-amber-50/80 text-amber-800 text-[10px] font-black uppercase tracking-widest rounded-full border border-amber-200/50 mx-auto w-max flex items-center gap-1.5">
-                  <ShieldAlert className="w-3.5 h-3.5" /> Verification Pending
-                </div>
                 <h2 className="text-2xl font-black tracking-tight text-zinc-900 uppercase">
                   Application Under Review
                 </h2>
@@ -226,8 +217,8 @@ export default function RootLayout({
               </div>
 
               {/* Professional Onboarding Progress Workflow Map */}
-              <div className="bg-brand-light/30 border border-brand-border/40 rounded-2xl p-5 space-y-4">
-                <h3 className="text-[10px] font-black text-brand-black uppercase tracking-widest border-b border-brand-border/40 pb-2">Onboarding Progress</h3>
+              <div className="pt-6 border-t border-brand-border/40 space-y-5">
+                <h3 className="text-[10px] font-black text-brand-gray uppercase tracking-widest">Onboarding Progress</h3>
                 
                 <div className="space-y-3.5 text-left">
                   {/* Step 1: Registered */}
