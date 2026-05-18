@@ -92,7 +92,7 @@ export function Step2MainInfo() {
       />
 
       {/* Header Info */}
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_160px] gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 px-1">
              Activity Title
@@ -103,21 +103,6 @@ export function Step2MainInfo() {
             placeholder="e.g., Sunset Sailing Tour in Santorini"
             className="h-11 text-base font-semibold rounded-xl bg-transparent border-border/40 focus:border-primary/50 transition-all"
           />
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 px-1">
-            Currency
-          </label>
-          <select 
-            value={product.currency}
-            onChange={(e) => updateProduct({ currency: e.target.value })}
-            className="w-full h-11 px-4 rounded-xl border border-border/40 bg-transparent outline-none font-semibold text-sm focus:border-primary/50 transition-all appearance-none cursor-pointer"
-          >
-            <option value="EUR">EUR (€)</option>
-            <option value="USD">USD ($)</option>
-            <option value="GBP">GBP (£)</option>
-            <option value="AED">AED (د.إ)</option>
-          </select>
         </div>
       </div>
 
