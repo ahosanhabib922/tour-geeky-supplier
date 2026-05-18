@@ -4,12 +4,31 @@ import { queryD1 } from "@/lib/db";
 export async function GET(request: NextRequest) {
   try {
     const supplierId = request.nextUrl.searchParams.get("supplier_id");
+    const email = request.nextUrl.searchParams.get("email");
+
+    let targetSupplierId = supplierId;
+
+    if (email) {
+      const supplierResult = await queryD1("SELECT id FROM suppliers WHERE email = ?", [email]);
+      if (supplierResult && supplierResult.length > 0) {
+        targetSupplierId = supplierResult[0].id;
+      } else {
+        return NextResponse.json({
+          grossSales: 0,
+          commissionRate: 10,
+          commissionPaid: 0,
+          netEarnings: 0,
+          totalBookings: 0,
+          transactions: []
+        }); // email provided but supplier not found
+      }
+    }
 
     // Get commission rate for this supplier
     let commissionRate = 10; // default 10%
-    if (supplierId) {
+    if (targetSupplierId) {
       const supplierResult = await queryD1(
-        "SELECT commission_rate FROM users WHERE id = ?", [supplierId]
+        "SELECT commission_rate FROM suppliers WHERE id = ?", [targetSupplierId]
       );
       if (supplierResult?.[0]?.commission_rate) {
         commissionRate = supplierResult[0].commission_rate;
@@ -17,10 +36,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Build WHERE clause
-    const whereClause = supplierId
+    const whereClause = targetSupplierId
       ? "WHERE (b.supplier_id = ? OR p.supplier_id = ?)"
       : "WHERE 1=1";
-    const params = supplierId ? [supplierId, supplierId] : [];
+    const params = targetSupplierId ? [targetSupplierId, targetSupplierId] : [];
 
     // Gross sales
     const grossResult = await queryD1(`

@@ -1,4 +1,5 @@
 import { Product } from "@/types/product";
+import { auth } from "@/lib/firebase";
 
 /**
  * Admin API client — talks to Next.js API routes.
@@ -6,13 +7,15 @@ import { Product } from "@/types/product";
  */
 export const api = {
   getProducts: async (): Promise<Product[]> => {
-    const res = await fetch(`/api/products?t=${Date.now()}`);
+    const email = auth.currentUser?.email || "";
+    const res = await fetch(`/api/products?email=${encodeURIComponent(email)}&t=${Date.now()}`);
     if (!res.ok) throw new Error("Failed to fetch products");
     return res.json();
   },
 
   getBookings: async (): Promise<any[]> => {
-    const res = await fetch(`/api/bookings?t=${Date.now()}`);
+    const email = auth.currentUser?.email || "";
+    const res = await fetch(`/api/bookings?email=${encodeURIComponent(email)}&t=${Date.now()}`);
     if (!res.ok) throw new Error("Failed to fetch bookings");
     return res.json();
   },
@@ -25,10 +28,11 @@ export const api = {
   },
 
   createProduct: async (product: Omit<Product, "id">): Promise<Product> => {
+    const email = auth.currentUser?.email || "";
     const res = await fetch("/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(product),
+      body: JSON.stringify({ ...product, supplier_email: email }),
     });
     if (!res.ok) throw new Error("Failed to create product");
     const data = await res.json();
@@ -36,10 +40,11 @@ export const api = {
   },
 
   updateProduct: async (id: string, updates: Partial<Product>): Promise<Product | null> => {
+    const email = auth.currentUser?.email || "";
     const res = await fetch("/api/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...updates, id }),
+      body: JSON.stringify({ ...updates, id, supplier_email: email }),
     });
     if (!res.ok) throw new Error("Failed to update product");
     const data = await res.json();

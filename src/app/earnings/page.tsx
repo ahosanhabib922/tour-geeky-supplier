@@ -5,6 +5,7 @@ import { Building, Loader2, TrendingUp, DollarSign, Percent, Download, FileText,
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
+import { auth } from "@/lib/firebase";
 
 export default function SupplierEarningsPage() {
   const [data, setData] = useState<any>(null);
@@ -16,7 +17,8 @@ export default function SupplierEarningsPage() {
 
   const fetchEarnings = async () => {
     try {
-      const res = await fetch("/api/finance");
+      const email = auth.currentUser?.email || "";
+      const res = await fetch(`/api/finance?email=${encodeURIComponent(email)}`);
       const result = await res.json();
       setData(result);
     } catch (error) {

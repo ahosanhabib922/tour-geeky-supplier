@@ -25,6 +25,7 @@ import {
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { Product } from "@/types/product";
+import { api } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { format, addDays, subDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, startOfWeek, endOfWeek } from "date-fns";
@@ -46,8 +47,7 @@ export default function AvailabilityPage() {
 
   const fetchProductsList = () => {
     setIsLoading(true);
-    fetch("/api/products")
-      .then(res => res.json())
+    api.getProducts()
       .then(data => {
         setProducts(Array.isArray(data) ? data : []);
         setIsLoading(false);

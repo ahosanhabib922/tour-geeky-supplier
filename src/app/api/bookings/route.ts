@@ -4,10 +4,22 @@ import { queryD1 } from "@/lib/db";
 export async function GET(request: NextRequest) {
   try {
     const supplierId = request.nextUrl.searchParams.get("supplier_id");
+    const email = request.nextUrl.searchParams.get("email");
     let sql: string;
     let params: any[] = [];
 
-    if (supplierId) {
+    let targetSupplierId = supplierId;
+
+    if (email) {
+      const supplierResult = await queryD1("SELECT id FROM suppliers WHERE email = ?", [email]);
+      if (supplierResult && supplierResult.length > 0) {
+        targetSupplierId = supplierResult[0].id;
+      } else {
+        return NextResponse.json([]); // email provided but supplier not found
+      }
+    }
+
+    if (targetSupplierId) {
       sql = `
         SELECT b.*, p.title as product_title 
         FROM bookings b
@@ -15,7 +27,7 @@ export async function GET(request: NextRequest) {
         WHERE b.supplier_id = ? OR p.supplier_id = ?
         ORDER BY b.created_at DESC
       `;
-      params = [supplierId, supplierId];
+      params = [targetSupplierId, targetSupplierId];
     } else {
       sql = `
         SELECT b.*, p.title as product_title 

@@ -16,17 +16,16 @@ export default function SupplierProductsPage() {
   useEffect(() => {
     const loadCatalogData = async () => {
       try {
-        const [productsData, bookingsRes] = await Promise.all([
+        const [productsData, bookingsData] = await Promise.all([
           api.getProducts(),
-          fetch('/api/bookings')
+          api.getBookings()
         ]);
 
         if (productsData) {
           setProducts(productsData);
         }
 
-        if (bookingsRes.ok) {
-          const bookingsData = await bookingsRes.json();
+        if (bookingsData) {
           setBookings(bookingsData);
         }
       } catch (error) {

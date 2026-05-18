@@ -5,9 +5,22 @@ import { mapProductFromDB, productSchema } from "@shared/index";
 export async function GET(request: NextRequest) {
   try {
     const supplierId = request.nextUrl.searchParams.get("supplier_id");
+    const email = request.nextUrl.searchParams.get("email");
     let results;
-    if (supplierId) {
-      results = await queryD1("SELECT * FROM products WHERE supplier_id = ? ORDER BY created_at DESC", [supplierId]);
+
+    let targetSupplierId = supplierId;
+
+    if (email) {
+      const supplierResult = await queryD1("SELECT id FROM suppliers WHERE email = ?", [email]);
+      if (supplierResult && supplierResult.length > 0) {
+        targetSupplierId = supplierResult[0].id;
+      } else {
+        return NextResponse.json([]); // email provided but supplier not found
+      }
+    }
+
+    if (targetSupplierId) {
+      results = await queryD1("SELECT * FROM products WHERE supplier_id = ? ORDER BY created_at DESC", [targetSupplierId]);
     } else {
       results = await queryD1("SELECT * FROM products ORDER BY created_at DESC");
     }
@@ -35,6 +48,16 @@ export async function POST(request: Request) {
     
     const product = validation.data;
     const id = (rawBody.id as string) || crypto.randomUUID();
+
+    const supplierEmail = rawBody.supplier_email;
+    let resolvedSupplierId = product.supplier_id || null;
+
+    if (supplierEmail) {
+      const supplierResult = await queryD1("SELECT id FROM suppliers WHERE email = ?", [supplierEmail]);
+      if (supplierResult && supplierResult.length > 0) {
+        resolvedSupplierId = supplierResult[0].id;
+      }
+    }
 
     // Generate slug if missing
     const slug =
@@ -125,7 +148,7 @@ export async function POST(request: Request) {
       JSON.stringify(product.notAllowed || []),
       JSON.stringify(product.whatToBring || []),
       product.cancellationPolicy || 'standard',
-      product.supplier_id || null,
+      resolvedSupplierId,
     ];
 
     await queryD1(sql, params);
