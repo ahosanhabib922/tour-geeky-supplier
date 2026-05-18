@@ -54,6 +54,9 @@ export function ImageUploadModal({ isOpen, onClose, images, coverImage, onUpdate
         if (res.ok) {
           const data = await res.json();
           uploadedUrls.push(data.url);
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Upload failed");
         }
       }
 
@@ -65,8 +68,8 @@ export function ImageUploadModal({ isOpen, onClose, images, coverImage, onUpdate
       }
       
       onUpdate(updatedImages, newCover);
-    } catch (error) {
-      alert("Failed to upload some images.");
+    } catch (error: any) {
+      alert(error.message || "Failed to upload some images.");
     } finally {
       setIsUploading(false);
     }
