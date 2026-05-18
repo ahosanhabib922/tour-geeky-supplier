@@ -47,7 +47,7 @@ export default function RootLayout({
           const res = await fetch(`/api/suppliers?t=${Date.now()}`);
           if (res.ok) {
             const data = await res.json();
-            const matched = data.find((s: any) => s.email === currentUser.email);
+            const matched = data.find((s: any) => s.email?.toLowerCase() === currentUser.email?.toLowerCase());
             if (matched) {
               setSupplierStatus(matched.supplier_status);
               setSupplierName(matched.supplier_name || matched.name || "");
@@ -174,7 +174,7 @@ export default function RootLayout({
             <div className="w-8 h-8 border-2 border-brand-black border-t-transparent rounded-full animate-spin" />
             <p className="text-[11px] font-bold text-brand-gray uppercase tracking-widest animate-pulse">Redirecting...</p>
           </div>
-        ) : supplierStatus !== "approved" ? (
+        ) : supplierStatus !== "active" ? (
           /* Notice for review under process */
           <div className="min-h-screen flex flex-col bg-brand-light/30 selection:bg-brand-black selection:text-white">
             {/* Top Navbar */}
