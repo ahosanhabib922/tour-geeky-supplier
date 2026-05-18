@@ -110,7 +110,7 @@ export function ProductWizard({ isEdit = false, onSuccess }: { isEdit?: boolean;
         {/* Progress Sidebar */}
         <aside className="lg:sticky lg:top-8 space-y-6">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-brand-gray/60 px-4">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-gray/60 px-4">
               <LayoutGrid className="w-3.5 h-3.5" /> Progress Tracker
             </div>
             
@@ -134,7 +134,7 @@ export function ProductWizard({ isEdit = false, onSuccess }: { isEdit?: boolean;
                     )}
                   >
                     <div className={cn(
-                      "w-6.5 h-6.5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0 transition-all duration-300 border border-brand-border",
+                      "w-6.5 h-6.5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 transition-all duration-300 border border-brand-border",
                       isCompleted ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600" : 
                       isActive ? "bg-brand-black text-white border-transparent" : "bg-transparent text-brand-gray/50"
                     )}>

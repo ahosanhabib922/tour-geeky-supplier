@@ -146,7 +146,7 @@ export function AvailabilityManager({ option, onUpdate }: AvailabilityManagerPro
                   <div className="flex-1 space-y-3">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-primary border border-brand-bg">
-                        <span className="text-[10px] font-black uppercase">Start</span>
+                        <span className="text-[10px] font-bold uppercase">Start</span>
                       </div>
                       <input 
                         type="time" 
@@ -157,7 +157,7 @@ export function AvailabilityManager({ option, onUpdate }: AvailabilityManagerPro
                     </div>
                     <div className="flex items-center gap-3">
                        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-brand-primary border border-brand-bg">
-                        <span className="text-[10px] font-black uppercase">Max</span>
+                        <span className="text-[10px] font-bold uppercase">Max</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <input 
@@ -193,7 +193,7 @@ export function AvailabilityManager({ option, onUpdate }: AvailabilityManagerPro
             </div>
             <div className="grid grid-cols-2 gap-8 max-w-md">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-brand-light uppercase tracking-widest">Opening Time</label>
+                <label className="text-[10px] font-bold text-brand-light uppercase tracking-widest">Opening Time</label>
                 <input 
                   type="time" 
                   value={availability.openingHours?.start || "09:00"}
@@ -202,7 +202,7 @@ export function AvailabilityManager({ option, onUpdate }: AvailabilityManagerPro
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-brand-light uppercase tracking-widest">Closing Time</label>
+                <label className="text-[10px] font-bold text-brand-light uppercase tracking-widest">Closing Time</label>
                 <input 
                   type="time" 
                   value={availability.openingHours?.end || "18:00"}

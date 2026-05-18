@@ -196,7 +196,7 @@ export default function RootLayout({
               
               {/* Title & Brand Badge */}
               <div className="text-center space-y-3">
-                <h2 className="text-2xl font-black tracking-tight text-zinc-900 uppercase">
+                <h2 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase">
                   Application Under Review
                 </h2>
                 {supplierName && (
@@ -218,7 +218,7 @@ export default function RootLayout({
 
               {/* Professional Onboarding Progress Workflow Map */}
               <div className="pt-6 border-t border-brand-border/40 space-y-5">
-                <h3 className="text-[10px] font-black text-brand-gray uppercase tracking-widest">Onboarding Progress</h3>
+                <h3 className="text-[10px] font-bold text-brand-gray uppercase tracking-widest">Onboarding Progress</h3>
                 
                 <div className="space-y-3.5 text-left">
                   {/* Step 1: Registered */}
@@ -298,7 +298,7 @@ export default function RootLayout({
                   alt="Tour Geeky Logo" 
                   className="h-6 w-auto object-contain" 
                 />
-                <span className="text-[8px] text-brand-gray uppercase font-black tracking-widest ml-2.5">Partner</span>
+                <span className="text-[8px] text-brand-gray uppercase font-bold tracking-widest ml-2.5">Partner</span>
               </Link>
               <div className="flex items-center gap-3">
                 <button className="relative p-1.5 text-brand-gray hover:text-brand-black rounded-full active:scale-95 transition-all">
@@ -323,14 +323,14 @@ export default function RootLayout({
                       className="h-7 w-auto object-contain" 
                     />
                     <div className="ml-3 flex flex-col">
-                      <span className="text-[8px] text-brand-gray uppercase font-black tracking-widest mt-1">Supplier Hub</span>
+                      <span className="text-[8px] text-brand-gray uppercase font-bold tracking-widest mt-1">Supplier Hub</span>
                     </div>
                   </Link>
                 </div>
 
                 {/* Navigation Links */}
                 <div className="px-4 py-2 space-y-1">
-                  <h3 className="text-[10px] font-black text-brand-gray/60 uppercase tracking-widest px-4 mb-3">Operator Hub</h3>
+                  <h3 className="text-[10px] font-bold text-brand-gray/60 uppercase tracking-widest px-4 mb-3">Operator Hub</h3>
                   <nav className="space-y-1.5">
                     {navItems.map(item => {
                       const Icon = item.icon;
@@ -435,7 +435,7 @@ export default function RootLayout({
                     <Icon className={`h-5 w-5 transition-all duration-200 ${
                       isActive ? "text-brand-black scale-110" : "text-brand-gray/50"
                     }`} />
-                    <span className={`text-[9px] font-black uppercase tracking-wider mt-1 transition-all ${
+                    <span className={`text-[9px] font-bold uppercase tracking-wider mt-1 transition-all ${
                       isActive ? "text-brand-black font-extrabold" : "text-brand-gray/40 font-semibold"
                     }`}>
                       {item.label}
@@ -456,7 +456,7 @@ export default function RootLayout({
                 style={{ boxShadow: "0 12px 30px rgba(0,0,0,0.25)" }}
               >
                 <fab.icon className="h-5 w-5 text-white" />
-                <span className="text-[10px] font-black uppercase tracking-wider pr-1 text-white">{fab.label}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider pr-1 text-white">{fab.label}</span>
               </button>
             )}
 

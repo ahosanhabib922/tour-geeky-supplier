@@ -307,7 +307,7 @@ export default function SupplierLandingPage() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-black/40 via-transparent to-transparent flex items-end p-8 sm:p-12 text-left">
               <div className="space-y-2">
-                <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-brand-black text-[10px] font-black uppercase tracking-widest rounded-full">Aegean Excursion Showcase</span>
+                <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-brand-black text-[10px] font-bold uppercase tracking-widest rounded-full">Aegean Excursion Showcase</span>
                 <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight max-w-lg">Captivate travelers with high-resolution listing pages and secure checkouts.</h3>
               </div>
             </div>
@@ -352,7 +352,7 @@ export default function SupplierLandingPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((s, idx) => (
             <div key={idx} className="p-6 rounded-[24px] bg-white border border-brand-border/40 hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300 space-y-3">
-              <h3 className="text-4xl font-black text-brand-black tracking-tight">{s.value}</h3>
+              <h3 className="text-4xl font-bold text-brand-black tracking-tight">{s.value}</h3>
               <p className="text-xs font-bold text-brand-black tracking-wide leading-none">{s.label}</p>
               <p className="text-[10px] text-brand-gray/60 font-semibold">{s.desc}</p>
             </div>

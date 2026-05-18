@@ -20,15 +20,15 @@ export function EarningsTab({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="p-6 rounded-[24px] bg-white border border-brand-border/40 hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300">
           <p className="text-[10px] uppercase font-bold tracking-widest text-brand-gray">Gross Sales Volume</p>
-          <h3 className="text-3xl font-black mt-2 text-brand-black">${grossSales.toFixed(2)}</h3>
+          <h3 className="text-3xl font-bold mt-2 text-brand-black">${grossSales.toFixed(2)}</h3>
         </div>
         <div className="p-6 rounded-[24px] bg-white border border-brand-border/40 hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300">
           <p className="text-[10px] uppercase font-bold tracking-widest text-brand-gray">Commission Paid (10%)</p>
-          <h3 className="text-3xl font-black mt-2 text-red-500">${commissionPaid.toFixed(2)}</h3>
+          <h3 className="text-3xl font-bold mt-2 text-red-500">${commissionPaid.toFixed(2)}</h3>
         </div>
         <div className="p-6 rounded-[24px] bg-white border border-brand-border/40 hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300">
           <p className="text-[10px] uppercase font-bold tracking-widest text-brand-gray">Total Net Disbursed</p>
-          <h3 className="text-3xl font-black mt-2 text-emerald-600">${netEarnings.toFixed(2)}</h3>
+          <h3 className="text-3xl font-bold mt-2 text-emerald-600">${netEarnings.toFixed(2)}</h3>
         </div>
       </div>
 

@@ -245,7 +245,7 @@ export default function SupplierCalendarPage() {
                 {new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
               </h2>
               <Badge className={cn(
-                "gap-1 rounded-lg text-[10px] font-black uppercase px-2.5 py-1 border-none",
+                "gap-1 rounded-lg text-[10px] font-bold uppercase px-2.5 py-1 border-none",
                 isBlocked ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-700"
               )}>
                 {isBlocked ? <Lock className="h-3 w-3" /> : <Zap className="h-3 w-3" />}

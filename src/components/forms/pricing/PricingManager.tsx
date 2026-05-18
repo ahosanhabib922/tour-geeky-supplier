@@ -243,12 +243,12 @@ export function PricingManager({ option, onUpdate }: PricingWizardProps) {
           </div>
           <div className="max-w-md p-8 bg-brand-bg/20 rounded-[32px] border border-brand-border/40 space-y-6">
             <div className="space-y-2">
-              <label className="text-[12px] font-black text-brand-dark uppercase tracking-widest">Total Price for Group</label>
+              <label className="text-[12px] font-bold text-brand-dark uppercase tracking-widest">Total Price for Group</label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[18px] font-bold text-brand-light">{currencySymbol}</span>
                 <input 
                   type="number" 
-                  className="w-full h-16 pl-10 pr-6 rounded-2xl bg-white border-2 border-brand-border/40 font-black text-[28px] text-brand-dark outline-none focus:border-brand-primary transition-all"
+                  className="w-full h-16 pl-10 pr-6 rounded-2xl bg-white border-2 border-brand-border/40 font-bold text-[28px] text-brand-dark outline-none focus:border-brand-primary transition-all"
                   placeholder="0.00"
                   value={activeSetup.groupPrice || 0}
                   onChange={(e) => updateActiveSetup({ groupPrice: parseFloat(e.target.value) || 0 })}

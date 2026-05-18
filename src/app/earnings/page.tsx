@@ -62,7 +62,7 @@ export default function SupplierEarningsPage() {
             </div>
             <p className="text-[10px] uppercase font-bold tracking-widest text-brand-gray">Gross Sales Volume</p>
           </div>
-          <h3 className="text-3xl font-black mt-2 text-brand-black">{formatCurrency(data?.grossSales)}</h3>
+          <h3 className="text-3xl font-bold mt-2 text-brand-black">{formatCurrency(data?.grossSales)}</h3>
           <p className="text-xs text-brand-gray mt-1">{data?.totalBookings || 0} total bookings</p>
         </div>
         <div className="p-6 rounded-[24px] bg-white border border-brand-border/40 hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300">
@@ -72,7 +72,7 @@ export default function SupplierEarningsPage() {
             </div>
             <p className="text-[10px] uppercase font-bold tracking-widest text-brand-gray">Commission ({data?.commissionRate || 10}%)</p>
           </div>
-          <h3 className="text-3xl font-black mt-2 text-red-500">{formatCurrency(data?.commissionPaid)}</h3>
+          <h3 className="text-3xl font-bold mt-2 text-red-500">{formatCurrency(data?.commissionPaid)}</h3>
           <p className="text-xs text-brand-gray mt-1">Platform service fee</p>
         </div>
         <div className="p-6 rounded-[24px] bg-white border border-brand-border/40 hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300">
@@ -82,7 +82,7 @@ export default function SupplierEarningsPage() {
             </div>
             <p className="text-[10px] uppercase font-bold tracking-widest text-brand-gray">Net Disbursed</p>
           </div>
-          <h3 className="text-3xl font-black mt-2 text-emerald-600">{formatCurrency(data?.netEarnings)}</h3>
+          <h3 className="text-3xl font-bold mt-2 text-emerald-600">{formatCurrency(data?.netEarnings)}</h3>
           <p className="text-xs text-brand-gray mt-1">Your take-home earnings</p>
         </div>
       </div>
@@ -105,9 +105,9 @@ export default function SupplierEarningsPage() {
               return (
                 <div key={tx.id} className="bg-white rounded-2xl border border-brand-border/40 p-5 space-y-3 hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-black tracking-tight">{tx.id}</span>
+                    <span className="font-mono text-xs font-bold tracking-tight">{tx.id}</span>
                     <Badge className={cn(
-                      "rounded-lg text-[9px] uppercase font-black px-2 py-0.5 border-none",
+                      "rounded-lg text-[9px] uppercase font-bold px-2 py-0.5 border-none",
                       tx.payment_status === "paid" ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-600"
                     )}>
                       {tx.payment_status}
@@ -118,7 +118,7 @@ export default function SupplierEarningsPage() {
                   <div className="grid grid-cols-3 gap-3 py-2.5 px-3.5 bg-brand-light/30 rounded-xl text-xs">
                     <div>
                       <span className="text-brand-gray block text-[9px] uppercase font-bold tracking-wider">Gross</span>
-                      <span className="font-black text-brand-black">{formatCurrency(tx.total_price)}</span>
+                      <span className="font-bold text-brand-black">{formatCurrency(tx.total_price)}</span>
                     </div>
                     <div>
                       <span className="text-brand-gray block text-[9px] uppercase font-bold tracking-wider">Fee</span>
@@ -126,7 +126,7 @@ export default function SupplierEarningsPage() {
                     </div>
                     <div>
                       <span className="text-brand-gray block text-[9px] uppercase font-bold tracking-wider">Payout</span>
-                      <span className="font-black text-emerald-600">{formatCurrency(payout)}</span>
+                      <span className="font-bold text-emerald-600">{formatCurrency(payout)}</span>
                     </div>
                   </div>
                 </div>
@@ -140,13 +140,13 @@ export default function SupplierEarningsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-brand-border/30 bg-brand-light/20">
-                <th className="text-left py-3 px-5 text-[10px] font-black uppercase tracking-widest text-brand-gray">Date</th>
-                <th className="text-left py-3 px-5 text-[10px] font-black uppercase tracking-widest text-brand-gray">Transaction</th>
-                <th className="text-left py-3 px-5 text-[10px] font-black uppercase tracking-widest text-brand-gray">Activity</th>
-                <th className="text-left py-3 px-5 text-[10px] font-black uppercase tracking-widest text-brand-gray">Gross</th>
-                <th className="text-left py-3 px-5 text-[10px] font-black uppercase tracking-widest text-brand-gray">Commission</th>
-                <th className="text-left py-3 px-5 text-[10px] font-black uppercase tracking-widest text-brand-gray">Net Payout</th>
-                <th className="text-center py-3 px-5 text-[10px] font-black uppercase tracking-widest text-brand-gray">Status</th>
+                <th className="text-left py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-gray">Date</th>
+                <th className="text-left py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-gray">Transaction</th>
+                <th className="text-left py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-gray">Activity</th>
+                <th className="text-left py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-gray">Gross</th>
+                <th className="text-left py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-gray">Commission</th>
+                <th className="text-left py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-gray">Net Payout</th>
+                <th className="text-center py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-brand-gray">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -168,10 +168,10 @@ export default function SupplierEarningsPage() {
                       <td className="py-4 px-5 font-medium max-w-[200px] truncate">{tx.product_title || "—"}</td>
                       <td className="py-4 px-5 font-bold text-brand-black">{formatCurrency(tx.total_price)}</td>
                       <td className="py-4 px-5 font-semibold text-red-500">-{formatCurrency(commission)}</td>
-                      <td className="py-4 px-5 font-black text-emerald-600">{formatCurrency(payout)}</td>
+                      <td className="py-4 px-5 font-bold text-emerald-600">{formatCurrency(payout)}</td>
                       <td className="py-4 px-5 text-center">
                         <Badge className={cn(
-                          "rounded-lg text-[9px] uppercase font-black px-2 py-0.5 border-none",
+                          "rounded-lg text-[9px] uppercase font-bold px-2 py-0.5 border-none",
                           tx.payment_status === "paid" ? "bg-emerald-500/10 text-emerald-600" : "bg-amber-500/10 text-amber-600"
                         )}>
                           {tx.payment_status}

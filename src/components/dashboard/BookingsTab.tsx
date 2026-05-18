@@ -68,7 +68,7 @@ export function BookingsTab({ bookings }: BookingsTabProps) {
                 )}
                 <div className={bk.option_name ? "" : "col-span-2"}>
                   <span className="text-muted-foreground block text-[10px] uppercase font-bold tracking-wider">Net Payout</span>
-                  <span className="text-sm font-black text-brand-black">${getPayout(bk).toFixed(2)}</span>
+                  <span className="text-sm font-bold text-brand-black">${getPayout(bk).toFixed(2)}</span>
                 </div>
               </div>
             </div>

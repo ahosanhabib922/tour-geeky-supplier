@@ -43,7 +43,7 @@ export function OverviewTab({
               </div>
               <div className="space-y-1 mt-2">
                 <p className="text-[10px] font-bold text-brand-gray uppercase tracking-wider">{m.label}</p>
-                <h3 className="text-2xl font-black text-brand-black tracking-tight">{m.val}</h3>
+                <h3 className="text-2xl font-bold text-brand-black tracking-tight">{m.val}</h3>
                 <p className="text-[10px] text-brand-gray/60 font-semibold leading-tight">{m.sub}</p>
               </div>
             </div>
@@ -61,7 +61,7 @@ export function OverviewTab({
               <h3 className="font-bold text-sm text-brand-black tracking-tight uppercase">Earning History</h3>
               <p className="text-[10px] text-brand-gray font-semibold">Monthly payout growth comparison</p>
             </div>
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-brand-light border border-brand-border text-brand-black rounded-full text-[10px] font-black uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-brand-light border border-brand-border text-brand-black rounded-full text-[10px] font-bold uppercase tracking-wider">
               <TrendingUp className="h-3.5 w-3.5" /> +14.2%
             </div>
           </div>

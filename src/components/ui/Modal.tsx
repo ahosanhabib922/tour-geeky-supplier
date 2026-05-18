@@ -34,7 +34,7 @@ export function Modal({
       )}>
         {title && (
           <div className="px-8 py-6 border-b border-brand-bg flex items-center justify-between shrink-0">
-            <h2 className="text-[20px] font-black text-brand-dark tracking-tight">{title}</h2>
+            <h2 className="text-[20px] font-bold text-brand-dark tracking-tight">{title}</h2>
             <button 
               onClick={onClose}
               className="p-2 hover:bg-brand-bg rounded-full transition-all text-brand-light hover:text-brand-dark"
