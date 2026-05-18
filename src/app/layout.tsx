@@ -192,10 +192,10 @@ export default function RootLayout({
             </nav>
 
             <main className="flex-1 w-full flex items-center justify-center p-4 sm:p-6 lg:p-8">
-              <div className="bg-white/95 backdrop-blur border border-brand-border/60 shadow-2xl rounded-[32px] max-w-xl w-full p-8 sm:p-10 space-y-8 animate-in zoom-in-95 duration-500">
+              <div className="bg-white border border-brand-border/40 rounded-[32px] max-w-xl w-full p-8 sm:p-10 space-y-8 animate-in zoom-in-95 duration-500">
               
               {/* Pulsing Status Icon */}
-              <div className="mx-auto w-16 h-16 rounded-[24px] bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-inner relative">
+              <div className="mx-auto w-16 h-16 rounded-[24px] bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 relative">
                 <div className="absolute inset-0 rounded-[24px] bg-amber-400/10 animate-ping opacity-75" />
                 <Clock className="w-8 h-8 relative z-10 animate-pulse" />
               </div>
@@ -270,7 +270,7 @@ export default function RootLayout({
                 <Button 
                   onClick={() => window.location.reload()}
                   variant="primary" 
-                  className="w-full h-12 rounded-xl text-xs font-bold bg-brand-black text-white hover:bg-brand-black/90 active:scale-95 cursor-pointer shadow-md"
+                  className="w-full h-12 rounded-xl text-xs font-bold bg-brand-black text-white hover:bg-brand-black/90 active:scale-95 cursor-pointer"
                 >
                   Refresh Status
                 </Button>
