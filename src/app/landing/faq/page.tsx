@@ -5,6 +5,60 @@ import { HelpCircle, ChevronDown, ChevronUp, DollarSign, Box, ClipboardList } fr
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
 
+const defaultCategories = [
+  {
+    title: "Commissions & Payouts",
+    items: [
+      {
+        q: "Is there an onboarding or listing fee?",
+        a: "No! Listing your experiences on Tour Geeky is completely free. We do not charge registration fees, catalog placement charges, or monthly software fees. You only pay when you make a verified sale."
+      },
+      {
+        q: "What is the flat commission structure?",
+        a: "We maintain a flat 10% commission on all completed bookings. The remaining 90% is yours. Stripe processing fees are included in this flat 10%, meaning there are absolutely no separate payment processing deductibles."
+      },
+      {
+        q: "When and how do I receive payouts?",
+        a: "All payouts are handled securely via Stripe direct bank transfers. We automatically initiate operator settlements twice a month: on the 15th (for bookings completed between 1st-14th) and on the last day of the month (for bookings completed between 15th-29th)."
+      }
+    ]
+  },
+  {
+    title: "Listing Experiences & Options",
+    items: [
+      {
+        q: "How many activities can I list?",
+        a: "You can list unlimited activities! We encourage our partners to showcase all available options—from luxury sunset cruises to guided day treks and food tastings."
+      },
+      {
+        q: "What credentials do I need for account approval?",
+        a: "We verify that you are a Greece-registered tourism organization, yacht operator, licensed guide, or local activity host. You will need to provide a valid contact number and a web/social presence during registration."
+      },
+      {
+        q: "How do option pricing tiers work?",
+        a: "Our listing wizard lets you create multiple pricing options (e.g. Standard Ticket, VIP Upgrade, Private Charter) under a single activity. You can also specify different prices for adults and children."
+      }
+    ]
+  },
+  {
+    title: "Bookings & Cancelations",
+    items: [
+      {
+        q: "How am I notified of traveler bookings?",
+        a: "The instant a customer completes their checkout, you receive an automated email notification and SMS alert containing the traveler's name, headcount, slot time, and specific custom requirements."
+      },
+      {
+        q: "What cancelation policies can I select?",
+        a: "During activity creation, you can select from three standard refund rules: (1) Standard: Free cancellation up to 24 hours prior. (2) Strict: Free cancellation up to 7 days prior. (3) Non-refundable: All ticket sales are final."
+      },
+      {
+        q: "How are bad-weather cancellations handled?",
+        a: "For maritime and outdoor activities, if bad weather prevents safe execution, you can log into the portal and click 'Cancel Slot'. Our platform automatically handles refund requests based on your chosen rules."
+      }
+    ]
+  }
+];
+
 export default function FAQPage() {
   const { openModal } = useModal();
   const [openIndex, setOpenIndex] = useState<string | null>(null);
@@ -21,64 +75,16 @@ export default function FAQPage() {
     setOpenIndex(openIndex === id ? null : id);
   };
 
-  const categories = [
-    {
-      title: "Commissions & Payouts",
-      icon: DollarSign,
-      items: [
-        {
-          q: "Is there an onboarding or listing fee?",
-          a: "No! Listing your experiences on Tour Geeky is completely free. We do not charge registration fees, catalog placement charges, or monthly software fees. You only pay when you make a verified sale."
-        },
-        {
-          q: "What is the flat commission structure?",
-          a: "We maintain a flat 10% commission on all completed bookings. The remaining 90% is yours. Stripe processing fees are included in this flat 10%, meaning there are absolutely no separate payment processing deductibles."
-        },
-        {
-          q: "When and how do I receive payouts?",
-          a: "All payouts are handled securely via Stripe direct bank transfers. We automatically initiate operator settlements twice a month: on the 15th (for bookings completed between 1st-14th) and on the last day of the month (for bookings completed between 15th-29th)."
-        }
-      ]
-    },
-    {
-      title: "Listing Experiences & Options",
-      icon: Box,
-      items: [
-        {
-          q: "How many activities can I list?",
-          a: "You can list unlimited activities! We encourage our partners to showcase all available options—from luxury sunset cruises to guided day treks and food tastings."
-        },
-        {
-          q: "What credentials do I need for account approval?",
-          a: "We verify that you are a Greece-registered tourism organization, yacht operator, licensed guide, or local activity host. You will need to provide a valid contact number and a web/social presence during registration."
-        },
-        {
-          q: "How do option pricing tiers work?",
-          a: "Our listing wizard lets you create multiple pricing options (e.g. Standard Ticket, VIP Upgrade, Private Charter) under a single activity. You can also specify different prices for adults and children."
-        }
-      ]
-    },
-    {
-      title: "Bookings & Cancelations",
-      icon: ClipboardList,
-      items: [
-        {
-          q: "How am I notified of traveler bookings?",
-          a: "The instant a customer completes their checkout, you receive an automated email notification and SMS alert containing the traveler's name, headcount, slot time, and specific custom requirements."
-        },
-        {
-          q: "What cancelation policies can I select?",
-          a: "During activity creation, you can select from three standard refund rules: (1) Standard: Free cancellation up to 24 hours prior. (2) Strict: Free cancellation up to 7 days prior. (3) Non-refundable: All ticket sales are final."
-        },
-        {
-          q: "How are bad-weather cancellations handled?",
-          a: "For maritime and outdoor activities, if bad weather prevents safe execution, you can log into the portal and click 'Cancel Slot'. Our platform automatically notifies all travelers and issues 100% refunds."
-        }
-      ]
-    }
-  ];
-
   const fq = cms?.pages?.faq || {};
+  const categoriesList = fq.categories && Array.isArray(fq.categories) ? fq.categories : defaultCategories;
+
+  const getIconForIndex = (idx: number) => {
+    switch (idx) {
+      case 0: return DollarSign;
+      case 1: return Box;
+      default: return ClipboardList;
+    }
+  };
 
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
@@ -99,8 +105,8 @@ export default function FAQPage() {
 
       {/* Accordion Categories - Cardless & Separators */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 pb-24">
-        {categories.map((cat, catIdx) => {
-          const Icon = cat.icon;
+        {categoriesList.map((cat: any, catIdx: number) => {
+          const Icon = getIconForIndex(catIdx);
           return (
             <div key={catIdx} className="mb-16 last:mb-0">
               {/* Category Title Header */}
@@ -111,7 +117,7 @@ export default function FAQPage() {
 
               {/* Accordion List */}
               <div className="divide-y divide-brand-border/40 text-left">
-                {cat.items.map((item, itemIdx) => {
+                {(cat.items || []).map((item: any, itemIdx: number) => {
                   const id = `${catIdx}-${itemIdx}`;
                   const isOpen = openIndex === id;
                   return (

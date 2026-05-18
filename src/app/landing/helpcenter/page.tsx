@@ -4,6 +4,43 @@ import React, { useEffect, useState } from "react";
 import { Mail, Phone, Clock, FileText, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
+const defaultOnboardingSteps = [
+  {
+    title: "1. Brand Authentication",
+    desc: "Authenticate using a verified Google Account or direct Email registration inside the Application modal window."
+  },
+  {
+    title: "2. Supplier Profile Setup",
+    desc: "Provide your operating brand name, registered corporate name, contact phone number, and brief description."
+  },
+  {
+    title: "3. Direct Stripe Integration",
+    desc: "Link your company IBAN or bank details via our secure automated Stripe onboarding wizard in the settings tab."
+  },
+  {
+    title: "4. Create Activity Listing",
+    desc: "Specify your excursions, ticket option variables (VIP/Standard), calendar schedules, and high-definition photos."
+  }
+];
+
+const defaultSupportChannels = [
+  {
+    title: "Email Assistance Team",
+    value: "info@gerromantours.com",
+    hours: "Mon - Sun: 9:00 AM - 8:00 PM (EET)"
+  },
+  {
+    title: "English Support Line",
+    value: "+39 342 034 2257",
+    hours: "Urgent boat capacity calls"
+  },
+  {
+    title: "Italian Support Line",
+    value: "+39 324 804 2892",
+    hours: "Urgent boat capacity calls"
+  }
+];
+
 export default function HelpCenterPage() {
   const [cms, setCms] = useState<any>(null);
 
@@ -14,47 +51,15 @@ export default function HelpCenterPage() {
       .catch((err) => console.error("Error loading CMS settings:", err));
   }, []);
 
-  const onboardingSteps = [
-    {
-      title: "1. Brand Authentication",
-      desc: "Authenticate using a verified Google Account or direct Email registration inside the Application modal window."
-    },
-    {
-      title: "2. Supplier Profile Setup",
-      desc: "Provide your operating brand name, registered corporate name, contact phone number, and brief description."
-    },
-    {
-      title: "3. Direct Stripe Integration",
-      desc: "Link your company IBAN or bank details via our secure automated Stripe onboarding wizard in the settings tab."
-    },
-    {
-      title: "4. Create Activity Listing",
-      desc: "Specify your excursions, ticket option variables (VIP/Standard), calendar schedules, and high-definition photos."
-    }
-  ];
-
-  const supportChannels = [
-    {
-      icon: Mail,
-      title: "Email Assistance Team",
-      value: "info@gerromantours.com",
-      hours: "Mon - Sun: 9:00 AM - 8:00 PM (EET)"
-    },
-    {
-      icon: Phone,
-      title: "English Support Line",
-      value: "+39 342 034 2257",
-      hours: "Urgent boat capacity calls"
-    },
-    {
-      icon: Phone,
-      title: "Italian Support Line",
-      value: "+39 324 804 2892",
-      hours: "Urgent boat capacity calls"
-    }
-  ];
-
   const hc = cms?.pages?.helpcenter || {};
+
+  const onboardingSteps = hc.onboardingSteps && Array.isArray(hc.onboardingSteps) ? hc.onboardingSteps : defaultOnboardingSteps;
+  const supportChannels = hc.supportChannels && Array.isArray(hc.supportChannels) ? hc.supportChannels : defaultSupportChannels;
+
+  const getIconForIndex = (idx: number) => {
+    if (idx === 0) return Mail;
+    return Phone;
+  };
 
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
@@ -76,8 +81,8 @@ export default function HelpCenterPage() {
       {/* Support Channels - Lightweight cardless layout */}
       <div className="max-w-6xl mx-auto px-6 sm:px-12 py-10 border-t border-brand-border/40">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {supportChannels.map((ch, idx) => {
-            const Icon = ch.icon;
+          {supportChannels.map((ch: any, idx: number) => {
+            const Icon = getIconForIndex(idx);
             return (
               <div 
                 key={idx} 
@@ -88,7 +93,7 @@ export default function HelpCenterPage() {
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-sm font-bold text-brand-black">{ch.title}</h3>
-                  <a href={ch.title.includes("Email") ? `mailto:${ch.value}` : `tel:${ch.value.replace(/\s+/g, '')}`} className="text-xs font-bold text-brand-black underline block">
+                  <a href={ch.title.toLowerCase().includes("email") ? `mailto:${ch.value}` : `tel:${ch.value.replace(/\s+/g, '')}`} className="text-xs font-bold text-brand-black underline block">
                     {ch.value}
                   </a>
                   <p className="text-[10px] text-brand-gray/70 font-semibold">{ch.hours}</p>
@@ -109,7 +114,7 @@ export default function HelpCenterPage() {
             </div>
 
             <div className="grid gap-12">
-              {onboardingSteps.map((step, idx) => (
+              {onboardingSteps.map((step: any, idx: number) => (
                 <div key={idx} className="flex gap-6 items-start">
                   <div className="h-8 w-8 rounded-full bg-white border border-brand-border flex items-center justify-center text-xs font-bold text-brand-black shrink-0">
                     <Check className="h-3.5 w-3.5" />

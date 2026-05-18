@@ -5,6 +5,92 @@ import { Plane, Star, Shield, TrendingUp, DollarSign, Users, Award, HelpCircle, 
 import { Button } from "@/components/ui/Button";
 import { useModal } from "./layout";
 
+// Fallback arrays if database has not set them yet
+const defaultBenefits = [
+  {
+    title: "10% Flat Commission",
+    desc: "Transparent and fair pricing. No setup fees, no monthly costs, and no hidden charges. You only pay when you make a sale."
+  },
+  {
+    title: "Global Marketplace Reach",
+    desc: "Instantly distribute your tours, sunset cruises, wine tastings, and experiences to hundreds of thousands of Greece-bound travelers."
+  },
+  {
+    title: "Secure & Automated Payouts",
+    desc: "We process payments securely via Stripe and automatically distribute operator payouts twice a month directly to your bank account."
+  },
+  {
+    title: "Robust Analytics & Tools",
+    desc: "Access our state-of-the-art supplier portal. Track bookings, monitor gross earnings, manage availability calendars, and list activities in minutes."
+  }
+];
+
+const defaultSteps = [
+  {
+    step: "01",
+    title: "Submit Brand Profile",
+    desc: "Fill in our quick 1-minute partner application form. Provide your brand name and basic contact details."
+  },
+  {
+    step: "02",
+    title: "Get Verified",
+    desc: "Our operator onboarding team reviews and verifies your details to ensure the highest catalog standard."
+  },
+  {
+    step: "03",
+    title: "List Experiences",
+    desc: "Use our premium step-by-step activity listing wizard to upload descriptions, pricing options, itineraries, and images."
+  },
+  {
+    step: "04",
+    title: "Receive Bookings",
+    desc: "Travelers book your activities. You receive automated notifications, traveler lists, and prompt payouts."
+  }
+];
+
+const defaultFaqs = [
+  {
+    q: "What is the cost to list activities on Tour Geeky?",
+    a: "Listing your experiences is 100% free! There are no listing fees, registration fees, or hidden subscription costs. We only charge a flat 10% commission on confirmed bookings."
+  },
+  {
+    q: "How and when do I receive payouts?",
+    a: "Payouts are automatically calculated and processed securely via Stripe. Operator earnings are sent twice a month directly to your linked bank account."
+  },
+  {
+    q: "What credentials do I need to get approved?",
+    a: "We verify that you are a Greece travel agency, local tour provider, cruise operator, or licensed guide. A valid phone number and website/social presence are usually sufficient for instant approval."
+  },
+  {
+    q: "Can I manage cancelations and refunds?",
+    a: "Yes! You can choose your cancelation policy (e.g. Standard 24h, Strict, or Non-refundable) during the product creation wizard. The platform automatically handles refund requests based on your chosen rules."
+  }
+];
+
+const defaultStats = [
+  { value: "2.4M+", label: "Monthly Active Travelers", desc: "Global exposure" },
+  { value: "150+", label: "Greek Operator Partners", desc: "Trusted Aegean network" },
+  { value: "120K+", label: "Confirmed Bookings", desc: "Completed experiences" },
+  { value: "10%", label: "Platform Commission", desc: "Flat rate, no hidden fees" }
+];
+
+const defaultStories = [
+  {
+    name: "Captain Dimitris",
+    role: "Founder, Aegean Sails Ltd",
+    avatar: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=100&h=100&q=80",
+    rating: 5,
+    quote: "\"Sailing with Tour Geeky has doubled our sunset cruise bookings in Crete and Athens. Payouts are incredibly fast, and their listing wizard took just minutes to configure. We went live with 4 yachts within the first day.\""
+  },
+  {
+    name: "Eleni Vance",
+    role: "Host, Athens Vineyard Estates",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80",
+    rating: 5,
+    quote: "\"Their local support crew and Greek translation helper attracted travelers from America and East Asia to our boutique vineyard tours near Mount Hymettus.\""
+  }
+];
+
 export default function SupplierLandingPage() {
   const { openModal } = useModal();
   const [cms, setCms] = useState<any>(null);
@@ -16,83 +102,24 @@ export default function SupplierLandingPage() {
       .catch((err) => console.error("Error loading CMS settings:", err));
   }, []);
 
-  const benefits = [
-    {
-      icon: DollarSign,
-      title: "10% Flat Commission",
-      desc: "Transparent and fair pricing. No setup fees, no monthly costs, and no hidden charges. You only pay when you make a sale.",
-      color: "bg-brand-light text-brand-black border-brand-border"
-    },
-    {
-      icon: TrendingUp,
-      title: "Global Marketplace Reach",
-      desc: "Instantly distribute your tours, sunset cruises, wine tastings, and experiences to hundreds of thousands of Greece-bound travelers.",
-      color: "bg-brand-light text-brand-black border-brand-border"
-    },
-    {
-      icon: Shield,
-      title: "Secure & Automated Payouts",
-      desc: "We process payments securely via Stripe and automatically distribute operator payouts twice a month directly to your bank account.",
-      color: "bg-brand-light text-brand-black border-brand-border"
-    },
-    {
-      icon: Users,
-      title: "Robust Analytics & Tools",
-      desc: "Access our state-of-the-art supplier portal. Track bookings, monitor gross earnings, manage availability calendars, and list activities in minutes.",
-      color: "bg-brand-light text-brand-black border-brand-border"
-    }
-  ];
-
-  const steps = [
-    {
-      step: "01",
-      title: "Submit Brand Profile",
-      desc: "Fill in our quick 1-minute partner application form. Provide your brand name and basic contact details."
-    },
-    {
-      step: "02",
-      title: "Get Verified",
-      desc: "Our operator onboarding team reviews and verifies your details to ensure the highest catalog standard."
-    },
-    {
-      step: "03",
-      title: "List Experiences",
-      desc: "Use our premium step-by-step activity listing wizard to upload descriptions, pricing options, itineraries, and images."
-    },
-    {
-      step: "04",
-      title: "Receive Bookings",
-      desc: "Travelers book your activities. You receive automated notifications, traveler lists, and prompt payouts."
-    }
-  ];
-
-  const faqs = [
-    {
-      q: "What is the cost to list activities on Tour Geeky?",
-      a: "Listing your experiences is 100% free! There are no listing fees, registration fees, or hidden subscription costs. We only charge a flat 10% commission on confirmed bookings."
-    },
-    {
-      q: "How and when do I receive payouts?",
-      a: "Payouts are automatically calculated and processed securely via Stripe. Operator earnings are sent twice a month directly to your linked bank account."
-    },
-    {
-      q: "What credentials do I need to get approved?",
-      a: "We verify that you are a Greece travel agency, local tour provider, cruise operator, or licensed guide. A valid phone number and website/social presence are usually sufficient for instant approval."
-    },
-    {
-      q: "Can I manage cancelations and refunds?",
-      a: "Yes! You can choose your cancelation policy (e.g. Standard 24h, Strict, or Non-refundable) during the product creation wizard. The platform automatically handles refund requests based on your chosen rules."
-    }
-  ];
-
-  const stats = [
-    { value: "2.4M+", label: "Monthly Active Travelers", desc: "Global exposure" },
-    { value: "150+", label: "Greek Operator Partners", desc: "Trusted Aegean network" },
-    { value: "120K+", label: "Confirmed Bookings", desc: "Completed experiences" },
-    { value: "10%", label: "Platform Commission", desc: "Flat rate, no hidden fees" }
-  ];
-
   const over = cms?.pages?.overview || {};
+
+  // Resolve dynamic arrays from CMS settings database
+  const benefitsList = over.benefits && Array.isArray(over.benefits) ? over.benefits : defaultBenefits;
+  const statsList = over.stats && Array.isArray(over.stats) ? over.stats : defaultStats;
+  const stepsList = over.steps && Array.isArray(over.steps) ? over.steps : defaultSteps;
+  const storiesList = over.stories && Array.isArray(over.stories) ? over.stories : defaultStories;
+  const faqsList = over.faqs && Array.isArray(over.faqs) ? over.faqs : defaultFaqs;
+
+  // Icon mapping helper
+  const getIconForIndex = (idx: number) => {
+    switch (idx) {
+      case 0: return DollarSign;
+      case 1: return TrendingUp;
+      case 2: return Shield;
+      default: return Users;
+    }
+  };
 
   return (
     <div className="bg-white text-brand-black">
@@ -165,11 +192,11 @@ export default function SupplierLandingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {benefits.map((b, idx) => {
-                const Icon = b.icon;
+              {benefitsList.map((b: any, idx: number) => {
+                const Icon = getIconForIndex(idx);
                 return (
                   <div key={idx} className="bg-white border border-brand-border/40 p-8 rounded-[28px] space-y-5 hover:shadow-xl hover:shadow-brand-black/5 hover:-translate-y-1 transition-all duration-300">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${b.color}`}>
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center border bg-brand-light text-brand-black border-brand-border">
                       <Icon className="w-5.5 h-5.5" />
                     </div>
                     <div className="space-y-2">
@@ -193,7 +220,7 @@ export default function SupplierLandingPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((s, idx) => (
+            {statsList.map((s: any, idx: number) => (
               <div key={idx} className="p-6 rounded-[24px] bg-white border border-brand-border/40 hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300 space-y-3">
                 <h3 className="text-4xl font-bold text-brand-black tracking-tight">{s.value}</h3>
                 <p className="text-xs font-bold text-brand-black tracking-wide leading-none">{s.label}</p>
@@ -214,10 +241,10 @@ export default function SupplierLandingPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {steps.map((s, idx) => (
+              {stepsList.map((s: any, idx: number) => (
                 <div key={idx} className="space-y-4 relative group">
                   <div className="text-5xl font-extrabold text-brand-black/10 group-hover:text-brand-black transition-colors duration-300">
-                    {s.step}
+                    {s.step || `0${idx + 1}`}
                   </div>
                   <div className="space-y-2">
                     <h3 className="text-base font-bold text-brand-black">{s.title}</h3>
@@ -238,52 +265,30 @@ export default function SupplierLandingPage() {
             <p className="text-sm text-brand-gray font-medium">{over.stories_subtitle || "Hear from verified travel operators running experiences on Tour Geeky Greece."}</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
-            {/* Crete Cruise Success Story */}
-            <div className="p-8 sm:p-10 rounded-[32px] border border-brand-border/40 bg-white hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300 flex flex-col justify-between gap-8">
-              <div className="space-y-6">
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map(s => <Star key={s} className="w-4.5 h-4.5 text-yellow-400 fill-yellow-400" />)}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {storiesList.map((st: any, idx: number) => (
+              <div key={idx} className="p-8 sm:p-10 rounded-[32px] border border-brand-border/40 bg-white hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300 flex flex-col justify-between gap-8">
+                <div className="space-y-6">
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: st.rating || 5 }).map((_, s) => <Star key={s} className="w-4.5 h-4.5 text-yellow-400 fill-yellow-400" />)}
+                  </div>
+                  <p className="text-sm sm:text-base text-brand-black font-medium italic leading-relaxed">
+                    {st.quote}
+                  </p>
                 </div>
-                <p className="text-base sm:text-lg text-brand-black font-medium italic leading-relaxed">
-                  "Sailing with Tour Geeky has doubled our sunset cruise bookings in Crete and Athens. Payouts are incredibly fast, and their listing wizard took just minutes to configure. We went live with 4 yachts within the first day."
-                </p>
-              </div>
-              <div className="flex items-center gap-4 border-t border-brand-border pt-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=100&h=100&q=80" 
-                  alt="Captain Dimitris" 
-                  className="w-12 h-12 rounded-full object-cover border border-brand-border"
-                />
-                <div>
-                  <p className="text-xs font-bold text-brand-black leading-none">Captain Dimitris</p>
-                  <p className="text-[9px] text-brand-gray font-bold uppercase tracking-wider mt-1">Founder, Aegean Sails Ltd</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Athens Vineyard Success Story */}
-            <div className="p-8 sm:p-10 rounded-[32px] border border-brand-border/40 bg-white hover:shadow-xl hover:shadow-brand-black/5 transition-all duration-300 flex flex-col justify-between gap-8">
-              <div className="space-y-6">
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map(s => <Star key={s} className="w-4.5 h-4.5 text-yellow-400 fill-yellow-400" />)}
-                </div>
-                <p className="text-sm text-brand-black font-semibold italic leading-relaxed">
-                  "Their local support crew and Greek translation helper attracted travelers from America and East Asia to our boutique vineyard tours near Mount Hymettus."
-                </p>
-              </div>
-              <div className="flex items-center gap-4 border-t border-brand-border pt-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" 
-                  alt="Eleni Vance" 
-                  className="w-12 h-12 rounded-full object-cover border border-brand-border"
-                />
-                <div>
-                  <p className="text-xs font-bold text-brand-black leading-none">Eleni Vance</p>
-                  <p className="text-[9px] text-brand-gray font-bold uppercase tracking-wider mt-1">Host, Athens Vineyard Estates</p>
+                <div className="flex items-center gap-4 border-t border-brand-border pt-6">
+                  <img 
+                    src={st.avatar || "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=100&h=100&q=80"} 
+                    alt={st.name} 
+                    className="w-12 h-12 rounded-full object-cover border border-brand-border"
+                  />
+                  <div>
+                    <p className="text-xs font-bold text-brand-black leading-none">{st.name}</p>
+                    <p className="text-[9px] text-brand-gray font-bold uppercase tracking-wider mt-1">{st.role}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </section>
       )}
@@ -298,7 +303,7 @@ export default function SupplierLandingPage() {
             </div>
 
             <div className="space-y-4">
-              {faqs.map((f, idx) => (
+              {faqsList.map((f: any, idx: number) => (
                 <div key={idx} className="bg-white border border-brand-border/40 p-6 rounded-[20px] space-y-2.5 hover:shadow-xl hover:shadow-brand-black/5 transition-all">
                   <h3 className="text-sm font-bold text-brand-black flex items-center gap-2">
                     <HelpCircle className="w-4.5 h-4.5 text-brand-gray/60 shrink-0" /> {f.q}

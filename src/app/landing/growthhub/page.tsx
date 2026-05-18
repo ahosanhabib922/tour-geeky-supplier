@@ -5,6 +5,43 @@ import { BarChart2, Compass } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
 
+const defaultGrowthStrategies = [
+  {
+    metric: "Dynamic Pricing Adjustments",
+    desc: "Capitalize on seasonal demand surges. Our tool provides suggestion algorithms that automatically recommend capacity price alterations for Aegean high-seasons (June - September) versus milder shoulder months (April and October).",
+    impact: "+24% bookings value"
+  },
+  {
+    metric: "High-Definition Listing Scoring",
+    desc: "Upload crystal-clear panoramic drone shots of yacht decks and vivid snapshots of historic ruins. Our listing optimization score prompts you on precisely what content structure and travel amenities customers search for most.",
+    impact: "+40% conversion rate"
+  },
+  {
+    metric: "Instant Confirmation & Booking Sliders",
+    desc: "Enable instant confirmations and synchronize live capacities directly with external calendars. Travelers prefer immediate checkouts over standard 'request-to-book' systems, boosting direct placement clicks.",
+    impact: "+35% customer engagement"
+  }
+];
+
+const defaultSeasonalTips = [
+  {
+    title: "Peak Summer Surge (Jun-Sep)",
+    tips: [
+      "Create special Sunset Yachting itineraries with premium local wine inclusions.",
+      "Add additional 5:00 PM evening slots to capture the sunset golden hour.",
+      "Double your slot capacity on weekends to capture sudden walk-in bookings."
+    ]
+  },
+  {
+    title: "Shoulder Season Growth (Apr-May & Oct)",
+    tips: [
+      "Offer early-bird promotional codes and family booking options.",
+      "Transition catamaran routes to historical land-based archaeological walks.",
+      "Highlight cozy indoor options for food tours and olive oil tastings."
+    ]
+  }
+];
+
 export default function GrowthHubPage() {
   const { openModal } = useModal();
   const [cms, setCms] = useState<any>(null);
@@ -16,44 +53,10 @@ export default function GrowthHubPage() {
       .catch((err) => console.error("Error loading CMS settings:", err));
   }, []);
 
-  const growthStrategies = [
-    {
-      metric: "Dynamic Pricing Adjustments",
-      desc: "Capitalize on seasonal demand surges. Our tool provides suggestion algorithms that automatically recommend capacity price alterations for Aegean high-seasons (June - September) versus milder shoulder months (April and October).",
-      impact: "+24% bookings value"
-    },
-    {
-      metric: "High-Definition Listing Scoring",
-      desc: "Upload crystal-clear panoramic drone shots of yacht decks and vivid snapshots of historic ruins. Our listing optimization score prompts you on precisely what content structure and travel amenities customers search for most.",
-      impact: "+40% conversion rate"
-    },
-    {
-      metric: "Instant Confirmation & Booking Sliders",
-      desc: "Enable instant confirmations and synchronize live capacities directly with external calendars. Travelers prefer immediate checkouts over standard 'request-to-book' systems, boosting direct placement clicks.",
-      impact: "+35% customer engagement"
-    }
-  ];
-
-  const seasonalTips = [
-    {
-      title: "Peak Summer Surge (Jun-Sep)",
-      tips: [
-        "Create special Sunset Yachting itineraries with premium local wine inclusions.",
-        "Add additional 5:00 PM evening slots to capture the sunset golden hour.",
-        "Double your slot capacity on weekends to capture sudden walk-in bookings."
-      ]
-    },
-    {
-      title: "Shoulder Season Growth (Apr-May & Oct)",
-      tips: [
-        "Offer early-bird promotional codes and family booking options.",
-        "Transition catamaran routes to historical land-based archaeological walks.",
-        "Highlight cozy indoor options for food tours and olive oil tastings."
-      ]
-    }
-  ];
-
   const gro = cms?.pages?.growthhub || {};
+
+  const strategiesList = gro.growthStrategies && Array.isArray(gro.growthStrategies) ? gro.growthStrategies : defaultGrowthStrategies;
+  const tipsList = gro.seasonalTips && Array.isArray(gro.seasonalTips) ? gro.seasonalTips : defaultSeasonalTips;
 
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
@@ -75,7 +78,7 @@ export default function GrowthHubPage() {
       {/* Strategies - Cardless Listing */}
       <div className="max-w-6xl mx-auto px-6 sm:px-12 py-10 border-t border-brand-border/40">
         <div className="grid gap-16">
-          {growthStrategies.map((s, idx) => (
+          {strategiesList.map((s: any, idx: number) => (
             <div 
               key={idx} 
               className="flex flex-col lg:flex-row lg:items-start justify-between gap-10 py-10 border-b border-brand-border/40 last:border-none"
@@ -108,14 +111,14 @@ export default function GrowthHubPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {seasonalTips.map((st, idx) => (
+              {tipsList.map((st: any, idx: number) => (
                 <div key={idx} className="space-y-6">
                   <div className="flex items-center gap-3 border-b border-brand-border/60 pb-4">
                     <Compass className="h-5 w-5 text-brand-black" />
                     <h3 className="text-base font-bold text-brand-black tracking-wide">{st.title}</h3>
                   </div>
                   <ul className="space-y-4">
-                    {st.tips.map((tip, tIdx) => (
+                    {(st.tips || []).map((tip: string, tIdx: number) => (
                       <li key={tIdx} className="flex items-start gap-3.5 text-xs text-brand-gray font-semibold leading-relaxed">
                         <span className="h-5 w-5 rounded-full bg-white border border-brand-border shrink-0 flex items-center justify-center text-[10px] font-bold text-brand-black">
                           {tIdx + 1}

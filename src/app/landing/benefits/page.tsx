@@ -5,6 +5,35 @@ import { DollarSign, Globe, Shield, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
 
+const defaultCoreBenefits = [
+  {
+    title: "10% Flat Fee Commission Structure",
+    headline: "Keep 90% of your ticket sales.",
+    desc: "Unlike other large international OTAs that demand up to 25% or 30% commission, Tour Geeky maintains a flat, transparent 10% fee. No annual memberships, no listing costs, and no hidden contract surprises."
+  },
+  {
+    title: "Aegean & Grecian Targeted Marketing",
+    headline: "Expose your tours to active buyers.",
+    desc: "Our localized search engines actively direct high-value travelers from the US, UK, and East Asia searching specifically for premium sailing excursions in Mykonos, Santorini historical walking tours, and vineyard crawls in Crete."
+  },
+  {
+    title: "Direct Stripe Settlement Infrastructure",
+    headline: "Automated payouts twice a month.",
+    desc: "Your funds are stored in escrow safely and transferred automatically directly to your local bank account via secure Stripe operator payouts twice a month, completely eliminating invoice waiting periods."
+  },
+  {
+    title: "Dedicated Greek Operator Support Crew",
+    headline: "Your personal growth managers.",
+    desc: "We don't believe in generic robot helplines. Every operator receives access to local, dedicated partners in Athens, Paros, and Chania to help construct optimal prices, high-quality images, and rich description copies."
+  }
+];
+
+const defaultComparisonTable = [
+  { channel: "Tour Geeky Partner", commission: "10% Flat Rate", cost: "€0 Free", settlement: "Twice Monthly (Stripe)" },
+  { channel: "Global OTAs (Viator / GetYourGuide)", commission: "22% - 28%", cost: "€25 Listing Charge", settlement: "Monthly Invoice" },
+  { channel: "Local Greek Agencies (Athens Walk-ins)", commission: "15% - 20%", cost: "Requires Retainer", settlement: "30-day Post Excursion" }
+];
+
 export default function BenefitsPage() {
   const { openModal } = useModal();
   const [cms, setCms] = useState<any>(null);
@@ -16,34 +45,19 @@ export default function BenefitsPage() {
       .catch((err) => console.error("Error loading CMS settings:", err));
   }, []);
 
-  const coreBenefits = [
-    {
-      icon: DollarSign,
-      title: "10% Flat Fee Commission Structure",
-      headline: "Keep 90% of your ticket sales.",
-      desc: "Unlike other large international OTAs that demand up to 25% or 30% commission, Tour Geeky maintains a flat, transparent 10% fee. No annual memberships, no listing costs, and no hidden contract surprises."
-    },
-    {
-      icon: Globe,
-      title: "Aegean & Grecian Targeted Marketing",
-      headline: "Expose your tours to active buyers.",
-      desc: "Our localized search engines actively direct high-value travelers from the US, UK, and East Asia searching specifically for premium sailing excursions in Mykonos, Santorini historical walking tours, and vineyard crawls in Crete."
-    },
-    {
-      icon: Shield,
-      title: "Direct Stripe Settlement Infrastructure",
-      headline: "Automated payouts twice a month.",
-      desc: "Your funds are stored in escrow safely and transferred automatically directly to your local bank account via secure Stripe operator payouts twice a month, completely eliminating invoice waiting periods."
-    },
-    {
-      icon: Users,
-      title: "Dedicated Greek Operator Support Crew",
-      headline: "Your personal growth managers.",
-      desc: "We don't believe in generic robot helplines. Every operator receives access to local, dedicated partners in Athens, Paros, and Chania to help construct optimal prices, high-quality images, and rich description copies."
-    }
-  ];
-
   const ben = cms?.pages?.benefits || {};
+
+  const benefitsList = ben.coreBenefits && Array.isArray(ben.coreBenefits) ? ben.coreBenefits : defaultCoreBenefits;
+  const comparisonList = ben.comparisonTable && Array.isArray(ben.comparisonTable) ? ben.comparisonTable : defaultComparisonTable;
+
+  const getIconForIndex = (idx: number) => {
+    switch (idx) {
+      case 0: return DollarSign;
+      case 1: return Globe;
+      case 2: return Shield;
+      default: return Users;
+    }
+  };
 
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
@@ -65,8 +79,8 @@ export default function BenefitsPage() {
       {/* Cardless Grid Details */}
       <div className="max-w-6xl mx-auto px-6 sm:px-12 py-10 border-t border-brand-border/40">
         <div className="grid gap-16">
-          {coreBenefits.map((b, idx) => {
-            const Icon = b.icon;
+          {benefitsList.map((b: any, idx: number) => {
+            const Icon = getIconForIndex(idx);
             return (
               <div 
                 key={idx} 
@@ -114,24 +128,17 @@ export default function BenefitsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-brand-border/40 text-xs font-semibold text-brand-black">
-                  <tr>
-                    <td className="py-5 font-bold">Tour Geeky Partner</td>
-                    <td className="py-5 text-emerald-600 font-bold">10% Flat Rate</td>
-                    <td className="py-5">€0 Free</td>
-                    <td className="py-5 text-right">Twice Monthly (Stripe)</td>
-                  </tr>
-                  <tr className="opacity-60">
-                    <td className="py-5">Global OTAs (Viator / GetYourGuide)</td>
-                    <td className="py-5 text-red-500">22% - 28%</td>
-                    <td className="py-5">€25 Listing Charge</td>
-                    <td className="py-5 text-right">Monthly Invoice</td>
-                  </tr>
-                  <tr className="opacity-60">
-                    <td className="py-5">Local Greek Agencies (Athens Walk-ins)</td>
-                    <td className="py-5 text-red-500">15% - 20%</td>
-                    <td className="py-5">Requires Retainer</td>
-                    <td className="py-5 text-right">30-day Post Excursion</td>
-                  </tr>
+                  {comparisonList.map((row: any, idx: number) => {
+                    const isTg = row.channel.toLowerCase().includes("tour geeky");
+                    return (
+                      <tr key={idx} className={isTg ? "" : "opacity-60"}>
+                        <td className="py-5 font-bold">{row.channel}</td>
+                        <td className={`py-5 font-bold ${isTg ? "text-emerald-600" : "text-red-500"}`}>{row.commission}</td>
+                        <td className="py-5">{row.cost}</td>
+                        <td className="py-5 text-right">{row.settlement}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
