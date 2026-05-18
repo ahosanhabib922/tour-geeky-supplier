@@ -52,8 +52,8 @@ export default function GrowthHubPage() {
         <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
           Operator Growth & Optimizations
         </span>
-        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black uppercase max-w-3xl mx-auto leading-tight">
-          Accelerate your experiential brand with <span className="underline decoration-brand-black underline-offset-8">Growth Hub</span>
+        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
+          Accelerate Your Experiential Brand with <span className="underline decoration-brand-black underline-offset-8">Growth Hub</span>
         </h1>
         <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
           Gain strategic market insights, dynamic pricing recommendations, and expert content formatting guides from the Tour Geeky operations crew.
@@ -71,7 +71,7 @@ export default function GrowthHubPage() {
               <div className="lg:w-1/3 space-y-3">
                 <div className="flex items-center gap-2.5">
                   <BarChart2 className="h-5 w-5 text-brand-black" />
-                  <h3 className="text-lg font-bold text-brand-black uppercase tracking-tight">{s.metric}</h3>
+                  <h3 className="text-lg font-bold text-brand-black tracking-tight">{s.metric}</h3>
                 </div>
                 <div className="inline-block px-3 py-1 bg-emerald-50 border border-emerald-100 rounded-full text-[10px] font-bold text-emerald-700">
                   Impact: {s.impact}
@@ -90,7 +90,7 @@ export default function GrowthHubPage() {
       <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
         <div className="max-w-5xl mx-auto space-y-16">
           <div className="text-center space-y-3">
-            <h2 className="text-2xl font-bold tracking-tight text-brand-black uppercase">Seasonal Strategy Manual</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-brand-black">Seasonal Strategy Manual</h2>
             <p className="text-xs text-brand-gray font-semibold">Maximal sales strategies optimized for Greece tourist seasons.</p>
           </div>
 
@@ -99,7 +99,7 @@ export default function GrowthHubPage() {
               <div key={idx} className="space-y-6">
                 <div className="flex items-center gap-3 border-b border-brand-border/60 pb-4">
                   <Compass className="h-5 w-5 text-brand-black" />
-                  <h3 className="text-base font-bold text-brand-black uppercase tracking-wide">{st.title}</h3>
+                  <h3 className="text-base font-bold text-brand-black tracking-wide">{st.title}</h3>
                 </div>
                 <ul className="space-y-4">
                   {st.tips.map((tip, tIdx) => (
@@ -119,7 +119,7 @@ export default function GrowthHubPage() {
 
       {/* Action CTA */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 py-24 text-center space-y-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight uppercase">Ready to unlock your growth tools?</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight">Ready to Unlock Your Growth Tools?</h2>
         <p className="text-xs sm:text-sm text-brand-gray font-medium max-w-md mx-auto leading-relaxed">
           Log into your supplier dashboard or submit a verified partner profile application to start auditing your listings.
         </p>

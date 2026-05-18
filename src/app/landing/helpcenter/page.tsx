@@ -50,7 +50,7 @@ export default function HelpCenterPage() {
         <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
           Operational Assistance Hub
         </span>
-        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black uppercase max-w-3xl mx-auto leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
           How Can We Support Your Operations?
         </h1>
         <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
@@ -72,7 +72,7 @@ export default function HelpCenterPage() {
                   <div className="h-10 w-10 rounded-full bg-brand-light border border-brand-border/60 flex items-center justify-center shrink-0">
                     <Icon className="h-4.5 w-4.5 text-brand-black" />
                   </div>
-                  <h3 className="text-base font-bold text-brand-black uppercase tracking-wide">{c.title}</h3>
+                  <h3 className="text-base font-bold text-brand-black tracking-wide">{c.title}</h3>
                 </div>
                 <p className="text-xs sm:text-sm text-brand-gray font-semibold leading-relaxed">
                   {c.desc}
@@ -93,7 +93,7 @@ export default function HelpCenterPage() {
       <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
         <div className="max-w-5xl mx-auto space-y-16">
           <div className="text-center space-y-3">
-            <h2 className="text-2xl font-bold tracking-tight text-brand-black uppercase">Onboarding Setup Handbook</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-brand-black">Onboarding Setup Handbook</h2>
             <p className="text-xs text-brand-gray font-semibold">Everything you need to configure in under 10 minutes.</p>
           </div>
 
@@ -109,7 +109,7 @@ export default function HelpCenterPage() {
                     <Icon className="h-5 w-5 text-brand-black" />
                   </div>
                   <div className="space-y-2 text-left">
-                    <h3 className="text-base font-bold text-brand-black uppercase tracking-wide leading-snug">{g.title}</h3>
+                    <h3 className="text-base font-bold text-brand-black tracking-wide leading-snug">{g.title}</h3>
                     <p className="text-xs sm:text-sm text-brand-gray font-semibold leading-relaxed">
                       {g.desc}
                     </p>
@@ -123,7 +123,7 @@ export default function HelpCenterPage() {
 
       {/* CTA Footer banner */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 py-24 text-center space-y-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight uppercase">Need hand-held listing guidance?</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight">Need Hand-held Listing Guidance?</h2>
         <p className="text-xs sm:text-sm text-brand-gray font-medium max-w-md mx-auto leading-relaxed">
           Submit your partner application first. Once verified, our operator relations manager will reach out via WhatsApp to assist in uploading assets.
         </p>

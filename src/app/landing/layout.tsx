@@ -157,7 +157,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
           </Link>
 
           {/* Navigation Links */}
-          <div className="hidden lg:flex items-center gap-1 text-[13px] font-bold uppercase tracking-wider text-brand-black/70">
+          <div className="hidden lg:flex items-center gap-1 text-[13px] font-bold text-brand-black/70">
             {navItems.map((item) => (
               <Link 
                 key={item.href} 
@@ -174,7 +174,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
 
           {/* Actions */}
           <div className="hidden md:flex items-center gap-6">
-            <button className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider hover:text-brand-gray transition-colors">
+            <button className="flex items-center gap-2 text-[12px] font-bold hover:text-brand-gray transition-colors">
               <Globe className="w-4 h-4" />
               English
             </button>
@@ -183,7 +183,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
               onClick={() => setIsModalOpen(true)}
               variant="primary" 
               size="sm" 
-              className="rounded-full px-8 h-11 font-bold text-[12px] uppercase tracking-widest"
+              className="rounded-full px-8 h-11 font-bold text-[12px]"
             >
               Apply as Partner
             </Button>
@@ -225,7 +225,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
             </div>
 
             <div>
-              <h4 className="font-bold text-[12px] uppercase tracking-wider text-brand-black mb-5">Company</h4>
+              <h4 className="font-bold text-[12px] text-brand-black mb-5">Company</h4>
               <ul className="space-y-3.5 text-[14px] text-brand-gray">
                 <li><a href="#" className="hover:text-brand-black transition-colors">About Us</a></li>
                 <li><a href="#" className="hover:text-brand-black transition-colors">Blog</a></li>
@@ -234,7 +234,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
             </div>
 
             <div>
-              <h4 className="font-bold text-[12px] uppercase tracking-wider text-brand-black mb-5">Legal</h4>
+              <h4 className="font-bold text-[12px] text-brand-black mb-5">Legal</h4>
               <ul className="space-y-3.5 text-[14px] text-brand-gray">
                 <li><a href="#" className="hover:text-brand-black transition-colors">Terms of Service</a></li>
                 <li><a href="#" className="hover:text-brand-black transition-colors">Privacy Policy</a></li>
@@ -243,7 +243,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
             </div>
 
             <div>
-              <h4 className="font-bold text-[12px] uppercase tracking-wider text-brand-black mb-5">Contact</h4>
+              <h4 className="font-bold text-[12px] text-brand-black mb-5">Contact</h4>
               <ul className="space-y-3.5 text-[14px] text-brand-gray">
                 <li><a href="mailto:info@gerromantours.com" className="hover:text-brand-black transition-colors">info@gerromantours.com</a></li>
                 <li className="pt-2">

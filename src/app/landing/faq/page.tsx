@@ -77,7 +77,7 @@ export default function FAQPage() {
         <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
           Partner Support & Help Manual
         </span>
-        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black uppercase max-w-3xl mx-auto leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
           Operator Frequently Asked Questions
         </h1>
         <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
@@ -94,7 +94,7 @@ export default function FAQPage() {
               {/* Category Title Header */}
               <div className="flex items-center gap-3 border-b border-brand-border pb-4 mb-6">
                 <Icon className="h-5 w-5 text-brand-black shrink-0" />
-                <h2 className="text-base font-bold text-brand-black uppercase tracking-wider">{cat.title}</h2>
+                <h2 className="text-base font-bold text-brand-black tracking-wider">{cat.title}</h2>
               </div>
 
               {/* Accordion List */}
@@ -131,7 +131,7 @@ export default function FAQPage() {
 
       {/* Action CTA */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 py-20 text-center space-y-8 border-t border-brand-border/40">
-        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight uppercase">Still have questions?</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight">Still Have Questions?</h2>
         <p className="text-xs sm:text-sm text-brand-gray font-medium max-w-md mx-auto leading-relaxed">
           Our partner success team is based in Athens and available via email or phone. We will help you optimize your experience listings.
         </p>

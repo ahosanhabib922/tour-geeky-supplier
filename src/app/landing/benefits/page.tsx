@@ -42,7 +42,7 @@ export default function BenefitsPage() {
         <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
           Partner Privileges & Growth
         </span>
-        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black uppercase max-w-3xl mx-auto leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
           Keep More of What You Earn with <span className="underline decoration-brand-black underline-offset-8">Tour Geeky</span>
         </h1>
         <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
@@ -86,7 +86,7 @@ export default function BenefitsPage() {
       <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
         <div className="max-w-4xl mx-auto space-y-12">
           <div className="text-center space-y-3">
-            <h2 className="text-2xl font-bold tracking-tight text-brand-black uppercase">Comparing Industry Commissions</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-brand-black">Comparing Industry Commissions</h2>
             <p className="text-xs text-brand-gray font-semibold">How Tour Geeky stacks up against global third-party channels.</p>
           </div>
 
@@ -127,7 +127,7 @@ export default function BenefitsPage() {
 
       {/* CTA Footer banner */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 py-24 text-center space-y-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight uppercase">Ready to elevate your margins?</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight">Ready to Elevate Your Margins?</h2>
         <p className="text-xs sm:text-sm text-brand-gray font-medium max-w-md mx-auto leading-relaxed">
           Application takes 1 minute and reviews are conducted within 24 hours. Connect your bank, list experiences, and welcome Greece travelers.
         </p>

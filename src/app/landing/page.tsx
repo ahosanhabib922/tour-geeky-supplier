@@ -148,7 +148,7 @@ export default function SupplierLandingPage() {
       <section id="benefits" className="py-24 bg-brand-light/20 border-y border-brand-border px-6 sm:px-12">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black uppercase">Why Partner with Us?</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black">Why Partner with Us?</h2>
             <p className="text-sm text-brand-gray font-medium">Everything you need to list, manage, and scale Greece experiential business.</p>
           </div>
 
@@ -174,7 +174,7 @@ export default function SupplierLandingPage() {
       {/* Impact Stats Grid Section */}
       <section id="stats" className="py-24 max-w-6xl mx-auto px-6 sm:px-12 space-y-16">
         <div className="text-center space-y-3">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black uppercase">Our Greece Marketplace Impact</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black">Our Greece Marketplace Impact</h2>
           <p className="text-sm text-brand-gray font-medium">Greece's premier channel for premium experiential excursions.</p>
         </div>
 
@@ -193,7 +193,7 @@ export default function SupplierLandingPage() {
       <section id="workflow" className="py-24 bg-brand-light/20 border-y border-brand-border px-6 sm:px-12">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black uppercase">How It Works</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black">How It Works</h2>
             <p className="text-sm text-brand-gray font-medium">Simple 4-step workflow from partner registration to payout.</p>
           </div>
 
@@ -216,7 +216,7 @@ export default function SupplierLandingPage() {
       {/* Live Greece Operator Success Stories */}
       <section id="stories" className="py-24 max-w-6xl mx-auto px-6 sm:px-12 space-y-16">
         <div className="text-center space-y-3">
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black uppercase">Greek Operator Stories</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black">Greek Operator Stories</h2>
           <p className="text-sm text-brand-gray font-medium">Hear from verified travel operators running experiences on Tour Geeky Greece.</p>
         </div>
 
@@ -273,7 +273,7 @@ export default function SupplierLandingPage() {
       <section id="faqs" className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
         <div className="max-w-4xl mx-auto space-y-12">
           <div className="text-center space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black uppercase">Frequently Asked Questions</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-black">Frequently Asked Questions</h2>
             <p className="text-sm text-brand-gray font-medium">Have questions about payouts, listings, or commissions?</p>
           </div>
 
