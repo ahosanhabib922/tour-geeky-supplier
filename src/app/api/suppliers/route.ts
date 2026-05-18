@@ -211,7 +211,7 @@ export async function POST(request: Request) {
                 </div>
 
                 <div style="text-align: center; margin-top: 32px;">
-                  <a href="https://supplier-tourgeeky.vercel.app/admin/suppliers" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-weight: 700; font-size: 12px; text-transform: uppercase; padding: 12px 24px; border-radius: 12px; text-decoration: none; letter-spacing: 0.5px;">Review Application inside Admin Portal</a>
+                  <a href="${process.env.RESEND_ADMIN_PORTAL_URL || 'https://admin-tourgeeky.vercel.app'}/suppliers" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-weight: 700; font-size: 12px; text-transform: uppercase; padding: 12px 24px; border-radius: 12px; text-decoration: none; letter-spacing: 0.5px;">Review Application inside Admin Portal</a>
                 </div>
               </div>
             `
