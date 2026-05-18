@@ -9,7 +9,10 @@ import {
   Clock, 
   History, 
   Sparkles,
-  Search
+  Search,
+  Lock,
+  Unlock,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { 
@@ -22,6 +25,8 @@ import {
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { Product } from "@/types/product";
+import { Modal } from "@/components/ui/Modal";
+import { Input } from "@/components/ui/Input";
 import { format, addDays, subDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, startOfWeek, endOfWeek } from "date-fns";
 
 export default function AvailabilityPage() {
@@ -32,14 +37,70 @@ export default function AvailabilityPage() {
   const [selectedProductFilter, setSelectedProductFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  // Manage Slot Modal States
+  const [managingSlot, setManagingSlot] = useState<any | null>(null);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [capacityOverride, setCapacityOverride] = useState(0);
+  const [isFetchingOverride, setIsFetchingOverride] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const fetchProductsList = () => {
+    setIsLoading(true);
     fetch("/api/products")
       .then(res => res.json())
       .then(data => {
         setProducts(Array.isArray(data) ? data : []);
         setIsLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchProductsList();
   }, []);
+
+  // Fetch overrides when a slot is chosen to be managed
+  useEffect(() => {
+    if (managingSlot) {
+      setIsFetchingOverride(true);
+      const dateStr = format(currentDate, "yyyy-MM-dd");
+      fetch(`/api/availability?productId=${managingSlot.productId}&optionId=${managingSlot.optionId}&date=${dateStr}`)
+        .then(res => res.json())
+        .then(data => {
+          setIsBlocked(data.override?.is_blocked === 1);
+          setCapacityOverride(data.override?.capacity_override ?? managingSlot.capacity);
+          setIsFetchingOverride(false);
+        })
+        .catch(err => {
+          console.error(err);
+          setIsFetchingOverride(false);
+        });
+    }
+  }, [managingSlot]);
+
+  const handleSaveOverride = async () => {
+    if (!managingSlot) return;
+    setIsSaving(true);
+    const dateStr = format(currentDate, "yyyy-MM-dd");
+    try {
+      await fetch("/api/availability", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: managingSlot.productId,
+          optionId: managingSlot.optionId,
+          date: dateStr,
+          isBlocked: isBlocked,
+          capacityOverride: capacityOverride
+        })
+      });
+      setManagingSlot(null);
+      fetchProductsList();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Calculate active slots for any given date
   const getSlotsForDate = (date: Date) => {
@@ -245,7 +306,14 @@ export default function AvailabilityPage() {
                         </div>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="h-10 rounded-full px-8 font-bold text-[10px] uppercase tracking-widest border-border group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all shadow-sm">Manage Slot</Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setManagingSlot(slot)}
+                      className="h-10 rounded-full px-8 font-bold text-[10px] uppercase tracking-widest border-border group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all shadow-sm"
+                    >
+                      Manage Slot
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -374,13 +442,10 @@ export default function AvailabilityPage() {
                               <Button 
                                 variant="outline" 
                                 size="sm" 
-                                onClick={() => {
-                                  setCurrentDate(day);
-                                  setViewMode("agenda");
-                                }}
+                                onClick={() => setManagingSlot(slot)}
                                 className="h-8 rounded-full px-6 font-bold text-[9px] uppercase tracking-widest border-border hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm"
                               >
-                                View Details
+                                Manage Slot
                               </Button>
                             </div>
                           ))}
@@ -394,6 +459,99 @@ export default function AvailabilityPage() {
           )}
         </div>
       </div>
+
+      {/* Manage Slot Modal */}
+      <Modal
+        isOpen={managingSlot !== null}
+        onClose={() => setManagingSlot(null)}
+        title="Manage Slot Capacity & Status"
+        maxWidth="max-w-md"
+      >
+        {managingSlot && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-sm font-bold text-foreground line-clamp-1">{managingSlot.productTitle}</h3>
+              <p className="text-xs text-muted-foreground font-medium mt-1 uppercase tracking-wider">
+                {managingSlot.time} Slot • {managingSlot.optionName}
+              </p>
+              <p className="text-xs text-primary font-bold mt-2">
+                Date: {format(currentDate, "EEEE, MMMM d, yyyy")}
+              </p>
+            </div>
+
+            {isFetchingOverride ? (
+              <div className="py-8 flex flex-col items-center justify-center gap-2">
+                <Loader2 className="w-5 h-5 text-primary animate-spin" />
+                <span className="text-xs font-bold text-muted-foreground">Fetching current settings...</span>
+              </div>
+            ) : (
+              <div className="space-y-6 animate-in fade-in duration-200">
+                {/* Capacity Override */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Slot Capacity</label>
+                  <Input
+                    type="number"
+                    value={capacityOverride}
+                    onChange={(e) => setCapacityOverride(parseInt(e.target.value) || 0)}
+                    disabled={isBlocked}
+                    className="h-10 rounded-xl"
+                  />
+                  <p className="text-[10px] text-muted-foreground font-medium">Default capacity: {managingSlot.capacity}</p>
+                </div>
+
+                {/* Block / Unblock Toggle */}
+                <div className="flex items-center justify-between py-3 border-t border-b border-border/40">
+                  <span className="text-xs font-bold text-foreground">Block bookings for this slot</span>
+                  <button
+                    onClick={() => setIsBlocked(!isBlocked)}
+                    className={cn(
+                      "px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all",
+                      isBlocked 
+                        ? "bg-red-50 text-red-600 border border-red-200 hover:bg-red-100/60" 
+                        : "bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100/60"
+                    )}
+                  >
+                    {isBlocked ? (
+                      <>
+                        <Lock className="w-3.5 h-3.5" /> Blocked
+                      </>
+                    ) : (
+                      <>
+                        <Unlock className="w-3.5 h-3.5" /> Allowed
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center justify-end gap-3 pt-2">
+                  <Button
+                    variant="ghost"
+                    onClick={() => setManagingSlot(null)}
+                    disabled={isSaving}
+                    className="h-10 px-6 rounded-full text-xs font-bold"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSaveOverride}
+                    disabled={isSaving}
+                    className="h-10 px-8 rounded-full text-xs font-bold"
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin mr-2" /> Saving...
+                      </>
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
