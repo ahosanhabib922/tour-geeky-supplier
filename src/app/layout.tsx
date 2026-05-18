@@ -28,7 +28,7 @@ export default function RootLayout({
   const [authLoading, setAuthLoading] = useState(true);
 
   // Exclude landing page from having the dashboard sidebar and header shell!
-  const isLanding = pathname === "/landing";
+  const isLanding = pathname === "/landing" || pathname.startsWith("/landing/");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -36,7 +36,7 @@ export default function RootLayout({
         setUser(null);
         setSupplierStatus(null);
         setSupplierName("");
-        if (pathname !== "/landing") {
+        if (pathname !== "/landing" && !pathname.startsWith("/landing/")) {
           router.push("/landing");
         }
         setAuthLoading(false);
@@ -57,7 +57,7 @@ export default function RootLayout({
             } else {
               // Logged in but no supplier application found yet in database
               setSupplierStatus("none");
-              if (pathname !== "/landing") {
+              if (pathname !== "/landing" && !pathname.startsWith("/landing/")) {
                 router.push("/landing");
               }
             }
