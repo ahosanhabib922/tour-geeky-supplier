@@ -1,13 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
-import { HelpCircle, ChevronDown, ChevronUp, DollarSign, Box, ClipboardList, ShieldAlert, Award } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { HelpCircle, ChevronDown, ChevronUp, DollarSign, Box, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
 
 export default function FAQPage() {
   const { openModal } = useModal();
   const [openIndex, setOpenIndex] = useState<string | null>(null);
+  const [cms, setCms] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/settings/supplier-landing")
+      .then((res) => res.json())
+      .then((data) => setCms(data))
+      .catch((err) => console.error("Error loading CMS settings:", err));
+  }, []);
 
   const toggleFAQ = (id: string) => {
     setOpenIndex(openIndex === id ? null : id);
@@ -70,20 +78,24 @@ export default function FAQPage() {
     }
   ];
 
+  const fq = cms?.pages?.faq || {};
+
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
       {/* Hero Header */}
-      <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
-        <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
-          Partner Support & Help Manual
-        </span>
-        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
-          Operator Frequently Asked Questions
-        </h1>
-        <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
-          Quickly find answers regarding secure payouts, commission rates, guest cancellations, bad-weather contingencies, and listing setup wizards.
-        </p>
-      </div>
+      {(fq.hero_show !== false) && (
+        <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
+          <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
+            {fq.hero_badge || "Partner Support & Help Manual"}
+          </span>
+          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
+            {fq.hero_title || "Operator Frequently Asked Questions"}
+          </h1>
+          <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
+            {fq.hero_description || "Quickly find answers regarding secure payouts, commission rates, guest cancellations, bad-weather contingencies, and listing setup wizards."}
+          </p>
+        </div>
+      )}
 
       {/* Accordion Categories - Cardless & Separators */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 pb-24">

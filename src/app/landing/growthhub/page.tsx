@@ -1,12 +1,20 @@
 "use client";
 
-import React from "react";
-import { TrendingUp, BarChart2, Star, Settings, ShieldCheck, HelpCircle, ArrowUpRight, Compass } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { BarChart2, Compass } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
 
 export default function GrowthHubPage() {
   const { openModal } = useModal();
+  const [cms, setCms] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/settings/supplier-landing")
+      .then((res) => res.json())
+      .then((data) => setCms(data))
+      .catch((err) => console.error("Error loading CMS settings:", err));
+  }, []);
 
   const growthStrategies = [
     {
@@ -45,20 +53,24 @@ export default function GrowthHubPage() {
     }
   ];
 
+  const gro = cms?.pages?.growthhub || {};
+
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
       {/* Hero */}
-      <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
-        <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
-          Operator Growth & Optimizations
-        </span>
-        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
-          Accelerate Your Experiential Brand with <span className="underline decoration-brand-black underline-offset-8">Growth Hub</span>
-        </h1>
-        <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
-          Gain strategic market insights, dynamic pricing recommendations, and expert content formatting guides from the Tour Geeky operations crew.
-        </p>
-      </div>
+      {(gro.hero_show !== false) && (
+        <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
+          <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
+            {gro.hero_badge || "Operator Growth & Optimizations"}
+          </span>
+          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
+            {gro.hero_title || "Accelerate Your Experiential Brand with Growth Hub"}
+          </h1>
+          <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
+            {gro.hero_description || "Gain strategic market insights, dynamic pricing recommendations, and expert content formatting guides from the Tour Geeky operations crew."}
+          </p>
+        </div>
+      )}
 
       {/* Strategies - Cardless Listing */}
       <div className="max-w-6xl mx-auto px-6 sm:px-12 py-10 border-t border-brand-border/40">
@@ -87,35 +99,37 @@ export default function GrowthHubPage() {
       </div>
 
       {/* Seasonal Insights Calendar Grid */}
-      <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
-        <div className="max-w-5xl mx-auto space-y-16">
-          <div className="text-center space-y-3">
-            <h2 className="text-2xl font-bold tracking-tight text-brand-black">Seasonal Strategy Manual</h2>
-            <p className="text-xs text-brand-gray font-semibold">Maximal sales strategies optimized for Greece tourist seasons.</p>
-          </div>
+      {(gro.tips_show !== false) && (
+        <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
+          <div className="max-w-5xl mx-auto space-y-16">
+            <div className="text-center space-y-3">
+              <h2 className="text-2xl font-bold tracking-tight text-brand-black">{gro.tips_title || "Seasonal Strategy Manual"}</h2>
+              <p className="text-xs text-brand-gray font-semibold">{gro.tips_subtitle || "Maximal sales strategies optimized for Greece tourist seasons."}</p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {seasonalTips.map((st, idx) => (
-              <div key={idx} className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-brand-border/60 pb-4">
-                  <Compass className="h-5 w-5 text-brand-black" />
-                  <h3 className="text-base font-bold text-brand-black tracking-wide">{st.title}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {seasonalTips.map((st, idx) => (
+                <div key={idx} className="space-y-6">
+                  <div className="flex items-center gap-3 border-b border-brand-border/60 pb-4">
+                    <Compass className="h-5 w-5 text-brand-black" />
+                    <h3 className="text-base font-bold text-brand-black tracking-wide">{st.title}</h3>
+                  </div>
+                  <ul className="space-y-4">
+                    {st.tips.map((tip, tIdx) => (
+                      <li key={tIdx} className="flex items-start gap-3.5 text-xs text-brand-gray font-semibold leading-relaxed">
+                        <span className="h-5 w-5 rounded-full bg-white border border-brand-border shrink-0 flex items-center justify-center text-[10px] font-bold text-brand-black">
+                          {tIdx + 1}
+                        </span>
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-4">
-                  {st.tips.map((tip, tIdx) => (
-                    <li key={tIdx} className="flex items-start gap-3.5 text-xs text-brand-gray font-semibold leading-relaxed">
-                      <span className="h-5 w-5 rounded-full bg-white border border-brand-border shrink-0 flex items-center justify-center text-[10px] font-bold text-brand-black">
-                        {tIdx + 1}
-                      </span>
-                      <span>{tip}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Action CTA */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 py-24 text-center space-y-8">

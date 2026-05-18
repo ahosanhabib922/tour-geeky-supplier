@@ -134,13 +134,24 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
     }
   };
 
-  const navItems = [
+  const [navItems, setNavItems] = useState([
     { label: "Overview", href: "/landing" },
     { label: "Benefits", href: "/landing/benefits" },
     { label: "Growth Hub", href: "/landing/growthhub" },
     { label: "FAQs", href: "/landing/faq" },
     { label: "Help Center", href: "/landing/helpcenter" }
-  ];
+  ]);
+
+  useEffect(() => {
+    fetch("/api/settings/supplier-landing")
+      .then(res => res.json())
+      .then(data => {
+        if (data.navItems && Array.isArray(data.navItems)) {
+          setNavItems(data.navItems);
+        }
+      })
+      .catch(e => console.error("Error fetching supplier CMS nav items:", e));
+  }, []);
 
   return (
     <ModalContext.Provider value={{ openModal: () => setIsModalOpen(true) }}>

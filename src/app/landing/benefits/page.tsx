@@ -1,12 +1,20 @@
 "use client";
 
-import React from "react";
-import { DollarSign, Globe, Shield, Users, ShieldAlert, Award, Activity, Heart, ArrowRight } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { DollarSign, Globe, Shield, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
 
 export default function BenefitsPage() {
   const { openModal } = useModal();
+  const [cms, setCms] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/settings/supplier-landing")
+      .then((res) => res.json())
+      .then((data) => setCms(data))
+      .catch((err) => console.error("Error loading CMS settings:", err));
+  }, []);
 
   const coreBenefits = [
     {
@@ -35,20 +43,24 @@ export default function BenefitsPage() {
     }
   ];
 
+  const ben = cms?.pages?.benefits || {};
+
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
       {/* Hero Header */}
-      <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
-        <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
-          Partner Privileges & Growth
-        </span>
-        <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
-          Keep More of What You Earn with <span className="underline decoration-brand-black underline-offset-8">Tour Geeky</span>
-        </h1>
-        <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
-          Discover why Greek yacht captains, independent travel curators, and boutique activity planners choose our transparent 10% flat commission model.
-        </p>
-      </div>
+      {(ben.hero_show !== false) && (
+        <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
+          <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
+            {ben.hero_badge || "Partner Privileges & Growth"}
+          </span>
+          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
+            {ben.hero_title || "Keep More of What You Earn with Tour Geeky"}
+          </h1>
+          <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
+            {ben.hero_description || "Discover why Greek yacht captains, independent travel curators, and boutique activity planners choose our transparent 10% flat commission model."}
+          </p>
+        </div>
+      )}
 
       {/* Cardless Grid Details */}
       <div className="max-w-6xl mx-auto px-6 sm:px-12 py-10 border-t border-brand-border/40">
@@ -83,47 +95,49 @@ export default function BenefitsPage() {
       </div>
 
       {/* Comparative Analysis Table (Clean & Cardless) */}
-      <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
-        <div className="max-w-4xl mx-auto space-y-12">
-          <div className="text-center space-y-3">
-            <h2 className="text-2xl font-bold tracking-tight text-brand-black">Comparing Industry Commissions</h2>
-            <p className="text-xs text-brand-gray font-semibold">How Tour Geeky stacks up against global third-party channels.</p>
-          </div>
+      {(ben.table_show !== false) && (
+        <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
+          <div className="max-w-4xl mx-auto space-y-12">
+            <div className="text-center space-y-3">
+              <h2 className="text-2xl font-bold tracking-tight text-brand-black">{ben.table_title || "Comparing Industry Commissions"}</h2>
+              <p className="text-xs text-brand-gray font-semibold">{ben.table_subtitle || "How Tour Geeky stacks up against global third-party channels."}</p>
+            </div>
 
-          <div className="overflow-hidden border-t border-brand-border/60">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-brand-border/50 text-[10px] font-bold text-brand-black/40 uppercase tracking-widest">
-                  <th className="py-4">Distribution Channel</th>
-                  <th className="py-4">Commission Fee</th>
-                  <th className="py-4">Onboarding Costs</th>
-                  <th className="py-4 text-right">Escrow Settlement</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-brand-border/40 text-xs font-semibold text-brand-black">
-                <tr>
-                  <td className="py-5 font-bold">Tour Geeky Partner</td>
-                  <td className="py-5 text-emerald-600 font-bold">10% Flat Rate</td>
-                  <td className="py-5">€0 Free</td>
-                  <td className="py-5 text-right">Twice Monthly (Stripe)</td>
-                </tr>
-                <tr className="opacity-60">
-                  <td className="py-5">Global OTAs (Viator / GetYourGuide)</td>
-                  <td className="py-5 text-red-500">22% - 28%</td>
-                  <td className="py-5">€25 Listing Charge</td>
-                  <td className="py-5 text-right">Monthly Invoice</td>
-                </tr>
-                <tr className="opacity-60">
-                  <td className="py-5">Local Greek Agencies (Athens Walk-ins)</td>
-                  <td className="py-5 text-red-500">15% - 20%</td>
-                  <td className="py-5">Requires Retainer</td>
-                  <td className="py-5 text-right">30-day Post Excursion</td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="overflow-hidden border-t border-brand-border/60">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-brand-border/50 text-[10px] font-bold text-brand-black/40 uppercase tracking-widest">
+                    <th className="py-4">Distribution Channel</th>
+                    <th className="py-4">Commission Fee</th>
+                    <th className="py-4">Onboarding Costs</th>
+                    <th className="py-4 text-right">Escrow Settlement</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-brand-border/40 text-xs font-semibold text-brand-black">
+                  <tr>
+                    <td className="py-5 font-bold">Tour Geeky Partner</td>
+                    <td className="py-5 text-emerald-600 font-bold">10% Flat Rate</td>
+                    <td className="py-5">€0 Free</td>
+                    <td className="py-5 text-right">Twice Monthly (Stripe)</td>
+                  </tr>
+                  <tr className="opacity-60">
+                    <td className="py-5">Global OTAs (Viator / GetYourGuide)</td>
+                    <td className="py-5 text-red-500">22% - 28%</td>
+                    <td className="py-5">€25 Listing Charge</td>
+                    <td className="py-5 text-right">Monthly Invoice</td>
+                  </tr>
+                  <tr className="opacity-60">
+                    <td className="py-5">Local Greek Agencies (Athens Walk-ins)</td>
+                    <td className="py-5 text-red-500">15% - 20%</td>
+                    <td className="py-5">Requires Retainer</td>
+                    <td className="py-5 text-right">30-day Post Excursion</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* CTA Footer banner */}
       <div className="max-w-4xl mx-auto px-6 sm:px-12 py-24 text-center space-y-8">
