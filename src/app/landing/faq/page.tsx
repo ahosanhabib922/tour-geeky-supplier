@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { HelpCircle, ChevronDown, ChevronUp, DollarSign, Box, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
+import { cn } from "@/lib/utils";
 
 const defaultCategories = [
   {
@@ -59,17 +60,70 @@ const defaultCategories = [
   }
 ];
 
+// ========================================================
+// DYNAMIC RESPONSIVE STYLES INJECTOR FOR NEXT.JS CLIENT
+// ========================================================
+const RenderCustomStyle = ({ id, styles }: { id: string; styles: any }) => {
+  if (!styles) return null;
+  const shadowValue = 
+    styles.shadow === 'soft' ? '0 2px 8px rgba(0,0,0,0.05)' : 
+    styles.shadow === 'premium' ? '0 8px 30px rgba(0,0,0,0.08)' : 
+    styles.shadow === 'strong' ? '0 20px 50px rgba(0,0,0,0.15)' : 'none';
+
+  const css = `
+    .style-${id} {
+      color: ${styles.color || 'inherit'} !important;
+      background-color: ${styles.bgColor || 'transparent'} !important;
+      font-size: ${styles.fontSizeDesktop || 16}px !important;
+      padding-top: ${styles.paddingTop !== undefined ? styles.paddingTop + 'px' : 'inherit'} !important;
+      padding-bottom: ${styles.paddingBottom !== undefined ? styles.paddingBottom + 'px' : 'inherit'} !important;
+      padding-left: ${styles.paddingLeft !== undefined ? styles.paddingLeft + 'px' : 'inherit'} !important;
+      padding-right: ${styles.paddingRight !== undefined ? styles.paddingRight + 'px' : 'inherit'} !important;
+      margin-top: ${styles.marginTop !== undefined ? styles.marginTop + 'px' : 'inherit'} !important;
+      margin-bottom: ${styles.marginBottom !== undefined ? styles.marginBottom + 'px' : 'inherit'} !important;
+      box-shadow: ${shadowValue} !important;
+    }
+    @media (max-width: 640px) {
+      .style-${id} {
+        font-size: ${(styles.fontSizeMobile !== undefined ? styles.fontSizeMobile : styles.fontSizeDesktop) || 14}px !important;
+      }
+    }
+  `;
+  return <style dangerouslySetInnerHTML={{ __html: css }} />;
+};
+
 export default function FAQPage() {
   const { openModal } = useModal();
   const [openIndex, setOpenIndex] = useState<string | null>(null);
   const [cms, setCms] = useState<any>(null);
+  const [isPreview, setIsPreview] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsPreview(window.location.search.includes("preview=true"));
+    }
+  }, []);
 
   useEffect(() => {
     fetch("/api/settings/supplier-landing")
       .then((res) => res.json())
       .then((data) => setCms(data))
       .catch((err) => console.error("Error loading CMS settings:", err));
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === "UPDATE_CMS_PREVIEW") {
+        setCms(event.data.data);
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, []);
+
+  const handleElementClick = (elementId: string) => {
+    if (isPreview && window.parent) {
+      window.parent.postMessage({ type: "ELEMENT_CLICKED", id: elementId }, "*");
+    }
+  };
 
   const toggleFAQ = (id: string) => {
     setOpenIndex(openIndex === id ? null : id);
@@ -88,16 +142,38 @@ export default function FAQPage() {
 
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
+      <RenderCustomStyle id="hero_badge" styles={fq.hero_badge_styles} />
+      <RenderCustomStyle id="hero_title" styles={fq.hero_title_styles} />
+      <RenderCustomStyle id="hero_description" styles={fq.hero_description_styles} />
+
       {/* Hero Header */}
       {(fq.hero_show !== false) && (
         <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
-          <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
+          <span 
+            className={cn(
+              "inline-flex px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black style-hero_badge",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_badge")}
+          >
             {fq.hero_badge || "Partner Support & Help Manual"}
           </span>
-          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
+          <h1 
+            className={cn(
+              "text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight style-hero_title",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_title")}
+          >
             {fq.hero_title || "Operator Frequently Asked Questions"}
           </h1>
-          <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
+          <p 
+            className={cn(
+              "text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed style-hero_description",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_description")}
+          >
             {fq.hero_description || "Quickly find answers regarding secure payouts, commission rates, guest cancellations, bad-weather contingencies, and listing setup wizards."}
           </p>
         </div>
@@ -148,10 +224,10 @@ export default function FAQPage() {
       </div>
 
       {/* Action CTA */}
-      <div className="max-w-4xl mx-auto px-6 sm:px-12 py-20 text-center space-y-8 border-t border-brand-border/40">
+      <div className="max-w-4xl mx-auto px-6 sm:px-12 py-24 text-center space-y-8 border-t border-brand-border/40">
         <h2 className="text-2xl sm:text-3xl font-bold text-brand-black tracking-tight">Still Have Questions?</h2>
         <p className="text-xs sm:text-sm text-brand-gray font-medium max-w-md mx-auto leading-relaxed">
-          Our partner success team is based in Athens and available via email or phone. We will help you optimize your experience listings.
+          Our partner integration support crew is active 24 hours a day to assist Greece tour guides and cruise businesses.
         </p>
         <div className="flex justify-center gap-4">
           <Button 
@@ -159,7 +235,7 @@ export default function FAQPage() {
             size="lg"
             className="rounded-full px-10 h-12 text-sm font-bold bg-brand-black text-white hover:bg-brand-black/90 shadow-md flex items-center justify-center gap-2"
           >
-            Ask Our Support Team
+            Contact Partner Support
           </Button>
         </div>
       </div>

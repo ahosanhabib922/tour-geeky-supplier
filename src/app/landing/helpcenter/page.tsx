@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Mail, Phone, Clock, FileText, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
 
 const defaultOnboardingSteps = [
   {
@@ -41,15 +42,68 @@ const defaultSupportChannels = [
   }
 ];
 
+// ========================================================
+// DYNAMIC RESPONSIVE STYLES INJECTOR FOR NEXT.JS CLIENT
+// ========================================================
+const RenderCustomStyle = ({ id, styles }: { id: string; styles: any }) => {
+  if (!styles) return null;
+  const shadowValue = 
+    styles.shadow === 'soft' ? '0 2px 8px rgba(0,0,0,0.05)' : 
+    styles.shadow === 'premium' ? '0 8px 30px rgba(0,0,0,0.08)' : 
+    styles.shadow === 'strong' ? '0 20px 50px rgba(0,0,0,0.15)' : 'none';
+
+  const css = `
+    .style-${id} {
+      color: ${styles.color || 'inherit'} !important;
+      background-color: ${styles.bgColor || 'transparent'} !important;
+      font-size: ${styles.fontSizeDesktop || 16}px !important;
+      padding-top: ${styles.paddingTop !== undefined ? styles.paddingTop + 'px' : 'inherit'} !important;
+      padding-bottom: ${styles.paddingBottom !== undefined ? styles.paddingBottom + 'px' : 'inherit'} !important;
+      padding-left: ${styles.paddingLeft !== undefined ? styles.paddingLeft + 'px' : 'inherit'} !important;
+      padding-right: ${styles.paddingRight !== undefined ? styles.paddingRight + 'px' : 'inherit'} !important;
+      margin-top: ${styles.marginTop !== undefined ? styles.marginTop + 'px' : 'inherit'} !important;
+      margin-bottom: ${styles.marginBottom !== undefined ? styles.marginBottom + 'px' : 'inherit'} !important;
+      box-shadow: ${shadowValue} !important;
+    }
+    @media (max-width: 640px) {
+      .style-${id} {
+        font-size: ${(styles.fontSizeMobile !== undefined ? styles.fontSizeMobile : styles.fontSizeDesktop) || 14}px !important;
+      }
+    }
+  `;
+  return <style dangerouslySetInnerHTML={{ __html: css }} />;
+};
+
 export default function HelpCenterPage() {
   const [cms, setCms] = useState<any>(null);
+  const [isPreview, setIsPreview] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsPreview(window.location.search.includes("preview=true"));
+    }
+  }, []);
 
   useEffect(() => {
     fetch("/api/settings/supplier-landing")
       .then((res) => res.json())
       .then((data) => setCms(data))
       .catch((err) => console.error("Error loading CMS settings:", err));
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === "UPDATE_CMS_PREVIEW") {
+        setCms(event.data.data);
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, []);
+
+  const handleElementClick = (elementId: string) => {
+    if (isPreview && window.parent) {
+      window.parent.postMessage({ type: "ELEMENT_CLICKED", id: elementId }, "*");
+    }
+  };
 
   const hc = cms?.pages?.helpcenter || {};
 
@@ -63,16 +117,40 @@ export default function HelpCenterPage() {
 
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
+      <RenderCustomStyle id="hero_badge" styles={hc.hero_badge_styles} />
+      <RenderCustomStyle id="hero_title" styles={hc.hero_title_styles} />
+      <RenderCustomStyle id="hero_description" styles={hc.hero_description_styles} />
+      <RenderCustomStyle id="guides_title" styles={hc.guides_title_styles} />
+      <RenderCustomStyle id="guides_subtitle" styles={hc.guides_subtitle_styles} />
+
       {/* Hero Header */}
       {(hc.hero_show !== false) && (
         <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
-          <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
+          <span 
+            className={cn(
+              "inline-flex px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black style-hero_badge",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_badge")}
+          >
             {hc.hero_badge || "Operational Assistance Hub"}
           </span>
-          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
+          <h1 
+            className={cn(
+              "text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight style-hero_title",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_title")}
+          >
             {hc.hero_title || "How Can We Support Your Operations?"}
           </h1>
-          <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
+          <p 
+            className={cn(
+              "text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed style-hero_description",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_description")}
+          >
             {hc.hero_description || "Reach our operator support center directly or browse detailed step-by-step walkthroughs to configure prices, sync schedules, and authorize Stripe bank accounts."}
           </p>
         </div>
@@ -109,8 +187,24 @@ export default function HelpCenterPage() {
         <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
           <div className="max-w-4xl mx-auto space-y-16">
             <div className="text-center space-y-3">
-              <h2 className="text-2xl font-bold tracking-tight text-brand-black">{hc.guides_title || "Onboarding Setup Handbook"}</h2>
-              <p className="text-xs text-brand-gray font-semibold">{hc.guides_subtitle || "Everything you need to configure in under 10 minutes."}</p>
+              <h2 
+                className={cn(
+                  "text-2xl font-bold tracking-tight text-brand-black style-guides_title",
+                  isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+                )}
+                onClick={() => handleElementClick("guides_title")}
+              >
+                {hc.guides_title || "Onboarding Setup Handbook"}
+              </h2>
+              <p 
+                className={cn(
+                  "text-xs text-brand-gray font-semibold style-guides_subtitle",
+                  isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+                )}
+                onClick={() => handleElementClick("guides_subtitle")}
+              >
+                {hc.guides_subtitle || "Everything you need to configure in under 10 minutes."}
+              </p>
             </div>
 
             <div className="grid gap-12">

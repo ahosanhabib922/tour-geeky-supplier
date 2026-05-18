@@ -142,6 +142,14 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
     { label: "Help Center", href: "/landing/helpcenter" }
   ]);
 
+  const [isPreview, setIsPreview] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsPreview(window.location.search.includes("preview=true"));
+    }
+  }, []);
+
   useEffect(() => {
     fetch("/api/settings/supplier-landing")
       .then(res => res.json())
@@ -151,6 +159,17 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
         }
       })
       .catch(e => console.error("Error fetching supplier CMS nav items:", e));
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === "UPDATE_CMS_PREVIEW") {
+        const payload = event.data.data;
+        if (payload && payload.navItems && Array.isArray(payload.navItems)) {
+          setNavItems(payload.navItems);
+        }
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, []);
 
   return (
@@ -173,6 +192,11 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
               <Link 
                 key={item.href} 
                 href={item.href}
+                onClick={(e) => {
+                  if (isPreview) {
+                    e.preventDefault();
+                  }
+                }}
                 className={cn(
                   "px-4 py-2 rounded-full hover:bg-brand-light hover:text-brand-black transition-all",
                   pathname === item.href ? "bg-brand-light text-brand-black font-extrabold" : ""
@@ -203,7 +227,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
       </nav>
 
       {/* Main Content */}
-      <main className="min-h-[calc(100vh-80px)]">
+      <main className={isPreview ? "min-h-screen" : "min-h-[calc(100vh-80px)]"}>
         {children}
       </main>
 

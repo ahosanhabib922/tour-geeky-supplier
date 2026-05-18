@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { DollarSign, Globe, Shield, Users, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useModal } from "../layout";
+import { cn } from "@/lib/utils";
 
 const defaultCoreBenefits = [
   {
@@ -34,16 +35,69 @@ const defaultComparisonTable = [
   { channel: "Local Greek Agencies (Athens Walk-ins)", commission: "15% - 20%", cost: "Requires Retainer", settlement: "30-day Post Excursion" }
 ];
 
+// ========================================================
+// DYNAMIC RESPONSIVE STYLES INJECTOR FOR NEXT.JS CLIENT
+// ========================================================
+const RenderCustomStyle = ({ id, styles }: { id: string; styles: any }) => {
+  if (!styles) return null;
+  const shadowValue = 
+    styles.shadow === 'soft' ? '0 2px 8px rgba(0,0,0,0.05)' : 
+    styles.shadow === 'premium' ? '0 8px 30px rgba(0,0,0,0.08)' : 
+    styles.shadow === 'strong' ? '0 20px 50px rgba(0,0,0,0.15)' : 'none';
+
+  const css = `
+    .style-${id} {
+      color: ${styles.color || 'inherit'} !important;
+      background-color: ${styles.bgColor || 'transparent'} !important;
+      font-size: ${styles.fontSizeDesktop || 16}px !important;
+      padding-top: ${styles.paddingTop !== undefined ? styles.paddingTop + 'px' : 'inherit'} !important;
+      padding-bottom: ${styles.paddingBottom !== undefined ? styles.paddingBottom + 'px' : 'inherit'} !important;
+      padding-left: ${styles.paddingLeft !== undefined ? styles.paddingLeft + 'px' : 'inherit'} !important;
+      padding-right: ${styles.paddingRight !== undefined ? styles.paddingRight + 'px' : 'inherit'} !important;
+      margin-top: ${styles.marginTop !== undefined ? styles.marginTop + 'px' : 'inherit'} !important;
+      margin-bottom: ${styles.marginBottom !== undefined ? styles.marginBottom + 'px' : 'inherit'} !important;
+      box-shadow: ${shadowValue} !important;
+    }
+    @media (max-width: 640px) {
+      .style-${id} {
+        font-size: ${(styles.fontSizeMobile !== undefined ? styles.fontSizeMobile : styles.fontSizeDesktop) || 14}px !important;
+      }
+    }
+  `;
+  return <style dangerouslySetInnerHTML={{ __html: css }} />;
+};
+
 export default function BenefitsPage() {
   const { openModal } = useModal();
   const [cms, setCms] = useState<any>(null);
+  const [isPreview, setIsPreview] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsPreview(window.location.search.includes("preview=true"));
+    }
+  }, []);
 
   useEffect(() => {
     fetch("/api/settings/supplier-landing")
       .then((res) => res.json())
       .then((data) => setCms(data))
       .catch((err) => console.error("Error loading CMS settings:", err));
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === "UPDATE_CMS_PREVIEW") {
+        setCms(event.data.data);
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
   }, []);
+
+  const handleElementClick = (elementId: string) => {
+    if (isPreview && window.parent) {
+      window.parent.postMessage({ type: "ELEMENT_CLICKED", id: elementId }, "*");
+    }
+  };
 
   const ben = cms?.pages?.benefits || {};
 
@@ -61,16 +115,44 @@ export default function BenefitsPage() {
 
   return (
     <div className="bg-white text-brand-black animate-in fade-in duration-500">
+      <RenderCustomStyle id="hero_badge" styles={ben.hero_badge_styles} />
+      <RenderCustomStyle id="hero_title" styles={ben.hero_title_styles} />
+      <RenderCustomStyle id="hero_description" styles={ben.hero_description_styles} />
+      <RenderCustomStyle id="table_title" styles={ben.table_title_styles} />
+      <RenderCustomStyle id="table_subtitle" styles={ben.table_subtitle_styles} />
+      
+      {benefitsList.map((_: any, idx: number) => (
+        <RenderCustomStyle key={`b-${idx}`} id={`benefit_card_${idx}`} styles={ben[`benefit_card_${idx}_styles`]} />
+      ))}
+
       {/* Hero Header */}
       {(ben.hero_show !== false) && (
         <div className="py-20 max-w-5xl mx-auto px-6 sm:px-12 text-center space-y-6">
-          <span className="px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black">
+          <span 
+            className={cn(
+              "inline-flex px-4 py-1.5 rounded-full bg-brand-light border border-brand-border text-[10px] font-bold uppercase tracking-wider text-brand-black style-hero_badge",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_badge")}
+          >
             {ben.hero_badge || "Partner Privileges & Growth"}
           </span>
-          <h1 className="text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight">
+          <h1 
+            className={cn(
+              "text-4xl sm:text-5xl font-medium tracking-tight text-brand-black max-w-3xl mx-auto leading-tight style-hero_title",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_title")}
+          >
             {ben.hero_title || "Keep More of What You Earn with Tour Geeky"}
           </h1>
-          <p className="text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed">
+          <p 
+            className={cn(
+              "text-sm sm:text-base text-brand-gray max-w-xl mx-auto font-medium leading-relaxed style-hero_description",
+              isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+            )}
+            onClick={() => handleElementClick("hero_description")}
+          >
             {ben.hero_description || "Discover why Greek yacht captains, independent travel curators, and boutique activity planners choose our transparent 10% flat commission model."}
           </p>
         </div>
@@ -84,7 +166,11 @@ export default function BenefitsPage() {
             return (
               <div 
                 key={idx} 
-                className="flex flex-col lg:flex-row lg:items-start justify-between gap-10 py-10 border-b border-brand-border/40 last:border-none transition-all duration-300"
+                className={cn(
+                  "flex flex-col lg:flex-row lg:items-start justify-between gap-10 py-10 border-b border-brand-border/40 last:border-none transition-all duration-300 style-benefit_card_" + idx,
+                  isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed"
+                )}
+                onClick={() => handleElementClick(`benefit_card_${idx}`)}
               >
                 <div className="flex items-center gap-6 lg:w-1/3">
                   <div className="h-14 w-14 rounded-full bg-brand-light flex items-center justify-center shrink-0 border border-brand-border/60">
@@ -113,8 +199,24 @@ export default function BenefitsPage() {
         <div className="py-24 bg-brand-light/20 border-t border-brand-border px-6 sm:px-12">
           <div className="max-w-4xl mx-auto space-y-12">
             <div className="text-center space-y-3">
-              <h2 className="text-2xl font-bold tracking-tight text-brand-black">{ben.table_title || "Comparing Industry Commissions"}</h2>
-              <p className="text-xs text-brand-gray font-semibold">{ben.table_subtitle || "How Tour Geeky stacks up against global third-party channels."}</p>
+              <h2 
+                className={cn(
+                  "text-2xl font-bold tracking-tight text-brand-black style-table_title",
+                  isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+                )}
+                onClick={() => handleElementClick("table_title")}
+              >
+                {ben.table_title || "Comparing Industry Commissions"}
+              </h2>
+              <p 
+                className={cn(
+                  "text-xs text-brand-gray font-semibold style-table_subtitle",
+                  isPreview && "cursor-pointer hover:ring-2 hover:ring-blue-500 hover:ring-dashed transition-all"
+                )}
+                onClick={() => handleElementClick("table_subtitle")}
+              >
+                {ben.table_subtitle || "How Tour Geeky stacks up against global third-party channels."}
+              </p>
             </div>
 
             <div className="overflow-hidden border-t border-brand-border/60">
