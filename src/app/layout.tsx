@@ -51,6 +51,9 @@ export default function RootLayout({
             if (matched) {
               setSupplierStatus(matched.supplier_status);
               setSupplierName(matched.supplier_name || matched.name || "");
+              if (pathname === "/landing") {
+                router.push("/");
+              }
             } else {
               // Logged in but no supplier application found yet in database
               setSupplierStatus("none");

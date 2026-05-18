@@ -5,8 +5,10 @@ import { Plane, Star, Shield, TrendingUp, DollarSign, Users, Award, HelpCircle, 
 import { Button } from "@/components/ui/Button";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 export default function SupplierLandingPage() {
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -110,6 +112,7 @@ export default function SupplierLandingPage() {
           setIsModalOpen(false);
           setSuccessMsg("");
           setFormData({ name: "", email: "", supplier_name: "", company_name: "", phone: "" });
+          router.push("/");
         }, 3500);
       } else {
         alert("Failed to submit application. Please try again.");
