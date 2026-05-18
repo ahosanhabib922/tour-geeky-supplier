@@ -94,7 +94,7 @@ export default function AvailabilityPage() {
                   className={cn(
                     "h-8 capitalize text-[10px] font-bold px-5 rounded-full transition-all duration-300 tracking-widest",
                     viewMode === mode 
-                      ? "bg-white text-primary shadow-xl shadow-black/5 hover:bg-white" 
+                      ? "bg-white text-primary hover:bg-white" 
                       : "text-muted-foreground hover:bg-transparent hover:text-primary/60"
                   )}
                   onClick={() => setViewMode(mode)}
@@ -103,7 +103,7 @@ export default function AvailabilityPage() {
                 </Button>
               ))}
            </div>
-           <Button size="sm" onClick={() => setCurrentDate(new Date())} className="h-10 px-8 rounded-full font-bold text-[11px] uppercase tracking-widest gap-3 shadow-lg shadow-primary/20 transition-transform hover:scale-[1.02]">
+           <Button size="sm" onClick={() => setCurrentDate(new Date())} className="h-10 px-8 rounded-full font-bold text-[11px] uppercase tracking-widest gap-3  transition-transform hover:scale-[1.02]">
              <CalendarIcon className="w-3.5 h-3.5" /> Jump to Today
            </Button>
         </div>
@@ -121,7 +121,7 @@ export default function AvailabilityPage() {
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60 px-1">Primary Activity</label>
                 <Select value={selectedProductFilter} onValueChange={(val) => setSelectedProductFilter(val || "all")}>
-                  <SelectTrigger className="h-11 rounded-2xl bg-card border-border/50 text-xs font-bold shadow-sm focus:ring-primary/20">
+                  <SelectTrigger className="h-10 bg-transparent border-b border-border/50 rounded-none shadow-none text-xs font-bold shadow-sm focus:ring-primary/20">
                     <SelectValue placeholder="Select activity" />
                   </SelectTrigger>
                   <SelectContent className="rounded-2xl border-border/50 shadow-2xl">
@@ -136,7 +136,7 @@ export default function AvailabilityPage() {
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60 px-1">Package Variant</label>
                 <Select defaultValue="all">
-                  <SelectTrigger className="h-11 rounded-2xl bg-card border-border/50 text-xs font-bold shadow-sm focus:ring-primary/20">
+                  <SelectTrigger className="h-10 bg-transparent border-b border-border/50 rounded-none shadow-none text-xs font-bold shadow-sm focus:ring-primary/20">
                     <SelectValue placeholder="Select option" />
                   </SelectTrigger>
                   <SelectContent className="rounded-2xl border-border/50 shadow-2xl">
@@ -149,7 +149,7 @@ export default function AvailabilityPage() {
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60 px-1">Window Slot</label>
                 <Select defaultValue="all">
-                  <SelectTrigger className="h-11 rounded-2xl bg-card border-border/50 text-xs font-bold shadow-sm focus:ring-primary/20">
+                  <SelectTrigger className="h-10 bg-transparent border-b border-border/50 rounded-none shadow-none text-xs font-bold shadow-sm focus:ring-primary/20">
                     <SelectValue placeholder="Select time" />
                   </SelectTrigger>
                   <SelectContent className="rounded-2xl border-border/50 shadow-2xl">
@@ -161,7 +161,7 @@ export default function AvailabilityPage() {
             </div>
           </div>
 
-          <div className="p-6 rounded-[32px] bg-primary/5 border border-primary/10 space-y-4 shadow-inner">
+          <div className="py-4 border-t border-border/50 space-y-3">
             <div className="flex items-center gap-2">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Intelligent Sync</span>
@@ -177,11 +177,11 @@ export default function AvailabilityPage() {
           {/* Calendar Controls */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-center gap-8">
-               <div className="flex items-center gap-2 bg-muted/30 p-1 rounded-full border border-border/50">
-                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white hover:shadow-sm" onClick={() => navDate(-1)}>
+               <div className="flex items-center gap-1">
+                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-muted/40" onClick={() => navDate(-1)}>
                    <ChevronLeft className="h-4 w-4" />
                  </Button>
-                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white hover:shadow-sm" onClick={() => navDate(1)}>
+                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-muted/40" onClick={() => navDate(1)}>
                    <ChevronRight className="h-4 w-4" />
                  </Button>
                </div>
@@ -190,9 +190,9 @@ export default function AvailabilityPage() {
                </h3>
             </div>
             <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors" />
+              <Search className="absolute left-1 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 group-focus-within:text-primary transition-colors" />
               <input 
-                className="w-full md:w-72 bg-card border border-border/50 rounded-2xl pl-12 pr-4 py-3 text-xs font-bold shadow-sm focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/40 transition-all"
+                className="w-full md:w-72 bg-transparent border-b border-border/50 pl-10 pr-4 py-2 text-xs font-bold focus:outline-none focus:border-primary transition-all"
                 placeholder="Search specific slots..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -215,9 +215,9 @@ export default function AvailabilityPage() {
                 ) : activeSlots.length === 0 ? (
                   <div className="p-8 text-center text-sm font-medium text-muted-foreground border border-dashed border-border/50 rounded-3xl">No slots scheduled for this date.</div>
                 ) : activeSlots.map((slot) => (
-                  <div key={slot.id} className="group flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 rounded-[32px] border border-border/50 bg-card/30 transition-all duration-500 hover:border-primary/30 hover:bg-card shadow-sm hover:shadow-xl hover:shadow-black/5">
+                  <div key={slot.id} className="group flex flex-col md:flex-row md:items-center justify-between gap-6 py-6 border-b border-border/40 last:border-none transition-all duration-300">
                     <div className="flex items-center gap-6">
-                      <div className="h-14 w-14 rounded-2xl bg-muted/50 flex items-center justify-center shrink-0 border border-border/50 group-hover:bg-primary/5 group-hover:border-primary/20 transition-colors">
+                      <div className="h-11 w-11 rounded-full bg-muted/30 flex items-center justify-center shrink-0 group-hover:bg-primary/5 transition-colors">
                         <Clock className="h-6 w-6 text-muted-foreground/60 group-hover:text-primary transition-colors" />
                       </div>
                       <div className="space-y-1.5">
@@ -240,7 +240,7 @@ export default function AvailabilityPage() {
           )}
 
           {viewMode === "month" && (
-            <div className="rounded-[40px] border border-border/50 overflow-hidden bg-card/30 animate-in zoom-in-95 duration-700 shadow-2xl shadow-black/5">
+            <div className="w-full border-t border-border/50 animate-in zoom-in-95 duration-700">
                <div className="grid grid-cols-7 border-b border-border/50 bg-muted/20">
                   {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(day => (
                     <div key={day} className="py-4 text-center text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em]">{day}</div>
