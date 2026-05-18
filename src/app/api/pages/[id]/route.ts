@@ -44,9 +44,19 @@ export async function POST(
 
     // Trigger revalidation on client side if needed
     const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || "http://localhost:3001";
-    try {
-      fetch(`${clientUrl}/api/revalidate?tag=pages&secret=tour-geeky-secret`).catch(() => {});
-    } catch (e) {}
+    const revalidateSecret = process.env.REVALIDATE_SECRET;
+    if (revalidateSecret) {
+      try {
+        await fetch(`${clientUrl}/api/revalidate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-revalidate-secret": revalidateSecret,
+          },
+          body: JSON.stringify({ tag: "pages" }),
+        });
+      } catch (e) {}
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -132,9 +132,19 @@ export async function POST(request: Request) {
 
     // Trigger revalidation on the client side
     const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL || "http://localhost:3000";
-    try {
-      fetch(`${clientUrl}/api/revalidate?tag=products&secret=tour-geeky-secret`).catch(() => {});
-    } catch (e) {}
+    const revalidateSecret = process.env.REVALIDATE_SECRET;
+    if (revalidateSecret) {
+      try {
+        await fetch(`${clientUrl}/api/revalidate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-revalidate-secret": revalidateSecret,
+          },
+          body: JSON.stringify({ tag: "products" }),
+        });
+      } catch (e) {}
+    }
 
     return NextResponse.json({ success: true, product: { ...product, id, slug } });
   } catch (error: unknown) {
