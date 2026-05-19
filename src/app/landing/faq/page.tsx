@@ -16,11 +16,11 @@ const defaultCategories = [
       },
       {
         q: "What is the flat commission structure?",
-        a: "We maintain a flat 10% commission on all completed bookings. The remaining 90% is yours. Stripe processing fees are included in this flat 10%, meaning there are absolutely no separate payment processing deductibles."
+        a: "We maintain a flat 10% commission on all completed bookings. The remaining 90% is yours. Revolut processing fees are included in this flat 10%, meaning there are absolutely no separate payment processing deductibles."
       },
       {
         q: "When and how do I receive payouts?",
-        a: "All payouts are handled securely via Stripe direct bank transfers. We automatically initiate operator settlements twice a month: on the 15th (for bookings completed between 1st-14th) and on the last day of the month (for bookings completed between 15th-29th)."
+        a: "All payouts are handled securely via Revolut direct bank transfers. We automatically initiate operator settlements twice a month: on the 15th (for bookings completed between 1st-14th) and on the last day of the month (for bookings completed between 15th-29th)."
       }
     ]
   },

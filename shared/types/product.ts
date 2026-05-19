@@ -117,7 +117,7 @@ export type Product = {
   hasFood?: boolean;
   hasTransportation?: boolean;
   currency: string;
-  status: "draft" | "published" | "archived";
+  status: "draft" | "published" | "pending" | "archived";
   images: string[];
   coverImage?: string;
   location?: string;

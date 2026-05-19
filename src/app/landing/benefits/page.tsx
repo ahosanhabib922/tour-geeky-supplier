@@ -18,9 +18,9 @@ const defaultCoreBenefits = [
     desc: "Our localized search engines actively direct high-value travelers from the US, UK, and East Asia searching specifically for premium sailing excursions in Mykonos, Santorini historical walking tours, and vineyard crawls in Crete."
   },
   {
-    title: "Direct Stripe Settlement Infrastructure",
+    title: "Direct Revolut Settlement Infrastructure",
     headline: "Automated payouts twice a month.",
-    desc: "Your funds are stored in escrow safely and transferred automatically directly to your local bank account via secure Stripe operator payouts twice a month, completely eliminating invoice waiting periods."
+    desc: "Your funds are stored in escrow safely and transferred automatically directly to your local bank account via secure Revolut business operator payouts twice a month, completely eliminating invoice waiting periods."
   },
   {
     title: "Dedicated Greek Operator Support Crew",
@@ -30,7 +30,7 @@ const defaultCoreBenefits = [
 ];
 
 const defaultComparisonTable = [
-  { channel: "Tour Geeky Partner", commission: "10% Flat Rate", cost: "€0 Free", settlement: "Twice Monthly (Stripe)" },
+  { channel: "Tour Geeky Partner", commission: "10% Flat Rate", cost: "€0 Free", settlement: "Twice Monthly (Revolut)" },
   { channel: "Global OTAs (Viator / GetYourGuide)", commission: "22% - 28%", cost: "€25 Listing Charge", settlement: "Monthly Invoice" },
   { channel: "Local Greek Agencies (Athens Walk-ins)", commission: "15% - 20%", cost: "Requires Retainer", settlement: "30-day Post Excursion" }
 ];

@@ -89,8 +89,8 @@ export function ProductWizard({ isEdit = false, onSuccess }: { isEdit?: boolean;
 
   const handleSubmit = async () => {
     let result;
-    if (product.status !== "published") {
-      result = await submitProduct({ ...product, status: "published" });
+    if (product.status !== "pending") {
+      result = await submitProduct({ ...product, status: "pending" });
     } else {
       result = await submitProduct();
     }
@@ -197,7 +197,7 @@ export function ProductWizard({ isEdit = false, onSuccess }: { isEdit?: boolean;
                 {isSubmitting ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <>{product.status === "published" ? "Update Experience" : "Launch Experience"}</>
+                  <>{(product.status === "pending" || product.status === "published") ? "Update Experience" : "Submit for Approval"}</>
                 )}
               </Button>
             ) : (

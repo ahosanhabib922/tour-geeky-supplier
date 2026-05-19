@@ -18,7 +18,7 @@ const defaultBenefits = [
   },
   {
     title: "Secure & Automated Payouts",
-    desc: "We process payments securely via Stripe and automatically distribute operator payouts twice a month directly to your bank account."
+    desc: "We process payments securely via Revolut and automatically distribute operator payouts twice a month directly to your bank account."
   },
   {
     title: "Robust Analytics & Tools",
@@ -56,7 +56,7 @@ const defaultFaqs = [
   },
   {
     q: "How and when do I receive payouts?",
-    a: "Payouts are automatically calculated and processed securely via Stripe. Operator earnings are sent twice a month directly to your linked bank account."
+    a: "Payouts are automatically calculated and processed securely via Revolut. Operator earnings are sent twice a month directly to your linked bank account."
   },
   {
     q: "What credentials do I need to get approved?",
@@ -273,7 +273,7 @@ export default function SupplierLandingPage() {
           <div className="pt-2 flex justify-center items-center gap-6 text-[10px] text-brand-gray font-bold uppercase tracking-widest">
             <span>No Onboarding Fee</span>
             <span>•</span>
-            <span>Stripe Integration</span>
+            <span>Revolut Integration</span>
             <span>•</span>
             <span>Greece & Europe Focus</span>
           </div>

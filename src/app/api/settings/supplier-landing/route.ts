@@ -24,7 +24,7 @@ const DEFAULT_SUPPLIER_LANDING_CMS = {
       benefits: [
         { "title": "10% Flat Commission", "desc": "Transparent and fair pricing. No setup fees, no monthly costs, and no hidden charges. You only pay when you make a sale." },
         { "title": "Global Marketplace Reach", "desc": "Instantly distribute your tours, sunset cruises, wine tastings, and experiences to hundreds of thousands of Greece-bound travelers." },
-        { "title": "Secure & Automated Payouts", "desc": "We process payments securely via Stripe and automatically distribute operator payouts twice a month directly to your bank account." },
+        { "title": "Secure & Automated Payouts", "desc": "We process payments securely via Revolut and automatically distribute operator payouts twice a month directly to your bank account." },
         { "title": "Robust Analytics & Tools", "desc": "Access our state-of-the-art supplier portal. Track bookings, monitor gross earnings, manage availability calendars, and list activities in minutes." }
       ],
 
@@ -61,7 +61,7 @@ const DEFAULT_SUPPLIER_LANDING_CMS = {
       faq_subtitle: "Have questions about payouts, listings, or commissions?",
       faqs: [
         { "q": "What is the cost to list activities on Tour Geeky?", "a": "Listing your experiences is 100% free! There are no listing fees, registration fees, or hidden subscription costs. We only charge a flat 10% commission on confirmed bookings." },
-        { "q": "How and when do I receive payouts?", "a": "Payouts are automatically calculated and processed securely via Stripe. Operator earnings are sent twice a month directly to your linked bank account." },
+        { "q": "How and when do I receive payouts?", "a": "Payouts are automatically calculated and processed securely via Revolut. Operator earnings are sent twice a month directly to your linked bank account." },
         { "q": "What credentials do I need to get approved?", "a": "We verify that you are a Greece travel agency, local tour provider, cruise operator, or licensed guide. A valid phone number and website/social presence are usually sufficient for instant approval." },
         { "q": "Can I manage cancelations and refunds?", "a": "Yes! You can choose your cancelation policy (e.g. Standard 24h, Strict, or Non-refundable) during the product creation wizard. The platform automatically handles refund requests based on your chosen rules." }
       ]
@@ -79,11 +79,11 @@ const DEFAULT_SUPPLIER_LANDING_CMS = {
       coreBenefits: [
         { "title": "10% Flat Fee Commission Structure", "headline": "Keep 90% of your ticket sales.", "desc": "Unlike other large international OTAs that demand up to 25% or 30% commission, Tour Geeky maintains a flat, transparent 10% fee. No annual memberships, no listing costs, and no hidden contract surprises." },
         { "title": "Aegean & Grecian Targeted Marketing", "headline": "Expose your tours to active buyers.", "desc": "Our localized search engines actively direct high-value travelers from the US, UK, and East Asia searching specifically for premium sailing excursions in Mykonos, Santorini historical walking tours, and vineyard crawls in Crete." },
-        { "title": "Direct Stripe Settlement Infrastructure", "headline": "Automated payouts twice a month.", "desc": "Your funds are stored in escrow safely and transferred automatically directly to your local bank account via secure Stripe operator payouts twice a month, completely eliminating invoice waiting periods." },
+        { "title": "Direct Revolut Settlement Infrastructure", "headline": "Automated payouts twice a month.", "desc": "Your funds are stored in escrow safely and transferred automatically directly to your local bank account via secure Revolut business operator payouts twice a month, completely eliminating invoice waiting periods." },
         { "title": "Dedicated Greek Operator Support Crew", "headline": "Your personal growth managers.", "desc": "We don't believe in generic robot helplines. Every operator receives access to local, dedicated partners in Athens, Paros, and Chania to help construct optimal prices, high-quality images, and rich description copies." }
       ],
       comparisonTable: [
-        { "channel": "Tour Geeky Partner", "commission": "10% Flat Rate", "cost": "€0 Free", "settlement": "Twice Monthly (Stripe)" },
+        { "channel": "Tour Geeky Partner", "commission": "10% Flat Rate", "cost": "€0 Free", "settlement": "Twice Monthly (Revolut)" },
         { "channel": "Global OTAs (Viator / GetYourGuide)", "commission": "22% - 28%", "cost": "€25 Listing Charge", "settlement": "Monthly Invoice" },
         { "channel": "Local Greek Agencies (Athens Walk-ins)", "commission": "15% - 20%", "cost": "Requires Retainer", "settlement": "30-day Post Excursion" }
       ]
@@ -119,8 +119,8 @@ const DEFAULT_SUPPLIER_LANDING_CMS = {
           "title": "Commissions & Payouts",
           "items": [
             { "q": "Is there an onboarding or listing fee?", "a": "No! Listing your experiences on Tour Geeky is completely free. We do not charge registration fees, catalog placement charges, or monthly software fees. You only pay when you make a verified sale." },
-            { "q": "What is the flat commission structure?", "a": "We maintain a flat 10% commission on all completed bookings. The remaining 90% is yours. Stripe processing fees are included in this flat 10%, meaning there are absolutely no separate payment processing deductibles." },
-            { "q": "When and how do I receive payouts?", "a": "All payouts are handled securely via Stripe direct bank transfers. We automatically initiate operator settlements twice a month: on the 15th (for bookings completed between 1st-14th) and on the last day of the month (for bookings completed between 15th-29th)." }
+            { "q": "What is the flat commission structure?", "a": "We maintain a flat 10% commission on all completed bookings. The remaining 90% is yours. Revolut processing fees are included in this flat 10%, meaning there are absolutely no separate payment processing deductibles." },
+            { "q": "When and how do I receive payouts?", "a": "All payouts are handled securely via Revolut direct bank transfers. We automatically initiate operator settlements twice a month: on the 15th (for bookings completed between 1st-14th) and on the last day of the month (for bookings completed between 15th-29th)." }
           ]
         },
         {
@@ -145,7 +145,7 @@ const DEFAULT_SUPPLIER_LANDING_CMS = {
       hero_show: true,
       hero_badge: "Operational Assistance Hub",
       hero_title: "How Can We Support Your Operations?",
-      hero_description: "Reach our operator support center directly or browse detailed step-by-step walkthroughs to configure prices, sync schedules, and authorize Stripe bank accounts.",
+      hero_description: "Reach our operator support center directly or browse detailed step-by-step walkthroughs to configure prices, sync schedules, and authorize Revolut bank accounts.",
       
       guides_show: true,
       guides_title: "Onboarding Setup Handbook",
@@ -159,7 +159,7 @@ const DEFAULT_SUPPLIER_LANDING_CMS = {
       onboardingSteps: [
         { "title": "1. Brand Authentication", "desc": "Authenticate using a verified Google Account or direct Email registration inside the Application modal window." },
         { "title": "2. Supplier Profile Setup", "desc": "Provide your operating brand name, registered corporate name, contact phone number, and brief description." },
-        { "title": "3. Direct Stripe Integration", "desc": "Link your company IBAN or bank details via our secure automated Stripe onboarding wizard in the settings tab." },
+        { "title": "3. Direct Revolut Integration", "desc": "Link your company IBAN or bank details via our secure Revolut merchant configuration panel." },
         { "title": "4. Create Activity Listing", "desc": "Specify your excursions, ticket option variables (VIP/Standard), calendar schedules, and high-definition photos." }
       ]
     }

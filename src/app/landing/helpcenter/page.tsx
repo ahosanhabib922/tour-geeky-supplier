@@ -15,8 +15,8 @@ const defaultOnboardingSteps = [
     desc: "Provide your operating brand name, registered corporate name, contact phone number, and brief description."
   },
   {
-    title: "3. Direct Stripe Integration",
-    desc: "Link your company IBAN or bank details via our secure automated Stripe onboarding wizard in the settings tab."
+    title: "3. Direct Revolut Integration",
+    desc: "Link your company IBAN or bank details via our secure Revolut merchant configuration panel."
   },
   {
     title: "4. Create Activity Listing",
@@ -151,7 +151,7 @@ export default function HelpCenterPage() {
             )}
             onClick={() => handleElementClick("hero_description")}
           >
-            {hc.hero_description || "Reach our operator support center directly or browse detailed step-by-step walkthroughs to configure prices, sync schedules, and authorize Stripe bank accounts."}
+            {hc.hero_description || "Reach our operator support center directly or browse detailed step-by-step walkthroughs to configure prices, sync schedules, and authorize Revolut bank accounts."}
           </p>
         </div>
       )}
